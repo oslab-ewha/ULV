@@ -65,9 +65,9 @@ define posix_host
   $(if $(filter $(1),elf64-littleaarch64),$(call aarch64_host))
   $(if $(filter yes,$(dpdk)),$(call virtio_net_dpdk))
   $(if $(filter yes,$(vde)),$(call virtio_net_vde))
-  $(if $(strip $(call find_include,fuse.h)),$(call set_autoconf_var,FUSE,y))
-  $(if $(strip $(call find_include,archive.h)),$(call set_autoconf_var,ARCHIVE,y))
-  $(if $(strip $(call find_include,linux/if_tun.h)),$(call set_autoconf_var,VIRTIO_NET_MACVTAP,y))
+  $(if $(strip $(call find_include,fuse.h)),$(call set_autoconf_var,FUSE,n))
+  $(if $(strip $(call find_include,archive.h)),$(call set_autoconf_var,ARCHIVE,n))
+  $(if $(strip $(call find_include,linux/if_tun.h)),$(call set_autoconf_var,VIRTIO_NET_MACVTAP,n))
   $(if $(filter $(1),elf64-x86-64-freebsd),$(call set_autoconf_var,NEEDS_LARGP,y))
   $(if $(filter $(1),elf32-i386),$(call set_autoconf_var,I386,y))
 endef
@@ -94,11 +94,11 @@ endef
 
 define do_autoconf
   export CROSS_COMPILE := $(CROSS_COMPILE)
-  export CC := $(CROSS_COMPILE)gcc
+  export CC := $(CROSS_COMPILE)musl-gcc
   export LD := $(CROSS_COMPILE)ld
   export AR := $(CROSS_COMPILE)ar
   $(eval LD := $(CROSS_COMPILE)ld)
-  $(eval CC := $(CROSS_COMPILE)gcc)
+  $(eval CC := $(CROSS_COMPILE)musl-gcc)
   $(eval LD_FMT := $(shell $(LD) -r -print-output-format))
   $(eval EXEC_FMT := $(shell echo $(LD_FMT) | cut -d "-" -f1))
   $(if $(filter $(EXEC_FMT),$(POSIX_HOSTS)),$(call posix_host,$(LD_FMT)))

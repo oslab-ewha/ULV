@@ -1,7 +1,7 @@
 libs-y += lib/liblkl
 
 ifneq ($(LKL_HOST_CONFIG_BSD),y)
-libs-$(LKL_HOST_CONFIG_POSIX) += lib/hijack/liblkl-hijack
+libs-n += lib/hijack/liblkl-hijack
 endif
 LDFLAGS_lib/hijack/liblkl-hijack-y += -shared -nodefaultlibs
 LDLIBS_lib/hijack/liblkl-hijack-y += -ldl
@@ -21,8 +21,8 @@ progs-$(LKL_HOST_CONFIG_ARCHIVE) += cptofs
 LDLIBS_cptofs-y := -larchive
 LDLIBS_cptofs-$(LKL_HOST_CONFIG_NEEDS_LARGP) += -largp
 
-progs-y += tests/boot
-progs-y += tests/disk
-progs-y += tests/disk-vfio-pci
-progs-y += tests/net-test
+progs-n += tests/boot
+progs-n += tests/disk
+progs-n += tests/disk-vfio-pci
+progs-n += tests/net-test
 

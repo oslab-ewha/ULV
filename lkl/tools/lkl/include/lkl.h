@@ -20,6 +20,7 @@ extern "C" {
 #pragma push_macro("__unused")
 #undef __unused
 
+#include <sys/stat.h>
 #include <lkl/asm/syscalls.h>
 
 #pragma pop_macro("__unused")
