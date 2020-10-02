@@ -1,0 +1,16 @@
+#
+# Generated files
+#
+bin2c
+conmakehash
+kallsyms
+kallsyms.exe
+pnmtologo
+unifdef
+unifdef.exe
+recordmcount
+sortextable
+asn1_compiler
+extract-cert
+sign-file
+insert-sys-cert

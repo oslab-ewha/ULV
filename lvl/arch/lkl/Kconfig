@@ -1,0 +1,101 @@
+config LKL
+       def_bool y
+       depends on !SMP && !MMU && !COREDUMP && !SECCOMP && !UPROBES && !COMPAT && !USER_RETURN_NOTIFIER
+       select ARCH_THREAD_STACK_ALLOCATOR
+       select RWSEM_GENERIC_SPINLOCK
+       select GENERIC_ATOMIC64
+       select GENERIC_HWEIGHT
+       select FLATMEM
+       select FLAT_NODE_MEM_MAP
+       select GENERIC_CLOCKEVENTS
+       select GENERIC_CPU_DEVICES
+       select NO_HZ_IDLE
+       select NO_PREEMPT
+       select ARCH_WANT_FRAME_POINTERS
+       select HAS_DMA
+       select DMA_DIRECT_OPS
+       select NET
+       select MULTIUSER
+       select INET
+       select IPV6
+       select IP_PNP
+       select IP_PNP_DHCP
+       select TCP_CONG_ADVANCED
+       select TCP_CONG_BBR
+       select HIGH_RES_TIMERS
+       select NET_SCHED
+       select NET_SCH_FQ
+       select IP_MULTICAST
+       select IPV6_MULTICAST
+       select IP_MULTIPLE_TABLES
+       select IPV6_MULTIPLE_TABLES
+       select IP_ROUTE_MULTIPATH
+       select IPV6_ROUTE_MULTIPATH
+       select IP_ADVANCED_ROUTER
+       select IPV6_ADVANCED_ROUTER
+       select ARCH_NO_COHERENT_DMA_MMAP
+       select HAVE_MEMBLOCK
+       select NO_BOOTMEM
+       select BLK_DEV_NVME
+
+config OUTPUT_FORMAT
+       string "Output format"
+       default "$(OUTPUT_FORMAT)"
+
+config ARCH_DMA_ADDR_T_64BIT
+       def_bool 64BIT
+
+config PHYS_ADDR_T_64BIT
+       def_bool 64BIT
+
+config 64BIT
+       def_bool y if "$(EXEC_FORMAT)" = "elf64" || "$(OUTPUT_FORMAT)" = "pe-x86-64"
+
+config COREDUMP
+       def_bool n
+
+config BIG_ENDIAN
+       def_bool y if "$(OUTPUT_FORMAT)" = "elf64-s390"
+
+config CPU_BIG_ENDIAN
+       def_bool BIG_ENDIAN
+
+config GENERIC_CSUM
+       def_bool y
+
+config GENERIC_HWEIGHT
+       def_bool y
+
+config NO_IOPORT_MAP
+       def_bool y
+
+config RWSEM_GENERIC_SPINLOCK
+	bool
+	default y
+
+config HAVE_UNDERSCORE_SYMBOL_PREFIX
+       def_bool y if "$(OUTPUT_FORMAT)" = "pe-i386"
+       help
+         Some architectures generate an _ in front of C symbols; things like
+         module loading and assembly files need to know about this.
+
+config HZ
+        int
+        default 100
+
+config CONSOLE_LOGLEVEL_QUIET
+	int "quiet console loglevel (1-15)"
+	range 1 15
+	default "4"
+	help
+	  loglevel to use when "quiet" is passed on the kernel commandline.
+
+	  When "quiet" is passed on the kernel commandline this loglevel
+	  will be used as the loglevel. IOW passing "quiet" will be the
+	  equivalent of passing "loglevel=<CONSOLE_LOGLEVEL_QUIET>"
+
+config PCI
+	bool "PCI support"
+	select NO_GENERIC_PCI_IOPORT_MAP
+	select GENERIC_PCI_IOMAP
+	default y
