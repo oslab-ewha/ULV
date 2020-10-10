@@ -2,6 +2,7 @@
 #define __USE_GNU
 #include <fcntl.h>
 #include <sys/ioctl.h>
+#include <linux/sockios.h>
 #include <sys/socket.h>
 #undef st_atime
 #undef st_mtime
