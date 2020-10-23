@@ -115,6 +115,19 @@ all_TARGETS += spt/solo5-spt
 
 endif # CONFIG_SPT
 
+lkl_SRCS := lkl/lkl_main.c lkl/lkl_core.c lkl/lkl_launch_$(CONFIG_ARCH).S \
+    lkl/lkl_module_net.c lkl/lkl_module_block.c lkl/lkl.c
+
+lkl_OBJS := $(patsubst %.c,%.o,$(patsubst %.S,%.o,$(lkl_SRCS)))
+
+lkl/solo5-lkl: $(lkl_OBJS) $(common_LIB)
+	$(HOSTLINK) ../../lkl/tools/lkl/liblkl.a -lrt -lpthread
+
+lkl/lkl.o: lkl/lkl.c
+	gcc -I../../lkl/tools/lkl/include -c $< -o $@
+
+all_TARGETS += lkl/solo5-lkl
+
 all: $(all_TARGETS)
 
 all_OBJS := $(common_OBJS) $(hvt_OBJS) $(hvt_debug_OBJS) $(spt_OBJS)
