@@ -28,7 +28,7 @@ all_TARGETS :=
 .SUFFIXES:
 $(V).SILENT:	
 
-ifneq ($(filter 1,$(CONFIG_HVT) $(CONFIG_SPT)),)
+ifneq ($(filter 1,$(CONFIG_HVT) $(CONFIG_SPT) $(CONFIG_LKL)),)
 
 common_LIB := common/libcommon.a
 common_SRCS := common/elf.c common/mft.c common/block_attach.c \
@@ -115,22 +115,32 @@ all_TARGETS += spt/solo5-spt
 
 endif # CONFIG_SPT
 
+ifdef CONFIG_LKL
+
 lkl_SRCS := lkl/lkl_main.c lkl/lkl_core.c lkl/lkl_launch_$(CONFIG_ARCH).S \
     lkl/lkl_module_net.c lkl/lkl_module_block.c lkl/lkl.c
 
 lkl_OBJS := $(patsubst %.c,%.o,$(patsubst %.S,%.o,$(lkl_SRCS)))
 
 lkl/solo5-lkl: $(lkl_OBJS) $(common_LIB)
-	$(HOSTLINK) ../../lkl/tools/lkl/liblkl.a -lrt -lpthread
+	$(HOSTLINK)
 
-lkl/lkl.o: lkl/lkl.c
-	gcc -I../../lkl/tools/lkl/include -c $< -o $@
+HOSTLDFLAGS += -Wl,-z -Wl,noexecstack
+HOSTLDLIBS += $(MAKECONF_SPT_LDLIBS)
+
+ifdef CONFIG_SPT_NO_PIE
+
+HOSTLDFLAGS += -Wl,-Ttext-segment=0x40000000
+
+endif
 
 all_TARGETS += lkl/solo5-lkl
 
+endif
+
 all: $(all_TARGETS)
 
-all_OBJS := $(common_OBJS) $(hvt_OBJS) $(hvt_debug_OBJS) $(spt_OBJS)
+all_OBJS := $(common_OBJS) $(hvt_OBJS) $(hvt_debug_OBJS) $(spt_OBJS) $(lkl_OBJS)
 all_DEPS := $(patsubst %.o,%.d,$(all_OBJS))
 
 .PHONY: clean

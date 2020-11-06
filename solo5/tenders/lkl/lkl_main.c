@@ -41,8 +41,6 @@
 extern struct spt_module __start_modules;
 extern struct spt_module __stop_modules;
 
-extern void init_lkl(void);
-
 static void setup_modules(struct spt *spt, struct mft *mft)
 {
     for (struct spt_module *m = &__start_modules; m < &__stop_modules; m++) {
@@ -245,7 +243,10 @@ int main(int argc, char **argv)
      * seccomp policy.
      */
 
-    init_lkl();
+    {
+	    extern void init_lkl(void);///TEST
+	    init_lkl();
+    }
 
     struct spt *spt = spt_init(mem_size);
 

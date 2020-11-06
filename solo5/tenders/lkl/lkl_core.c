@@ -282,6 +282,8 @@ void spt_run(struct spt *spt, uint64_t p_entry)
     seccomp_release(spt->sc_ctx);
     spt->sc_ctx = NULL;
 
+    /* Currently, seccomp is disabled */
+#if 0
     rc = prctl(PR_SET_NO_NEW_PRIVS, 1, 0, 0, 0);
     if (rc != 0)
         err(1, "prctl(PR_SET_NO_NEW_PRIVS) failed");
@@ -298,6 +300,7 @@ void spt_run(struct spt *spt, uint64_t p_entry)
     rc = syscall(SYS_seccomp, SECCOMP_SET_MODE_FILTER, 0, &prog);
     if (rc != 0)
         err(1, "seccomp(SECCOMP_SET_MODE_FILTER) failed");
+#endif
 
     spt_launch(sp, start_fn, spt->mem + SPT_BOOT_INFO_BASE);
 

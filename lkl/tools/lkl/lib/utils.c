@@ -264,8 +264,6 @@ void lkl_sysctl_parse_write(const char *sysctls)
 
 void lkl_start_kernel_default(void)
 {
-	char	*envp[] = { NULL };
-
-	__init_libc(envp, "lkl");
+	/* libc initialization __init_libc() should be already called */
 	lkl_start_kernel(&lkl_host_ops, "mem=800M");
 }

@@ -41,6 +41,11 @@ hvt_SRCS := hvt/start.c $(common_SRCS) $(common_hvt_SRCS) \
     hvt/platform_lifecycle.c hvt/yield.c hvt/tscclock.c hvt/console.c \
     hvt/net.c hvt/block.c
 
+lkl_SRCS := lkl/start.c lkl/lkl.c \
+    abort.c crt.c printf.c mem.c exit.c log.c cmdline.c tls.c mft.c \
+    lkl/bindings.c lkl/block.c lkl/net.c lkl/platform.c \
+    lkl/sys_linux_$(CONFIG_ARCH).c
+
 spt_SRCS := spt/start.c \
     abort.c crt.c printf.c lib.c mem.c exit.c log.c cmdline.c tls.c mft.c \
     spt/bindings.c spt/block.c spt/net.c spt/platform.c \
@@ -107,6 +112,26 @@ hvt/solo5_hvt.o: $(hvt_OBJS)
     all_TARGETS += hvt/solo5_hvt.o
     all_OBJS += $(hvt_OBJS)
     all_SRCS += $(hvt_SRCS)
+endif
+
+ifdef CONFIG_LKL
+    lkl_OBJS := $(patsubst %.c,%.o,$(patsubst %.S,%.o,$(lkl_SRCS)))
+
+LIBLKL := ../../lkl/tools/lkl/liblkl.a
+LKL_CFLAGS := -I../../lkl/tools/lkl/include
+LKL_LDFLAGS := -L /usr/lib/x86_64-linux-musl -lrt -lpthread -lc
+
+lkl/solo5_lkl.o: $(lkl_OBJS) $(LIBLKL)
+	@echo "LD $@"
+	$(LD) -static -r $(LDFLAGS) $^ $(LIBLKL) $(LKL_LDFLAGS) -o $@
+	@echo "OBJCOPY $@"
+	$(OBJCOPY) -w -G solo5_\* -G _start\* -G $(SSP_GUARD) -G $(SSP_FAIL) -G lkl_syscall $@ $@
+
+lkl/lkl.o: CFLAGS += $(LKL_CFLAGS)
+
+    all_TARGETS += lkl/solo5_lkl.o
+    all_OBJS += $(lkl_OBJS)
+    all_SRCS += $(lkl_SRCS)
 endif
 
 ifdef CONFIG_SPT
