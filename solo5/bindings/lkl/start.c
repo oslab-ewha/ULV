@@ -28,8 +28,11 @@ void _start(void *arg)
 {
     init_lkl();
 
+   /* These should be disabled. __init_libc() will manage ssp, tls. */
+#if 0
     crt_init_ssp();
     crt_init_tls();
+#endif
 
     static struct solo5_start_info si;
 

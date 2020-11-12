@@ -1,1 +1,6 @@
 *~
+*.o
+/cscope.files
+/cscope.out
+/micro_benchmarks/*.spt
+/micro_benchmarks/manifest.c

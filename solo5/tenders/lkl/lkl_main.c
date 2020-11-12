@@ -243,11 +243,6 @@ int main(int argc, char **argv)
      * seccomp policy.
      */
 
-    {
-	    extern void init_lkl(void);///TEST
-	    init_lkl();
-    }
-
     struct spt *spt = spt_init(mem_size);
 
     elf_load(elf_fd, elf_filename, spt->mem, spt->mem_size, SPT_GUEST_MIN_BASE,

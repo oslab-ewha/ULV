@@ -118,7 +118,7 @@ endif # CONFIG_SPT
 ifdef CONFIG_LKL
 
 lkl_SRCS := lkl/lkl_main.c lkl/lkl_core.c lkl/lkl_launch_$(CONFIG_ARCH).S \
-    lkl/lkl_module_net.c lkl/lkl_module_block.c lkl/lkl.c
+    lkl/lkl_module_net.c lkl/lkl_module_block.c
 
 lkl_OBJS := $(patsubst %.c,%.o,$(patsubst %.S,%.o,$(lkl_SRCS)))
 
