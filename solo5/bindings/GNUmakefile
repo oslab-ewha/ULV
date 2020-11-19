@@ -125,7 +125,7 @@ lkl/solo5_lkl.o: $(lkl_OBJS) $(LIBLKL)
 	@echo "LD $@"
 	$(LD) -static -r $(LDFLAGS) $^ $(LIBLKL) $(LKL_LDFLAGS) -o $@
 	@echo "OBJCOPY $@"
-	$(OBJCOPY) -w -G solo5_\* -G _start\* -G $(SSP_GUARD) -G $(SSP_FAIL) -G lkl_syscall $@ $@
+	$(OBJCOPY) -w -G solo5_\* -G _start\* -G $(SSP_GUARD) -G $(SSP_FAIL) -G lkl_syscall -G snprintf $@ $@
 
 lkl/lkl.o: CFLAGS += $(LKL_CFLAGS)
 
