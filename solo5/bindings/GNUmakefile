@@ -42,7 +42,7 @@ hvt_SRCS := hvt/start.c $(common_SRCS) $(common_hvt_SRCS) \
     hvt/net.c hvt/block.c
 
 lkl_SRCS := lkl/start.c lkl/lkl.c \
-    abort.c crt.c printf.c mem.c exit.c log.c cmdline.c tls.c mft.c \
+    abort.c crt.c mem.c exit.c log.c cmdline.c tls.c mft.c \
     lkl/bindings.c lkl/block.c lkl/net.c lkl/platform.c \
     lkl/sys_linux_$(CONFIG_ARCH).c
 
@@ -121,11 +121,11 @@ LIBLKL := ../../lkl/tools/lkl/liblkl.a
 LKL_CFLAGS := -I../../lkl/tools/lkl/include
 LKL_LDFLAGS := -L /usr/lib/x86_64-linux-musl -lrt -lpthread -lc
 
-lkl/solo5_lkl.o: $(lkl_OBJS) $(LIBLKL)
+lkl/solo5_lkl.o: $(lkl_OBJS) $(LIBLKL) lkl/globals.txt
 	@echo "LD $@"
-	$(LD) -static -r $(LDFLAGS) $^ $(LIBLKL) $(LKL_LDFLAGS) -o $@
+	$(LD) -static -r $(LDFLAGS) $(lkl_OBJS) $(LIBLKL) $(LKL_LDFLAGS) -o $@
 	@echo "OBJCOPY $@"
-	$(OBJCOPY) -w -G solo5_\* -G _start\* -G $(SSP_GUARD) -G $(SSP_FAIL) -G lkl_syscall -G snprintf $@ $@
+	$(OBJCOPY) -w --globalize-symbols lkl/globals.txt $@ $@
 
 lkl/lkl.o: CFLAGS += $(LKL_CFLAGS)
 

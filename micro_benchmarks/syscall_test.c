@@ -1,8 +1,8 @@
 #include "solo5.h"
-#include "../../bindings/lib.c"
 #include <lkl.h>
 
 #define UNUSED(x) (void)(x)
+int strlen(const char *str);
 int snprintf(char *str, size_t size, const char *format, ...);
 
 static void
