@@ -3,3 +3,4 @@ _start*
 __stack_chk_guard
 __stack_chk_fail
 lkl_syscall
+mount_fs

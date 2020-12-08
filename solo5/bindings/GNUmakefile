@@ -41,7 +41,7 @@ hvt_SRCS := hvt/start.c $(common_SRCS) $(common_hvt_SRCS) \
     hvt/platform_lifecycle.c hvt/yield.c hvt/tscclock.c hvt/console.c \
     hvt/net.c hvt/block.c
 
-lkl_SRCS := lkl/start.c lkl/lkl.c \
+lkl_SRCS := lkl/start.c \
     abort.c crt.c mem.c exit.c log.c cmdline.c tls.c mft.c \
     lkl/bindings.c lkl/block.c lkl/net.c lkl/platform.c \
     lkl/sys_linux_$(CONFIG_ARCH).c

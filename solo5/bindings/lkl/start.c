@@ -22,11 +22,21 @@
 #include "../crt_init.h"
 #include "solo5_version.h"
 
-extern void init_lkl(void);
+extern void init_liblkl(void);
+extern void __init_libc(char *envp[], const char *);
+
+static void
+start_lkl(void)
+{
+	char	*envp[] = { 0 };
+
+	__init_libc(envp, "lkl");
+	init_liblkl();
+}
 
 void _start(void *arg)
 {
-    init_lkl();
+    start_lkl();
 
    /* These should be disabled. __init_libc() will manage ssp, tls. */
 #if 0

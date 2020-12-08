@@ -2,7 +2,7 @@ SOLO5 := ../solo5
 LKL := ../lkl
 
 TOPDIR := $(SOLO5)
-LKLINC := $(TOPDIR)/bindings/lkl
+LKLINC := -I$(LKL)/tools/lkl/lib
 
 SPT := syscall_test.spt
 
@@ -23,7 +23,7 @@ manifest.c: manifest.json $(SOLO5)/include/solo5/mft_abi.h $(ELFTOOL)
 	@echo "CC $<"
 	$(CC) $(CFLAGS) $(CPPFLAGS) -c $< -o $@
 
-syscall_test.o: CFLAGS += -I$(LKLINC)
+syscall_test.o: CFLAGS += $(LKLINC)
 
 %.spt: %.o manifest.o $(LDS.spt) $(BINDINGS.lkl)
 	@echo "LD $@"

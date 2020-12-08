@@ -1,9 +1,7 @@
 #include "solo5.h"
-#include <lkl.h>
+#include "liblkl.h"
 
 #define UNUSED(x) (void)(x)
-int strlen(const char *str);
-int snprintf(char *str, size_t size, const char *format, ...);
 
 static void
 puts(const char *s)
@@ -16,6 +14,7 @@ solo5_app_main(const struct solo5_start_info *si)
 {
 	struct utsname	uname;
 	struct timeval	tv;
+	char	*path_fs, path_open[128];
 	uint64_t	elapsed;
 	char	buf[256];
 	solo5_time_t	start;
@@ -49,11 +48,15 @@ solo5_app_main(const struct solo5_start_info *si)
 
 	puts("start open()/close() call 10000 times\n");
 
+	path_fs = mount_fs("/tmp/testfile");
+	snprintf(path_open, 128, "%s/test.txt", path_fs);
+
 	start = solo5_clock_monotonic();
 	for (i = 0; i < 10000; i++) {
-		int fd = lkl_sys_open("/", 0);
-		if (fd >= 0)
+		int fd = lkl_sys_open(path_open, 0);
+		if (fd >= 0) {
 			lkl_sys_close(fd);
+		}
 	}
 
 	elapsed = solo5_clock_monotonic() - start;
