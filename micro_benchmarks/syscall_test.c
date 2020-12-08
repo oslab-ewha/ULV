@@ -14,7 +14,8 @@ solo5_app_main(const struct solo5_start_info *si)
 {
 	struct utsname	uname;
 	struct timeval	tv;
-	char	*path_fs, path_open[128];
+	void	*fs;
+	char	*path_open;
 	uint64_t	elapsed;
 	char	buf[256];
 	solo5_time_t	start;
@@ -48,8 +49,12 @@ solo5_app_main(const struct solo5_start_info *si)
 
 	puts("start open()/close() call 10000 times\n");
 
-	path_fs = mount_fs("/tmp/testfile");
-	snprintf(path_open, 128, "%s/test.txt", path_fs);
+	if (mount_fs("/tmp/testfile", &fs) < 0) {
+		puts("failed to mount\n");
+		return 1;
+	}
+
+	path_open = get_path(fs, "/test.txt");
 
 	start = solo5_clock_monotonic();
 	for (i = 0; i < 10000; i++) {
@@ -60,6 +65,9 @@ solo5_app_main(const struct solo5_start_info *si)
 	}
 
 	elapsed = solo5_clock_monotonic() - start;
+
+	free(path_open);
+	umount_fs(fs);
 
 	snprintf(buf, 256, "Elapsed time: %lluus\n", elapsed / 1000);
 	puts(buf);
