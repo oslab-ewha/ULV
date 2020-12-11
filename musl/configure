@@ -325,6 +325,7 @@ arm*) ARCH=arm ;;
 aarch64*) ARCH=aarch64 ;;
 i?86-nt32*) ARCH=nt32 ;;
 i?86*) ARCH=i386 ;;
+x86_64-lkl) ARCH=x86_64-lkl ;;
 x86_64-x32*|x32*|x86_64*x32) ARCH=x32 ;;
 x86_64-nt64*) ARCH=nt64 ;;
 x86_64*) ARCH=x86_64 ;;
@@ -567,7 +568,10 @@ tryldflag LDFLAGS_AUTO -Wl,--hash-style=both
 # libc.so will crash at runtime during relocation processing.
 # The common way this can happen is failure to link the compiler
 # runtime library; implementation error is also a possibility.
-tryldflag LDFLAGS_AUTO -Wl,--no-undefined
+
+if test "$ARCH" != x86_64-lkl; then
+    tryldflag LDFLAGS_AUTO -Wl,--no-undefined
+fi
 
 # Avoid exporting symbols from compiler runtime libraries. They
 # should be hidden anyway, but some toolchains including old gcc
