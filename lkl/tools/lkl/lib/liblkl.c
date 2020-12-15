@@ -70,3 +70,10 @@ get_path(void *_fs, const char *path)
 	snprintf(buf, 1024, "%s%s", fs->mpoint, path);
 	return strdup(buf);
 }
+
+void
+free_path(char *path)
+{
+	if (path)
+		free(path);
+}

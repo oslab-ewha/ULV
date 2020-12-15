@@ -44,8 +44,10 @@ __SC_3264(__NR_io_getevents, sys_io_getevents_time32, sys_io_getevents)
 #endif
 
 /* fs/xattr.c */
+#if 0
 #define __NR_setxattr 5
 __SYSCALL(__NR_setxattr, sys_setxattr)
+#endif
 #define __NR_lsetxattr 6
 __SYSCALL(__NR_lsetxattr, sys_lsetxattr)
 #define __NR_fsetxattr 7
@@ -58,8 +60,10 @@ __SYSCALL(__NR_lgetxattr, sys_lgetxattr)
 __SYSCALL(__NR_fgetxattr, sys_fgetxattr)
 #define __NR_listxattr 11
 __SYSCALL(__NR_listxattr, sys_listxattr)
+#if 0
 #define __NR_llistxattr 12
 __SYSCALL(__NR_llistxattr, sys_llistxattr)
+#endif
 #define __NR_flistxattr 13
 __SYSCALL(__NR_flistxattr, sys_flistxattr)
 #define __NR_removexattr 14
@@ -180,7 +184,10 @@ __SYSCALL(__NR_fchmodat, sys_fchmodat)
 __SYSCALL(__NR_fchownat, sys_fchownat)
 #define __NR_fchown 55
 __SYSCALL(__NR_fchown, sys_fchown)
-#define __NR_openat 56
+#define __NR_open 2
+__SYSCALL(__NR_open, sys_open)
+__SYSCALL(5, sys_newfstat)
+#define __NR_openat 257
 __SYSCALL(__NR_openat, sys_openat)
 #define __NR_close 57
 __SYSCALL(__NR_close, sys_close)
@@ -621,7 +628,7 @@ __SC_COMP(__NR_recvmsg, sys_recvmsg, compat_sys_recvmsg)
 __SC_COMP(__NR_readahead, sys_readahead, compat_sys_readahead)
 
 /* mm/nommu.c, also with MMU */
-#define __NR_brk 214
+#define __NR_brk 12
 __SYSCALL(__NR_brk, sys_brk)
 #define __NR_munmap 215
 __SYSCALL(__NR_munmap, sys_munmap)
@@ -642,7 +649,7 @@ __SYSCALL(__NR_clone, sys_clone)
 #define __NR_execve 221
 __SC_COMP(__NR_execve, sys_execve, compat_sys_execve)
 
-#define __NR3264_mmap 222
+#define __NR3264_mmap 9
 __SC_3264(__NR3264_mmap, sys_mmap2, sys_mmap)
 /* mm/fadvise.c */
 #define __NR3264_fadvise64 223
