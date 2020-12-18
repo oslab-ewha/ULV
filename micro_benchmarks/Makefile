@@ -27,7 +27,7 @@ syscall_test.o: CFLAGS += $(LKLINC)
 
 %.spt: %.o manifest.o $(LDS.spt) $(BINDINGS.lkl)
 	@echo "LD $@"
-	$(LD) $(LDFLAGS) -T $(LDS.spt) $(BINDINGS.lkl) $< manifest.o -o $@
+	$(LD) $(LDFLAGS) -T $(LDS.spt) $(BINDINGS.lkl) $< ../musl/lib/libc.a manifest.o -o $@
 
 .PHONY: clean
 

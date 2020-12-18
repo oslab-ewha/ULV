@@ -4,3 +4,5 @@
 /cscope.out
 /micro_benchmarks/*.spt
 /micro_benchmarks/manifest.c
+/macro_benchmarks/*.spt
+/macro_benchmarks/manifest.c

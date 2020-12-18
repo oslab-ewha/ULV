@@ -119,13 +119,13 @@ ifdef CONFIG_LKL
 
 LIBLKL := ../../lkl/tools/lkl/liblkl.a
 LKL_CFLAGS := -I../../lkl/tools/lkl/include
-LKL_LDFLAGS := -L /usr/lib/x86_64-linux-musl -lrt -lpthread -lc
+LKL_LDFLAGS := /usr/lib/x86_64-linux-musl/libc.a
 
 lkl/solo5_lkl.o: $(lkl_OBJS) $(LIBLKL) lkl/globals.txt
 	@echo "LD $@"
 	$(LD) -static -r $(LDFLAGS) $(lkl_OBJS) $(LIBLKL) $(LKL_LDFLAGS) -o $@
 	@echo "OBJCOPY $@"
-	$(OBJCOPY) -w --globalize-symbols lkl/globals.txt $@ $@
+	$(OBJCOPY) -w --keep-global-symbols lkl/globals.txt $@ $@
 
 lkl/lkl.o: CFLAGS += $(LKL_CFLAGS)
 

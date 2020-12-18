@@ -66,7 +66,7 @@ solo5_app_main(const struct solo5_start_info *si)
 
 	elapsed = solo5_clock_monotonic() - start;
 
-	free(path_open);
+	free_path(path_open);
 	umount_fs(fs);
 
 	snprintf(buf, 256, "Elapsed time: %lluus\n", elapsed / 1000);
