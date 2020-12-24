@@ -48,7 +48,7 @@ export CFLAGS += -I$(OUTPUT)/include -Iinclude -Wall -g -O2 -Wextra \
 -include Targets
 
 TARGETS := $(progs-y:%=$(OUTPUT)%$(EXESUF))
-TARGETS += $(libs-y:%=$(OUTPUT)%$(SOSUF))
+TARGETS += $(OUTPUT)liblkl.a
 all: $(TARGETS)
 
 # this workaround is for FreeBSD
@@ -78,8 +78,8 @@ $(OUTPUT)liblkl.a: $(OUTPUT)lib/liblkl-in.o $(OUTPUT)lib/lkl.o
 	$(QUIET_AR)$(AR) -rc $@ $^
 
 # rule to link programs
-$(OUTPUT)%$(EXESUF): $(OUTPUT)%-in.o $(OUTPUT)liblkl.a
-	$(QUIET_LINK)$(CC) $(LDFLAGS) $(LDFLAGS_$*-y) -o $@ $^ $(LDLIBS) $(LDLIBS_$*-y)
+#$(OUTPUT)%$(EXESUF): $(OUTPUT)%-in.o $(OUTPUT)liblkl.a
+#	$(QUIET_LINK)$(CC) $(LDFLAGS) $(LDFLAGS_$*-y) -o $@ $^ $(LDLIBS) $(LDLIBS_$*-y)
 
 # rule to build objects
 $(OUTPUT)%-in.o: $(OUTPUT)lib/lkl.o FORCE
