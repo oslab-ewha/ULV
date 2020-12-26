@@ -22,22 +22,20 @@
 #include "../crt_init.h"
 #include "solo5_version.h"
 
-extern void init_liblkl(void);
+extern void init_liblkl(void *heap_start, unsigned long heap_size);
 extern void __init_libc(char *envp[], const char *);
 
 static void
-start_lkl(void)
+start_lkl(void *heap_start, unsigned long heap_size)
 {
 	char	*envp[] = { 0 };
 
 	__init_libc(envp, "lkl");
-	init_liblkl();
+	init_liblkl(heap_start, heap_size);
 }
 
 void _start(void *arg)
 {
-    start_lkl();
-
    /* These should be disabled. __init_libc() will manage ssp, tls. */
 #if 0
     crt_init_ssp();
@@ -60,6 +58,10 @@ void _start(void *arg)
     net_init(arg);
 
     mem_lock_heap(&si.heap_start, &si.heap_size);
+
+    /* solo5 binding uses stack in this area. Stack size should be subtracted for now. */
+    start_lkl((void *)si.heap_start, si.heap_size - 0x10000);
+
     solo5_exit(solo5_app_main(&si));
 }
 

@@ -4,30 +4,19 @@
 #include <linux/swap.h>
 
 unsigned long memory_start, memory_end;
-static unsigned long _memory_start, mem_size;
 
 void *empty_zero_page;
 
-void __init bootmem_init(unsigned long mem_sz)
+void __init bootmem_init(void)
 {
-	mem_size = mem_sz;
+	unsigned long	mem_size;
 
-	if (lkl_ops->page_alloc) {
-		mem_size = PAGE_ALIGN(mem_size);
-		_memory_start = (unsigned long)lkl_ops->page_alloc(mem_size);
-	} else {
-		_memory_start = (unsigned long)lkl_ops->mem_alloc(mem_size);
-	}
+	if (PAGE_ALIGN(memory_start) != memory_start)
+		memory_start = PAGE_ALIGN(memory_start) + PAGE_SIZE;
 
-	memory_start = _memory_start;
-	BUG_ON(!memory_start);
-	memory_end = memory_start + mem_size;
+	memory_end = PAGE_ALIGN(memory_end);
+	mem_size = memory_end - memory_start;
 
-	if (PAGE_ALIGN(memory_start) != memory_start) {
-		mem_size -= PAGE_ALIGN(memory_start) - memory_start;
-		memory_start = PAGE_ALIGN(memory_start);
-		mem_size = (mem_size / PAGE_SIZE) * PAGE_SIZE;
-	}
 	pr_info("memblock address range: 0x%lx - 0x%lx\n", memory_start,
 		memory_start+mem_size);
 	/*
@@ -55,7 +44,7 @@ void __init mem_init(void)
 	/* this will put all memory onto the freelists */
 	totalram_pages_add(memblock_free_all());
 	pr_info("Memory available: %luk/%luk RAM\n",
-		(nr_free_pages() << PAGE_SHIFT) >> 10, mem_size >> 10);
+		(nr_free_pages() << PAGE_SHIFT) >> 10, (memory_end - memory_start) >> 10);
 }
 
 /*
@@ -68,8 +57,4 @@ void free_initmem(void)
 
 void free_mem(void)
 {
-	if (lkl_ops->page_free)
-		lkl_ops->page_free((void *)_memory_start, mem_size);
-	else
-		lkl_ops->mem_free((void *)_memory_start);
 }

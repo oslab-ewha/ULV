@@ -179,11 +179,11 @@ struct lkl_host_operations {
  * The function returns only after the kernel is shutdown with lkl_sys_halt.
  *
  * @lkl_ops - pointer to host operations
- * @cmd_line - format for command line string that is going to be used to
+ * @mem_start - start memory address
+ * @mem_size - memory size
  * generate the Linux kernel command line
  */
-int lkl_start_kernel(struct lkl_host_operations *lkl_ops,
-		    const char *cmd_line, ...);
+int lkl_start_kernel(struct lkl_host_operations *lkl_ops, void *mem_start, unsigned long mem_size);
 
 /**
  * lkl_is_running - returns 1 if the kernel is currently running

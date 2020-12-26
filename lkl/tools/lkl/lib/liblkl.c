@@ -12,9 +12,9 @@ typedef struct {
 } fs_t;
 
 void
-init_liblkl(void)
+init_liblkl(void *mem_start, unsigned long mem_size)
 {
-	lkl_start_kernel(&lkl_host_ops, "mem=800M");
+	lkl_start_kernel(&lkl_host_ops, mem_start, mem_size);
 }
 
 int
