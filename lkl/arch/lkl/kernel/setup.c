@@ -155,6 +155,8 @@ static int lkl_run_init(struct linux_binprm *bprm)
 
 	init_pid_ns.child_reaper = 0;
 
+	current->mm->start_brk = current->mm->brk = memory_end;
+
 	syscalls_init();
 
 	lkl_ops->sem_up(init_sem);
