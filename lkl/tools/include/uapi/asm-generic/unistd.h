@@ -30,14 +30,18 @@
 #define __SC_COMP_3264(_nr, _32, _64, _comp) __SC_3264(_nr, _32, _64)
 #endif
 
+#if 0
 #define __NR_io_setup 0
 __SC_COMP(__NR_io_setup, sys_io_setup, compat_sys_io_setup)
 #define __NR_io_destroy 1
 __SYSCALL(__NR_io_destroy, sys_io_destroy)
+#endif
 #define __NR_io_submit 2
 __SC_COMP(__NR_io_submit, sys_io_submit, compat_sys_io_submit)
+#if 0
 #define __NR_io_cancel 3
 __SYSCALL(__NR_io_cancel, sys_io_cancel)
+#endif
 #if defined(__ARCH_WANT_TIME32_SYSCALLS) || __BITS_PER_LONG != 32
 #define __NR_io_getevents 4
 __SC_3264(__NR_io_getevents, sys_io_getevents_time32, sys_io_getevents)
@@ -52,15 +56,17 @@ __SYSCALL(__NR_setxattr, sys_setxattr)
 __SYSCALL(__NR_lsetxattr, sys_lsetxattr)
 #define __NR_fsetxattr 7
 __SYSCALL(__NR_fsetxattr, sys_fsetxattr)
+#if 0
 #define __NR_getxattr 8
 __SYSCALL(__NR_getxattr, sys_getxattr)
+#endif
 #define __NR_lgetxattr 9
 __SYSCALL(__NR_lgetxattr, sys_lgetxattr)
+#if 0
 #define __NR_fgetxattr 10
 __SYSCALL(__NR_fgetxattr, sys_fgetxattr)
 #define __NR_listxattr 11
 __SYSCALL(__NR_listxattr, sys_listxattr)
-#if 0
 #define __NR_llistxattr 12
 __SYSCALL(__NR_llistxattr, sys_llistxattr)
 #endif
@@ -98,7 +104,7 @@ __SC_COMP(__NR_epoll_pwait, sys_epoll_pwait, compat_sys_epoll_pwait)
 __SYSCALL(__NR_dup, sys_dup)
 #define __NR_dup3 24
 __SYSCALL(__NR_dup3, sys_dup3)
-#define __NR3264_fcntl 25
+#define __NR3264_fcntl 72
 __SC_COMP_3264(__NR3264_fcntl, sys_fcntl64, sys_fcntl, compat_sys_fcntl64)
 
 /* fs/inotify_user.c */
@@ -120,7 +126,7 @@ __SYSCALL(__NR_ioprio_set, sys_ioprio_set)
 __SYSCALL(__NR_ioprio_get, sys_ioprio_get)
 
 /* fs/locks.c */
-#define __NR_flock 32
+#define __NR_flock 73
 __SYSCALL(__NR_flock, sys_flock)
 
 /* fs/namei.c */
@@ -186,10 +192,9 @@ __SYSCALL(__NR_fchownat, sys_fchownat)
 __SYSCALL(__NR_fchown, sys_fchown)
 #define __NR_open 2
 __SYSCALL(__NR_open, sys_open)
-__SYSCALL(5, sys_newfstat)
 #define __NR_openat 257
 __SYSCALL(__NR_openat, sys_openat)
-#define __NR_close 57
+#define __NR_close 3
 __SYSCALL(__NR_close, sys_close)
 #define __NR_vhangup 58
 __SYSCALL(__NR_vhangup, sys_vhangup)
@@ -207,11 +212,11 @@ __SYSCALL(__NR_quotactl, sys_quotactl)
 __SYSCALL(__NR_getdents64, sys_getdents64)
 
 /* fs/read_write.c */
-#define __NR3264_lseek 62
+#define __NR3264_lseek 8
 __SC_3264(__NR3264_lseek, sys_llseek, sys_lseek)
-#define __NR_read 63
+#define __NR_read 0
 __SYSCALL(__NR_read, sys_read)
-#define __NR_write 64
+#define __NR_write 1
 __SYSCALL(__NR_write, sys_write)
 #define __NR_readv 65
 __SC_COMP(__NR_readv, sys_readv, compat_sys_readv)
@@ -232,15 +237,17 @@ __SYSCALL(__NR3264_sendfile, sys_sendfile64)
 
 /* fs/select.c */
 #if defined(__ARCH_WANT_TIME32_SYSCALLS) || __BITS_PER_LONG != 32
-#define __NR_pselect6 72
+#define __NR_pselect6 270
 __SC_COMP_3264(__NR_pselect6, sys_pselect6_time32, sys_pselect6, compat_sys_pselect6_time32)
-#define __NR_ppoll 73
+#define __NR_ppoll 271
 __SC_COMP_3264(__NR_ppoll, sys_ppoll_time32, sys_ppoll, compat_sys_ppoll_time32)
 #endif
 
 /* fs/signalfd.c */
+#if 0
 #define __NR_signalfd4 74
 __SC_COMP(__NR_signalfd4, sys_signalfd4, compat_sys_signalfd4)
+#endif
 
 /* fs/splice.c */
 #define __NR_vmsplice 75
@@ -256,14 +263,14 @@ __SYSCALL(__NR_readlinkat, sys_readlinkat)
 #if defined(__ARCH_WANT_NEW_STAT) || defined(__ARCH_WANT_STAT64)
 #define __NR3264_fstatat 79
 __SC_3264(__NR3264_fstatat, sys_fstatat64, sys_newfstatat)
-#define __NR3264_fstat 80
+#define __NR3264_fstat 5
 __SC_3264(__NR3264_fstat, sys_fstat64, sys_newfstat)
 #endif
 
 /* fs/sync.c */
 #define __NR_sync 81
 __SYSCALL(__NR_sync, sys_sync)
-#define __NR_fsync 82
+#define __NR_fsync 74
 __SYSCALL(__NR_fsync, sys_fsync)
 #define __NR_fdatasync 83
 __SYSCALL(__NR_fdatasync, sys_fdatasync)
@@ -630,7 +637,7 @@ __SC_COMP(__NR_readahead, sys_readahead, compat_sys_readahead)
 /* mm/nommu.c, also with MMU */
 #define __NR_brk 12
 __SYSCALL(__NR_brk, sys_brk)
-#define __NR_munmap 215
+#define __NR_munmap 11
 __SYSCALL(__NR_munmap, sys_munmap)
 #define __NR_mremap 216
 __SYSCALL(__NR_mremap, sys_mremap)
@@ -661,7 +668,7 @@ __SC_COMP(__NR3264_fadvise64, sys_fadvise64_64, compat_sys_fadvise64_64)
 __SYSCALL(__NR_swapon, sys_swapon)
 #define __NR_swapoff 225
 __SYSCALL(__NR_swapoff, sys_swapoff)
-#define __NR_mprotect 226
+#define __NR_mprotect 10
 __SYSCALL(__NR_mprotect, sys_mprotect)
 #define __NR_msync 227
 __SYSCALL(__NR_msync, sys_msync)
