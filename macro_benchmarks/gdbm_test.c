@@ -40,6 +40,8 @@ fatal(const char *msg)
 	puts(msg);
 }
 
+static char	*envp[1024] = { 0, 0 };
+
 static void
 gdbm_test(void)
 {
@@ -90,6 +92,11 @@ solo5_app_main(const struct solo5_start_info *si)
 	char	buf[256];
 
 	UNUSED(si);
+
+	{
+		extern void __init_libc(char *envp[], const char *);
+		__init_libc(envp, "lkl");
+	}
 
 	puts("gdbm test");
 
