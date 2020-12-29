@@ -45,6 +45,7 @@
 # Version: @VERSION@
 #
 
+
 VPATH = @srcdir@
 am__is_gnu_make = { \
   if test -z '$(MAKELEVEL)'; then \
@@ -253,6 +254,7 @@ CONFIG_CLEAN_FILES =
 CONFIG_CLEAN_VPATH_FILES =
 am__installdirs = "$(DESTDIR)$(bindir)"
 PROGRAMS = $(bin_PROGRAMS)
+LIBRARIES = $(noinst_LIBRARIES)
 AM_V_AR = $(am__v_AR_@AM_V@)
 am__v_AR_ = $(am__v_AR_@AM_DEFAULT_V@)
 am__v_AR_0 = @echo "  AR      " $@;
@@ -298,6 +300,44 @@ am_libunittest_a_OBJECTS = $(am__objects_4) \
 nodist_libunittest_a_OBJECTS = libunittest_a-version.$(OBJEXT)
 libunittest_a_OBJECTS = $(am_libunittest_a_OBJECTS) \
 	$(nodist_libunittest_a_OBJECTS)
+libwget_a_AR = $(AR) $(ARFLAGS)
+libwget_a_DEPENDENCIES = $(LIBOBJS)
+am__libwget_a_SOURCES_DIST = connect.c convert.c cookies.c ftp.c \
+	css_.c css-url.c ftp-basic.c ftp-ls.c hash.c host.c hsts.c \
+	html-parse.c html-url.c http.c init.c log.c main.c netrc.c \
+	progress.c ptimer.c recur.c res.c retr.c spider.c url.c warc.c \
+	xattr.c utils.c exits.c build_info.c iri.c metalink.c \
+	css-url.h css-tokens.h connect.h convert.h cookies.h ftp.h \
+	hash.h host.h hsts.h html-parse.h html-url.h http.h \
+	http-ntlm.h init.h log.h mswindows.h netrc.h options.h \
+	progress.h ptimer.h recur.h res.h retr.h spider.h ssl.h \
+	sysdep.h url.h warc.h utils.h wget.h iri.h exits.h version.h \
+	metalink.h xattr.h
+@WITH_XATTR_TRUE@am__objects_5 = libwget_a-xattr.$(OBJEXT)
+@IRI_IS_ENABLED_TRUE@am__objects_6 = libwget_a-iri.$(OBJEXT)
+@METALINK_IS_ENABLED_TRUE@am__objects_7 =  \
+@METALINK_IS_ENABLED_TRUE@	libwget_a-metalink.$(OBJEXT)
+am__objects_8 = libwget_a-connect.$(OBJEXT) \
+	libwget_a-convert.$(OBJEXT) libwget_a-cookies.$(OBJEXT) \
+	libwget_a-ftp.$(OBJEXT) libwget_a-css_.$(OBJEXT) \
+	libwget_a-css-url.$(OBJEXT) libwget_a-ftp-basic.$(OBJEXT) \
+	libwget_a-ftp-ls.$(OBJEXT) libwget_a-hash.$(OBJEXT) \
+	libwget_a-host.$(OBJEXT) libwget_a-hsts.$(OBJEXT) \
+	libwget_a-html-parse.$(OBJEXT) libwget_a-html-url.$(OBJEXT) \
+	libwget_a-http.$(OBJEXT) libwget_a-init.$(OBJEXT) \
+	libwget_a-log.$(OBJEXT) libwget_a-main.$(OBJEXT) \
+	libwget_a-netrc.$(OBJEXT) libwget_a-progress.$(OBJEXT) \
+	libwget_a-ptimer.$(OBJEXT) libwget_a-recur.$(OBJEXT) \
+	libwget_a-res.$(OBJEXT) libwget_a-retr.$(OBJEXT) \
+	libwget_a-spider.$(OBJEXT) libwget_a-url.$(OBJEXT) \
+	libwget_a-warc.$(OBJEXT) $(am__objects_5) \
+	libwget_a-utils.$(OBJEXT) libwget_a-exits.$(OBJEXT) \
+	libwget_a-build_info.$(OBJEXT) $(am__objects_6) \
+	$(am__objects_7)
+am_libwget_a_OBJECTS = $(am__objects_8)
+nodist_libwget_a_OBJECTS = libwget_a-version.$(OBJEXT)
+libwget_a_OBJECTS = $(am_libwget_a_OBJECTS) \
+	$(nodist_libwget_a_OBJECTS)
 am__wget_SOURCES_DIST = connect.c convert.c cookies.c ftp.c css_.c \
 	css-url.c ftp-basic.c ftp-ls.c hash.c host.c hsts.c \
 	html-parse.c html-url.c http.c init.c log.c main.c netrc.c \
@@ -309,9 +349,9 @@ am__wget_SOURCES_DIST = connect.c convert.c cookies.c ftp.c css_.c \
 	progress.h ptimer.h recur.h res.h retr.h spider.h ssl.h \
 	sysdep.h url.h warc.h utils.h wget.h iri.h exits.h version.h \
 	metalink.h xattr.h
-@WITH_XATTR_TRUE@am__objects_5 = xattr.$(OBJEXT)
-@IRI_IS_ENABLED_TRUE@am__objects_6 = iri.$(OBJEXT)
-@METALINK_IS_ENABLED_TRUE@am__objects_7 = metalink.$(OBJEXT)
+@WITH_XATTR_TRUE@am__objects_9 = xattr.$(OBJEXT)
+@IRI_IS_ENABLED_TRUE@am__objects_10 = iri.$(OBJEXT)
+@METALINK_IS_ENABLED_TRUE@am__objects_11 = metalink.$(OBJEXT)
 am_wget_OBJECTS = connect.$(OBJEXT) convert.$(OBJEXT) \
 	cookies.$(OBJEXT) ftp.$(OBJEXT) css_.$(OBJEXT) \
 	css-url.$(OBJEXT) ftp-basic.$(OBJEXT) ftp-ls.$(OBJEXT) \
@@ -320,9 +360,9 @@ am_wget_OBJECTS = connect.$(OBJEXT) convert.$(OBJEXT) \
 	init.$(OBJEXT) log.$(OBJEXT) main.$(OBJEXT) netrc.$(OBJEXT) \
 	progress.$(OBJEXT) ptimer.$(OBJEXT) recur.$(OBJEXT) \
 	res.$(OBJEXT) retr.$(OBJEXT) spider.$(OBJEXT) url.$(OBJEXT) \
-	warc.$(OBJEXT) $(am__objects_5) utils.$(OBJEXT) \
-	exits.$(OBJEXT) build_info.$(OBJEXT) $(am__objects_6) \
-	$(am__objects_7)
+	warc.$(OBJEXT) $(am__objects_9) utils.$(OBJEXT) \
+	exits.$(OBJEXT) build_info.$(OBJEXT) $(am__objects_10) \
+	$(am__objects_11)
 nodist_wget_OBJECTS = version.$(OBJEXT)
 wget_OBJECTS = $(am_wget_OBJECTS) $(nodist_wget_OBJECTS)
 wget_LDADD = $(LDADD)
@@ -393,7 +433,31 @@ am__depfiles_remade = $(DEPDIR)/ftp-opie.Po $(DEPDIR)/gnutls.Po \
 	./$(DEPDIR)/libunittest_a-utils.Po \
 	./$(DEPDIR)/libunittest_a-version.Po \
 	./$(DEPDIR)/libunittest_a-warc.Po \
-	./$(DEPDIR)/libunittest_a-xattr.Po ./$(DEPDIR)/log.Po \
+	./$(DEPDIR)/libunittest_a-xattr.Po \
+	./$(DEPDIR)/libwget_a-build_info.Po \
+	./$(DEPDIR)/libwget_a-connect.Po \
+	./$(DEPDIR)/libwget_a-convert.Po \
+	./$(DEPDIR)/libwget_a-cookies.Po \
+	./$(DEPDIR)/libwget_a-css-url.Po ./$(DEPDIR)/libwget_a-css_.Po \
+	./$(DEPDIR)/libwget_a-exits.Po \
+	./$(DEPDIR)/libwget_a-ftp-basic.Po \
+	./$(DEPDIR)/libwget_a-ftp-ls.Po ./$(DEPDIR)/libwget_a-ftp.Po \
+	./$(DEPDIR)/libwget_a-hash.Po ./$(DEPDIR)/libwget_a-host.Po \
+	./$(DEPDIR)/libwget_a-hsts.Po \
+	./$(DEPDIR)/libwget_a-html-parse.Po \
+	./$(DEPDIR)/libwget_a-html-url.Po \
+	./$(DEPDIR)/libwget_a-http.Po ./$(DEPDIR)/libwget_a-init.Po \
+	./$(DEPDIR)/libwget_a-iri.Po ./$(DEPDIR)/libwget_a-log.Po \
+	./$(DEPDIR)/libwget_a-main.Po \
+	./$(DEPDIR)/libwget_a-metalink.Po \
+	./$(DEPDIR)/libwget_a-netrc.Po \
+	./$(DEPDIR)/libwget_a-progress.Po \
+	./$(DEPDIR)/libwget_a-ptimer.Po ./$(DEPDIR)/libwget_a-recur.Po \
+	./$(DEPDIR)/libwget_a-res.Po ./$(DEPDIR)/libwget_a-retr.Po \
+	./$(DEPDIR)/libwget_a-spider.Po ./$(DEPDIR)/libwget_a-url.Po \
+	./$(DEPDIR)/libwget_a-utils.Po \
+	./$(DEPDIR)/libwget_a-version.Po ./$(DEPDIR)/libwget_a-warc.Po \
+	./$(DEPDIR)/libwget_a-xattr.Po ./$(DEPDIR)/log.Po \
 	./$(DEPDIR)/main.Po ./$(DEPDIR)/metalink.Po \
 	./$(DEPDIR)/netrc.Po ./$(DEPDIR)/progress.Po \
 	./$(DEPDIR)/ptimer.Po ./$(DEPDIR)/recur.Po ./$(DEPDIR)/res.Po \
@@ -418,9 +482,11 @@ am__v_CCLD_ = $(am__v_CCLD_@AM_DEFAULT_V@)
 am__v_CCLD_0 = @echo "  CCLD    " $@;
 am__v_CCLD_1 = 
 SOURCES = $(libunittest_a_SOURCES) $(nodist_libunittest_a_SOURCES) \
+	$(libwget_a_SOURCES) $(nodist_libwget_a_SOURCES) \
 	$(wget_SOURCES) $(EXTRA_wget_SOURCES) $(nodist_wget_SOURCES)
 DIST_SOURCES = $(am__libunittest_a_SOURCES_DIST) \
-	$(am__wget_SOURCES_DIST) $(EXTRA_wget_SOURCES)
+	$(am__libwget_a_SOURCES_DIST) $(am__wget_SOURCES_DIST) \
+	$(EXTRA_wget_SOURCES)
 am__can_run_installinfo = \
   case $$AM_UPDATE_INFO_DIR in \
     n|no|NO) false;; \
@@ -1530,6 +1596,7 @@ program_transform_name = @program_transform_name@
 psdir = @psdir@
 pyexecdir = @pyexecdir@
 pythondir = @pythondir@
+runstatedir = @runstatedir@
 sbindir = @sbindir@
 sharedstatedir = @sharedstatedir@
 srcdir = @srcdir@
@@ -1555,6 +1622,10 @@ wget_SOURCES = connect.c convert.c cookies.c ftp.c	\
 		spider.h ssl.h sysdep.h url.h warc.h utils.h wget.h iri.h	\
 		exits.h version.h metalink.h xattr.h
 
+noinst_LIBRARIES = libwget.a
+libwget_a_SOURCES = $(wget_SOURCES)
+nodist_libwget_a_SOURCES = version.c
+libwget_a_CFLAGS = -DLIBWGET
 nodist_wget_SOURCES = version.c
 EXTRA_wget_SOURCES = iri.c
 LDADD = $(LIBOBJS) ../lib/libgnu.a $(GETADDRINFO_LIB) $(HOSTENT_LIB)\
@@ -1569,6 +1640,7 @@ libunittest_a_SOURCES = $(wget_SOURCES) build_info.c
 nodist_libunittest_a_SOURCES = version.c
 libunittest_a_CPPFLAGS = -DTESTING "-I$(top_builddir)/lib" "-I$(top_srcdir)/lib"
 libunittest_a_LIBADD = $(LIBOBJS)
+libwget_a_LIBADD = $(LIBOBJS)
 CLEANFILES = *~ *.bak core core.[0-9]* build_info.c version.c
 all: config.h
 	$(MAKE) $(AM_MAKEFLAGS) all-am
@@ -1665,10 +1737,18 @@ clean-binPROGRAMS:
 clean-checkLIBRARIES:
 	-test -z "$(check_LIBRARIES)" || rm -f $(check_LIBRARIES)
 
+clean-noinstLIBRARIES:
+	-test -z "$(noinst_LIBRARIES)" || rm -f $(noinst_LIBRARIES)
+
 libunittest.a: $(libunittest_a_OBJECTS) $(libunittest_a_DEPENDENCIES) $(EXTRA_libunittest_a_DEPENDENCIES) 
 	$(AM_V_at)-rm -f libunittest.a
 	$(AM_V_AR)$(libunittest_a_AR) libunittest.a $(libunittest_a_OBJECTS) $(libunittest_a_LIBADD)
 	$(AM_V_at)$(RANLIB) libunittest.a
+
+libwget.a: $(libwget_a_OBJECTS) $(libwget_a_DEPENDENCIES) $(EXTRA_libwget_a_DEPENDENCIES) 
+	$(AM_V_at)-rm -f libwget.a
+	$(AM_V_AR)$(libwget_a_AR) libwget.a $(libwget_a_OBJECTS) $(libwget_a_LIBADD)
+	$(AM_V_at)$(RANLIB) libwget.a
 
 wget$(EXEEXT): $(wget_OBJECTS) $(wget_DEPENDENCIES) $(EXTRA_wget_DEPENDENCIES) 
 	@rm -f wget$(EXEEXT)
@@ -1736,6 +1816,39 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libunittest_a-version.Po@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libunittest_a-warc.Po@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libunittest_a-xattr.Po@am__quote@ # am--include-marker
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libwget_a-build_info.Po@am__quote@ # am--include-marker
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libwget_a-connect.Po@am__quote@ # am--include-marker
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libwget_a-convert.Po@am__quote@ # am--include-marker
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libwget_a-cookies.Po@am__quote@ # am--include-marker
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libwget_a-css-url.Po@am__quote@ # am--include-marker
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libwget_a-css_.Po@am__quote@ # am--include-marker
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libwget_a-exits.Po@am__quote@ # am--include-marker
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libwget_a-ftp-basic.Po@am__quote@ # am--include-marker
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libwget_a-ftp-ls.Po@am__quote@ # am--include-marker
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libwget_a-ftp.Po@am__quote@ # am--include-marker
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libwget_a-hash.Po@am__quote@ # am--include-marker
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libwget_a-host.Po@am__quote@ # am--include-marker
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libwget_a-hsts.Po@am__quote@ # am--include-marker
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libwget_a-html-parse.Po@am__quote@ # am--include-marker
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libwget_a-html-url.Po@am__quote@ # am--include-marker
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libwget_a-http.Po@am__quote@ # am--include-marker
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libwget_a-init.Po@am__quote@ # am--include-marker
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libwget_a-iri.Po@am__quote@ # am--include-marker
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libwget_a-log.Po@am__quote@ # am--include-marker
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libwget_a-main.Po@am__quote@ # am--include-marker
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libwget_a-metalink.Po@am__quote@ # am--include-marker
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libwget_a-netrc.Po@am__quote@ # am--include-marker
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libwget_a-progress.Po@am__quote@ # am--include-marker
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libwget_a-ptimer.Po@am__quote@ # am--include-marker
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libwget_a-recur.Po@am__quote@ # am--include-marker
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libwget_a-res.Po@am__quote@ # am--include-marker
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libwget_a-retr.Po@am__quote@ # am--include-marker
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libwget_a-spider.Po@am__quote@ # am--include-marker
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libwget_a-url.Po@am__quote@ # am--include-marker
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libwget_a-utils.Po@am__quote@ # am--include-marker
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libwget_a-version.Po@am__quote@ # am--include-marker
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libwget_a-warc.Po@am__quote@ # am--include-marker
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libwget_a-xattr.Po@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/log.Po@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/main.Po@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/metalink.Po@am__quote@ # am--include-marker
@@ -2234,6 +2347,468 @@ libunittest_a-version.obj: version.c
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
 @am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libunittest_a_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -c -o libunittest_a-version.obj `if test -f 'version.c'; then $(CYGPATH_W) 'version.c'; else $(CYGPATH_W) '$(srcdir)/version.c'; fi`
 
+libwget_a-connect.o: connect.c
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libwget_a_CFLAGS) $(CFLAGS) -MT libwget_a-connect.o -MD -MP -MF $(DEPDIR)/libwget_a-connect.Tpo -c -o libwget_a-connect.o `test -f 'connect.c' || echo '$(srcdir)/'`connect.c
+@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/libwget_a-connect.Tpo $(DEPDIR)/libwget_a-connect.Po
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='connect.c' object='libwget_a-connect.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libwget_a_CFLAGS) $(CFLAGS) -c -o libwget_a-connect.o `test -f 'connect.c' || echo '$(srcdir)/'`connect.c
+
+libwget_a-connect.obj: connect.c
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libwget_a_CFLAGS) $(CFLAGS) -MT libwget_a-connect.obj -MD -MP -MF $(DEPDIR)/libwget_a-connect.Tpo -c -o libwget_a-connect.obj `if test -f 'connect.c'; then $(CYGPATH_W) 'connect.c'; else $(CYGPATH_W) '$(srcdir)/connect.c'; fi`
+@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/libwget_a-connect.Tpo $(DEPDIR)/libwget_a-connect.Po
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='connect.c' object='libwget_a-connect.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libwget_a_CFLAGS) $(CFLAGS) -c -o libwget_a-connect.obj `if test -f 'connect.c'; then $(CYGPATH_W) 'connect.c'; else $(CYGPATH_W) '$(srcdir)/connect.c'; fi`
+
+libwget_a-convert.o: convert.c
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libwget_a_CFLAGS) $(CFLAGS) -MT libwget_a-convert.o -MD -MP -MF $(DEPDIR)/libwget_a-convert.Tpo -c -o libwget_a-convert.o `test -f 'convert.c' || echo '$(srcdir)/'`convert.c
+@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/libwget_a-convert.Tpo $(DEPDIR)/libwget_a-convert.Po
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='convert.c' object='libwget_a-convert.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libwget_a_CFLAGS) $(CFLAGS) -c -o libwget_a-convert.o `test -f 'convert.c' || echo '$(srcdir)/'`convert.c
+
+libwget_a-convert.obj: convert.c
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libwget_a_CFLAGS) $(CFLAGS) -MT libwget_a-convert.obj -MD -MP -MF $(DEPDIR)/libwget_a-convert.Tpo -c -o libwget_a-convert.obj `if test -f 'convert.c'; then $(CYGPATH_W) 'convert.c'; else $(CYGPATH_W) '$(srcdir)/convert.c'; fi`
+@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/libwget_a-convert.Tpo $(DEPDIR)/libwget_a-convert.Po
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='convert.c' object='libwget_a-convert.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libwget_a_CFLAGS) $(CFLAGS) -c -o libwget_a-convert.obj `if test -f 'convert.c'; then $(CYGPATH_W) 'convert.c'; else $(CYGPATH_W) '$(srcdir)/convert.c'; fi`
+
+libwget_a-cookies.o: cookies.c
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libwget_a_CFLAGS) $(CFLAGS) -MT libwget_a-cookies.o -MD -MP -MF $(DEPDIR)/libwget_a-cookies.Tpo -c -o libwget_a-cookies.o `test -f 'cookies.c' || echo '$(srcdir)/'`cookies.c
+@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/libwget_a-cookies.Tpo $(DEPDIR)/libwget_a-cookies.Po
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='cookies.c' object='libwget_a-cookies.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libwget_a_CFLAGS) $(CFLAGS) -c -o libwget_a-cookies.o `test -f 'cookies.c' || echo '$(srcdir)/'`cookies.c
+
+libwget_a-cookies.obj: cookies.c
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libwget_a_CFLAGS) $(CFLAGS) -MT libwget_a-cookies.obj -MD -MP -MF $(DEPDIR)/libwget_a-cookies.Tpo -c -o libwget_a-cookies.obj `if test -f 'cookies.c'; then $(CYGPATH_W) 'cookies.c'; else $(CYGPATH_W) '$(srcdir)/cookies.c'; fi`
+@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/libwget_a-cookies.Tpo $(DEPDIR)/libwget_a-cookies.Po
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='cookies.c' object='libwget_a-cookies.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libwget_a_CFLAGS) $(CFLAGS) -c -o libwget_a-cookies.obj `if test -f 'cookies.c'; then $(CYGPATH_W) 'cookies.c'; else $(CYGPATH_W) '$(srcdir)/cookies.c'; fi`
+
+libwget_a-ftp.o: ftp.c
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libwget_a_CFLAGS) $(CFLAGS) -MT libwget_a-ftp.o -MD -MP -MF $(DEPDIR)/libwget_a-ftp.Tpo -c -o libwget_a-ftp.o `test -f 'ftp.c' || echo '$(srcdir)/'`ftp.c
+@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/libwget_a-ftp.Tpo $(DEPDIR)/libwget_a-ftp.Po
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='ftp.c' object='libwget_a-ftp.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libwget_a_CFLAGS) $(CFLAGS) -c -o libwget_a-ftp.o `test -f 'ftp.c' || echo '$(srcdir)/'`ftp.c
+
+libwget_a-ftp.obj: ftp.c
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libwget_a_CFLAGS) $(CFLAGS) -MT libwget_a-ftp.obj -MD -MP -MF $(DEPDIR)/libwget_a-ftp.Tpo -c -o libwget_a-ftp.obj `if test -f 'ftp.c'; then $(CYGPATH_W) 'ftp.c'; else $(CYGPATH_W) '$(srcdir)/ftp.c'; fi`
+@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/libwget_a-ftp.Tpo $(DEPDIR)/libwget_a-ftp.Po
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='ftp.c' object='libwget_a-ftp.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libwget_a_CFLAGS) $(CFLAGS) -c -o libwget_a-ftp.obj `if test -f 'ftp.c'; then $(CYGPATH_W) 'ftp.c'; else $(CYGPATH_W) '$(srcdir)/ftp.c'; fi`
+
+libwget_a-css_.o: css_.c
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libwget_a_CFLAGS) $(CFLAGS) -MT libwget_a-css_.o -MD -MP -MF $(DEPDIR)/libwget_a-css_.Tpo -c -o libwget_a-css_.o `test -f 'css_.c' || echo '$(srcdir)/'`css_.c
+@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/libwget_a-css_.Tpo $(DEPDIR)/libwget_a-css_.Po
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='css_.c' object='libwget_a-css_.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libwget_a_CFLAGS) $(CFLAGS) -c -o libwget_a-css_.o `test -f 'css_.c' || echo '$(srcdir)/'`css_.c
+
+libwget_a-css_.obj: css_.c
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libwget_a_CFLAGS) $(CFLAGS) -MT libwget_a-css_.obj -MD -MP -MF $(DEPDIR)/libwget_a-css_.Tpo -c -o libwget_a-css_.obj `if test -f 'css_.c'; then $(CYGPATH_W) 'css_.c'; else $(CYGPATH_W) '$(srcdir)/css_.c'; fi`
+@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/libwget_a-css_.Tpo $(DEPDIR)/libwget_a-css_.Po
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='css_.c' object='libwget_a-css_.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libwget_a_CFLAGS) $(CFLAGS) -c -o libwget_a-css_.obj `if test -f 'css_.c'; then $(CYGPATH_W) 'css_.c'; else $(CYGPATH_W) '$(srcdir)/css_.c'; fi`
+
+libwget_a-css-url.o: css-url.c
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libwget_a_CFLAGS) $(CFLAGS) -MT libwget_a-css-url.o -MD -MP -MF $(DEPDIR)/libwget_a-css-url.Tpo -c -o libwget_a-css-url.o `test -f 'css-url.c' || echo '$(srcdir)/'`css-url.c
+@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/libwget_a-css-url.Tpo $(DEPDIR)/libwget_a-css-url.Po
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='css-url.c' object='libwget_a-css-url.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libwget_a_CFLAGS) $(CFLAGS) -c -o libwget_a-css-url.o `test -f 'css-url.c' || echo '$(srcdir)/'`css-url.c
+
+libwget_a-css-url.obj: css-url.c
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libwget_a_CFLAGS) $(CFLAGS) -MT libwget_a-css-url.obj -MD -MP -MF $(DEPDIR)/libwget_a-css-url.Tpo -c -o libwget_a-css-url.obj `if test -f 'css-url.c'; then $(CYGPATH_W) 'css-url.c'; else $(CYGPATH_W) '$(srcdir)/css-url.c'; fi`
+@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/libwget_a-css-url.Tpo $(DEPDIR)/libwget_a-css-url.Po
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='css-url.c' object='libwget_a-css-url.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libwget_a_CFLAGS) $(CFLAGS) -c -o libwget_a-css-url.obj `if test -f 'css-url.c'; then $(CYGPATH_W) 'css-url.c'; else $(CYGPATH_W) '$(srcdir)/css-url.c'; fi`
+
+libwget_a-ftp-basic.o: ftp-basic.c
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libwget_a_CFLAGS) $(CFLAGS) -MT libwget_a-ftp-basic.o -MD -MP -MF $(DEPDIR)/libwget_a-ftp-basic.Tpo -c -o libwget_a-ftp-basic.o `test -f 'ftp-basic.c' || echo '$(srcdir)/'`ftp-basic.c
+@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/libwget_a-ftp-basic.Tpo $(DEPDIR)/libwget_a-ftp-basic.Po
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='ftp-basic.c' object='libwget_a-ftp-basic.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libwget_a_CFLAGS) $(CFLAGS) -c -o libwget_a-ftp-basic.o `test -f 'ftp-basic.c' || echo '$(srcdir)/'`ftp-basic.c
+
+libwget_a-ftp-basic.obj: ftp-basic.c
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libwget_a_CFLAGS) $(CFLAGS) -MT libwget_a-ftp-basic.obj -MD -MP -MF $(DEPDIR)/libwget_a-ftp-basic.Tpo -c -o libwget_a-ftp-basic.obj `if test -f 'ftp-basic.c'; then $(CYGPATH_W) 'ftp-basic.c'; else $(CYGPATH_W) '$(srcdir)/ftp-basic.c'; fi`
+@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/libwget_a-ftp-basic.Tpo $(DEPDIR)/libwget_a-ftp-basic.Po
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='ftp-basic.c' object='libwget_a-ftp-basic.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libwget_a_CFLAGS) $(CFLAGS) -c -o libwget_a-ftp-basic.obj `if test -f 'ftp-basic.c'; then $(CYGPATH_W) 'ftp-basic.c'; else $(CYGPATH_W) '$(srcdir)/ftp-basic.c'; fi`
+
+libwget_a-ftp-ls.o: ftp-ls.c
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libwget_a_CFLAGS) $(CFLAGS) -MT libwget_a-ftp-ls.o -MD -MP -MF $(DEPDIR)/libwget_a-ftp-ls.Tpo -c -o libwget_a-ftp-ls.o `test -f 'ftp-ls.c' || echo '$(srcdir)/'`ftp-ls.c
+@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/libwget_a-ftp-ls.Tpo $(DEPDIR)/libwget_a-ftp-ls.Po
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='ftp-ls.c' object='libwget_a-ftp-ls.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libwget_a_CFLAGS) $(CFLAGS) -c -o libwget_a-ftp-ls.o `test -f 'ftp-ls.c' || echo '$(srcdir)/'`ftp-ls.c
+
+libwget_a-ftp-ls.obj: ftp-ls.c
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libwget_a_CFLAGS) $(CFLAGS) -MT libwget_a-ftp-ls.obj -MD -MP -MF $(DEPDIR)/libwget_a-ftp-ls.Tpo -c -o libwget_a-ftp-ls.obj `if test -f 'ftp-ls.c'; then $(CYGPATH_W) 'ftp-ls.c'; else $(CYGPATH_W) '$(srcdir)/ftp-ls.c'; fi`
+@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/libwget_a-ftp-ls.Tpo $(DEPDIR)/libwget_a-ftp-ls.Po
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='ftp-ls.c' object='libwget_a-ftp-ls.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libwget_a_CFLAGS) $(CFLAGS) -c -o libwget_a-ftp-ls.obj `if test -f 'ftp-ls.c'; then $(CYGPATH_W) 'ftp-ls.c'; else $(CYGPATH_W) '$(srcdir)/ftp-ls.c'; fi`
+
+libwget_a-hash.o: hash.c
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libwget_a_CFLAGS) $(CFLAGS) -MT libwget_a-hash.o -MD -MP -MF $(DEPDIR)/libwget_a-hash.Tpo -c -o libwget_a-hash.o `test -f 'hash.c' || echo '$(srcdir)/'`hash.c
+@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/libwget_a-hash.Tpo $(DEPDIR)/libwget_a-hash.Po
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='hash.c' object='libwget_a-hash.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libwget_a_CFLAGS) $(CFLAGS) -c -o libwget_a-hash.o `test -f 'hash.c' || echo '$(srcdir)/'`hash.c
+
+libwget_a-hash.obj: hash.c
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libwget_a_CFLAGS) $(CFLAGS) -MT libwget_a-hash.obj -MD -MP -MF $(DEPDIR)/libwget_a-hash.Tpo -c -o libwget_a-hash.obj `if test -f 'hash.c'; then $(CYGPATH_W) 'hash.c'; else $(CYGPATH_W) '$(srcdir)/hash.c'; fi`
+@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/libwget_a-hash.Tpo $(DEPDIR)/libwget_a-hash.Po
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='hash.c' object='libwget_a-hash.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libwget_a_CFLAGS) $(CFLAGS) -c -o libwget_a-hash.obj `if test -f 'hash.c'; then $(CYGPATH_W) 'hash.c'; else $(CYGPATH_W) '$(srcdir)/hash.c'; fi`
+
+libwget_a-host.o: host.c
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libwget_a_CFLAGS) $(CFLAGS) -MT libwget_a-host.o -MD -MP -MF $(DEPDIR)/libwget_a-host.Tpo -c -o libwget_a-host.o `test -f 'host.c' || echo '$(srcdir)/'`host.c
+@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/libwget_a-host.Tpo $(DEPDIR)/libwget_a-host.Po
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='host.c' object='libwget_a-host.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libwget_a_CFLAGS) $(CFLAGS) -c -o libwget_a-host.o `test -f 'host.c' || echo '$(srcdir)/'`host.c
+
+libwget_a-host.obj: host.c
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libwget_a_CFLAGS) $(CFLAGS) -MT libwget_a-host.obj -MD -MP -MF $(DEPDIR)/libwget_a-host.Tpo -c -o libwget_a-host.obj `if test -f 'host.c'; then $(CYGPATH_W) 'host.c'; else $(CYGPATH_W) '$(srcdir)/host.c'; fi`
+@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/libwget_a-host.Tpo $(DEPDIR)/libwget_a-host.Po
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='host.c' object='libwget_a-host.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libwget_a_CFLAGS) $(CFLAGS) -c -o libwget_a-host.obj `if test -f 'host.c'; then $(CYGPATH_W) 'host.c'; else $(CYGPATH_W) '$(srcdir)/host.c'; fi`
+
+libwget_a-hsts.o: hsts.c
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libwget_a_CFLAGS) $(CFLAGS) -MT libwget_a-hsts.o -MD -MP -MF $(DEPDIR)/libwget_a-hsts.Tpo -c -o libwget_a-hsts.o `test -f 'hsts.c' || echo '$(srcdir)/'`hsts.c
+@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/libwget_a-hsts.Tpo $(DEPDIR)/libwget_a-hsts.Po
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='hsts.c' object='libwget_a-hsts.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libwget_a_CFLAGS) $(CFLAGS) -c -o libwget_a-hsts.o `test -f 'hsts.c' || echo '$(srcdir)/'`hsts.c
+
+libwget_a-hsts.obj: hsts.c
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libwget_a_CFLAGS) $(CFLAGS) -MT libwget_a-hsts.obj -MD -MP -MF $(DEPDIR)/libwget_a-hsts.Tpo -c -o libwget_a-hsts.obj `if test -f 'hsts.c'; then $(CYGPATH_W) 'hsts.c'; else $(CYGPATH_W) '$(srcdir)/hsts.c'; fi`
+@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/libwget_a-hsts.Tpo $(DEPDIR)/libwget_a-hsts.Po
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='hsts.c' object='libwget_a-hsts.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libwget_a_CFLAGS) $(CFLAGS) -c -o libwget_a-hsts.obj `if test -f 'hsts.c'; then $(CYGPATH_W) 'hsts.c'; else $(CYGPATH_W) '$(srcdir)/hsts.c'; fi`
+
+libwget_a-html-parse.o: html-parse.c
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libwget_a_CFLAGS) $(CFLAGS) -MT libwget_a-html-parse.o -MD -MP -MF $(DEPDIR)/libwget_a-html-parse.Tpo -c -o libwget_a-html-parse.o `test -f 'html-parse.c' || echo '$(srcdir)/'`html-parse.c
+@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/libwget_a-html-parse.Tpo $(DEPDIR)/libwget_a-html-parse.Po
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='html-parse.c' object='libwget_a-html-parse.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libwget_a_CFLAGS) $(CFLAGS) -c -o libwget_a-html-parse.o `test -f 'html-parse.c' || echo '$(srcdir)/'`html-parse.c
+
+libwget_a-html-parse.obj: html-parse.c
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libwget_a_CFLAGS) $(CFLAGS) -MT libwget_a-html-parse.obj -MD -MP -MF $(DEPDIR)/libwget_a-html-parse.Tpo -c -o libwget_a-html-parse.obj `if test -f 'html-parse.c'; then $(CYGPATH_W) 'html-parse.c'; else $(CYGPATH_W) '$(srcdir)/html-parse.c'; fi`
+@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/libwget_a-html-parse.Tpo $(DEPDIR)/libwget_a-html-parse.Po
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='html-parse.c' object='libwget_a-html-parse.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libwget_a_CFLAGS) $(CFLAGS) -c -o libwget_a-html-parse.obj `if test -f 'html-parse.c'; then $(CYGPATH_W) 'html-parse.c'; else $(CYGPATH_W) '$(srcdir)/html-parse.c'; fi`
+
+libwget_a-html-url.o: html-url.c
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libwget_a_CFLAGS) $(CFLAGS) -MT libwget_a-html-url.o -MD -MP -MF $(DEPDIR)/libwget_a-html-url.Tpo -c -o libwget_a-html-url.o `test -f 'html-url.c' || echo '$(srcdir)/'`html-url.c
+@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/libwget_a-html-url.Tpo $(DEPDIR)/libwget_a-html-url.Po
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='html-url.c' object='libwget_a-html-url.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libwget_a_CFLAGS) $(CFLAGS) -c -o libwget_a-html-url.o `test -f 'html-url.c' || echo '$(srcdir)/'`html-url.c
+
+libwget_a-html-url.obj: html-url.c
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libwget_a_CFLAGS) $(CFLAGS) -MT libwget_a-html-url.obj -MD -MP -MF $(DEPDIR)/libwget_a-html-url.Tpo -c -o libwget_a-html-url.obj `if test -f 'html-url.c'; then $(CYGPATH_W) 'html-url.c'; else $(CYGPATH_W) '$(srcdir)/html-url.c'; fi`
+@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/libwget_a-html-url.Tpo $(DEPDIR)/libwget_a-html-url.Po
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='html-url.c' object='libwget_a-html-url.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libwget_a_CFLAGS) $(CFLAGS) -c -o libwget_a-html-url.obj `if test -f 'html-url.c'; then $(CYGPATH_W) 'html-url.c'; else $(CYGPATH_W) '$(srcdir)/html-url.c'; fi`
+
+libwget_a-http.o: http.c
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libwget_a_CFLAGS) $(CFLAGS) -MT libwget_a-http.o -MD -MP -MF $(DEPDIR)/libwget_a-http.Tpo -c -o libwget_a-http.o `test -f 'http.c' || echo '$(srcdir)/'`http.c
+@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/libwget_a-http.Tpo $(DEPDIR)/libwget_a-http.Po
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='http.c' object='libwget_a-http.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libwget_a_CFLAGS) $(CFLAGS) -c -o libwget_a-http.o `test -f 'http.c' || echo '$(srcdir)/'`http.c
+
+libwget_a-http.obj: http.c
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libwget_a_CFLAGS) $(CFLAGS) -MT libwget_a-http.obj -MD -MP -MF $(DEPDIR)/libwget_a-http.Tpo -c -o libwget_a-http.obj `if test -f 'http.c'; then $(CYGPATH_W) 'http.c'; else $(CYGPATH_W) '$(srcdir)/http.c'; fi`
+@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/libwget_a-http.Tpo $(DEPDIR)/libwget_a-http.Po
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='http.c' object='libwget_a-http.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libwget_a_CFLAGS) $(CFLAGS) -c -o libwget_a-http.obj `if test -f 'http.c'; then $(CYGPATH_W) 'http.c'; else $(CYGPATH_W) '$(srcdir)/http.c'; fi`
+
+libwget_a-init.o: init.c
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libwget_a_CFLAGS) $(CFLAGS) -MT libwget_a-init.o -MD -MP -MF $(DEPDIR)/libwget_a-init.Tpo -c -o libwget_a-init.o `test -f 'init.c' || echo '$(srcdir)/'`init.c
+@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/libwget_a-init.Tpo $(DEPDIR)/libwget_a-init.Po
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='init.c' object='libwget_a-init.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libwget_a_CFLAGS) $(CFLAGS) -c -o libwget_a-init.o `test -f 'init.c' || echo '$(srcdir)/'`init.c
+
+libwget_a-init.obj: init.c
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libwget_a_CFLAGS) $(CFLAGS) -MT libwget_a-init.obj -MD -MP -MF $(DEPDIR)/libwget_a-init.Tpo -c -o libwget_a-init.obj `if test -f 'init.c'; then $(CYGPATH_W) 'init.c'; else $(CYGPATH_W) '$(srcdir)/init.c'; fi`
+@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/libwget_a-init.Tpo $(DEPDIR)/libwget_a-init.Po
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='init.c' object='libwget_a-init.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libwget_a_CFLAGS) $(CFLAGS) -c -o libwget_a-init.obj `if test -f 'init.c'; then $(CYGPATH_W) 'init.c'; else $(CYGPATH_W) '$(srcdir)/init.c'; fi`
+
+libwget_a-log.o: log.c
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libwget_a_CFLAGS) $(CFLAGS) -MT libwget_a-log.o -MD -MP -MF $(DEPDIR)/libwget_a-log.Tpo -c -o libwget_a-log.o `test -f 'log.c' || echo '$(srcdir)/'`log.c
+@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/libwget_a-log.Tpo $(DEPDIR)/libwget_a-log.Po
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='log.c' object='libwget_a-log.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libwget_a_CFLAGS) $(CFLAGS) -c -o libwget_a-log.o `test -f 'log.c' || echo '$(srcdir)/'`log.c
+
+libwget_a-log.obj: log.c
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libwget_a_CFLAGS) $(CFLAGS) -MT libwget_a-log.obj -MD -MP -MF $(DEPDIR)/libwget_a-log.Tpo -c -o libwget_a-log.obj `if test -f 'log.c'; then $(CYGPATH_W) 'log.c'; else $(CYGPATH_W) '$(srcdir)/log.c'; fi`
+@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/libwget_a-log.Tpo $(DEPDIR)/libwget_a-log.Po
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='log.c' object='libwget_a-log.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libwget_a_CFLAGS) $(CFLAGS) -c -o libwget_a-log.obj `if test -f 'log.c'; then $(CYGPATH_W) 'log.c'; else $(CYGPATH_W) '$(srcdir)/log.c'; fi`
+
+libwget_a-main.o: main.c
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libwget_a_CFLAGS) $(CFLAGS) -MT libwget_a-main.o -MD -MP -MF $(DEPDIR)/libwget_a-main.Tpo -c -o libwget_a-main.o `test -f 'main.c' || echo '$(srcdir)/'`main.c
+@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/libwget_a-main.Tpo $(DEPDIR)/libwget_a-main.Po
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='main.c' object='libwget_a-main.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libwget_a_CFLAGS) $(CFLAGS) -c -o libwget_a-main.o `test -f 'main.c' || echo '$(srcdir)/'`main.c
+
+libwget_a-main.obj: main.c
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libwget_a_CFLAGS) $(CFLAGS) -MT libwget_a-main.obj -MD -MP -MF $(DEPDIR)/libwget_a-main.Tpo -c -o libwget_a-main.obj `if test -f 'main.c'; then $(CYGPATH_W) 'main.c'; else $(CYGPATH_W) '$(srcdir)/main.c'; fi`
+@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/libwget_a-main.Tpo $(DEPDIR)/libwget_a-main.Po
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='main.c' object='libwget_a-main.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libwget_a_CFLAGS) $(CFLAGS) -c -o libwget_a-main.obj `if test -f 'main.c'; then $(CYGPATH_W) 'main.c'; else $(CYGPATH_W) '$(srcdir)/main.c'; fi`
+
+libwget_a-netrc.o: netrc.c
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libwget_a_CFLAGS) $(CFLAGS) -MT libwget_a-netrc.o -MD -MP -MF $(DEPDIR)/libwget_a-netrc.Tpo -c -o libwget_a-netrc.o `test -f 'netrc.c' || echo '$(srcdir)/'`netrc.c
+@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/libwget_a-netrc.Tpo $(DEPDIR)/libwget_a-netrc.Po
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='netrc.c' object='libwget_a-netrc.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libwget_a_CFLAGS) $(CFLAGS) -c -o libwget_a-netrc.o `test -f 'netrc.c' || echo '$(srcdir)/'`netrc.c
+
+libwget_a-netrc.obj: netrc.c
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libwget_a_CFLAGS) $(CFLAGS) -MT libwget_a-netrc.obj -MD -MP -MF $(DEPDIR)/libwget_a-netrc.Tpo -c -o libwget_a-netrc.obj `if test -f 'netrc.c'; then $(CYGPATH_W) 'netrc.c'; else $(CYGPATH_W) '$(srcdir)/netrc.c'; fi`
+@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/libwget_a-netrc.Tpo $(DEPDIR)/libwget_a-netrc.Po
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='netrc.c' object='libwget_a-netrc.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libwget_a_CFLAGS) $(CFLAGS) -c -o libwget_a-netrc.obj `if test -f 'netrc.c'; then $(CYGPATH_W) 'netrc.c'; else $(CYGPATH_W) '$(srcdir)/netrc.c'; fi`
+
+libwget_a-progress.o: progress.c
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libwget_a_CFLAGS) $(CFLAGS) -MT libwget_a-progress.o -MD -MP -MF $(DEPDIR)/libwget_a-progress.Tpo -c -o libwget_a-progress.o `test -f 'progress.c' || echo '$(srcdir)/'`progress.c
+@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/libwget_a-progress.Tpo $(DEPDIR)/libwget_a-progress.Po
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='progress.c' object='libwget_a-progress.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libwget_a_CFLAGS) $(CFLAGS) -c -o libwget_a-progress.o `test -f 'progress.c' || echo '$(srcdir)/'`progress.c
+
+libwget_a-progress.obj: progress.c
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libwget_a_CFLAGS) $(CFLAGS) -MT libwget_a-progress.obj -MD -MP -MF $(DEPDIR)/libwget_a-progress.Tpo -c -o libwget_a-progress.obj `if test -f 'progress.c'; then $(CYGPATH_W) 'progress.c'; else $(CYGPATH_W) '$(srcdir)/progress.c'; fi`
+@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/libwget_a-progress.Tpo $(DEPDIR)/libwget_a-progress.Po
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='progress.c' object='libwget_a-progress.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libwget_a_CFLAGS) $(CFLAGS) -c -o libwget_a-progress.obj `if test -f 'progress.c'; then $(CYGPATH_W) 'progress.c'; else $(CYGPATH_W) '$(srcdir)/progress.c'; fi`
+
+libwget_a-ptimer.o: ptimer.c
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libwget_a_CFLAGS) $(CFLAGS) -MT libwget_a-ptimer.o -MD -MP -MF $(DEPDIR)/libwget_a-ptimer.Tpo -c -o libwget_a-ptimer.o `test -f 'ptimer.c' || echo '$(srcdir)/'`ptimer.c
+@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/libwget_a-ptimer.Tpo $(DEPDIR)/libwget_a-ptimer.Po
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='ptimer.c' object='libwget_a-ptimer.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libwget_a_CFLAGS) $(CFLAGS) -c -o libwget_a-ptimer.o `test -f 'ptimer.c' || echo '$(srcdir)/'`ptimer.c
+
+libwget_a-ptimer.obj: ptimer.c
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libwget_a_CFLAGS) $(CFLAGS) -MT libwget_a-ptimer.obj -MD -MP -MF $(DEPDIR)/libwget_a-ptimer.Tpo -c -o libwget_a-ptimer.obj `if test -f 'ptimer.c'; then $(CYGPATH_W) 'ptimer.c'; else $(CYGPATH_W) '$(srcdir)/ptimer.c'; fi`
+@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/libwget_a-ptimer.Tpo $(DEPDIR)/libwget_a-ptimer.Po
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='ptimer.c' object='libwget_a-ptimer.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libwget_a_CFLAGS) $(CFLAGS) -c -o libwget_a-ptimer.obj `if test -f 'ptimer.c'; then $(CYGPATH_W) 'ptimer.c'; else $(CYGPATH_W) '$(srcdir)/ptimer.c'; fi`
+
+libwget_a-recur.o: recur.c
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libwget_a_CFLAGS) $(CFLAGS) -MT libwget_a-recur.o -MD -MP -MF $(DEPDIR)/libwget_a-recur.Tpo -c -o libwget_a-recur.o `test -f 'recur.c' || echo '$(srcdir)/'`recur.c
+@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/libwget_a-recur.Tpo $(DEPDIR)/libwget_a-recur.Po
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='recur.c' object='libwget_a-recur.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libwget_a_CFLAGS) $(CFLAGS) -c -o libwget_a-recur.o `test -f 'recur.c' || echo '$(srcdir)/'`recur.c
+
+libwget_a-recur.obj: recur.c
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libwget_a_CFLAGS) $(CFLAGS) -MT libwget_a-recur.obj -MD -MP -MF $(DEPDIR)/libwget_a-recur.Tpo -c -o libwget_a-recur.obj `if test -f 'recur.c'; then $(CYGPATH_W) 'recur.c'; else $(CYGPATH_W) '$(srcdir)/recur.c'; fi`
+@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/libwget_a-recur.Tpo $(DEPDIR)/libwget_a-recur.Po
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='recur.c' object='libwget_a-recur.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libwget_a_CFLAGS) $(CFLAGS) -c -o libwget_a-recur.obj `if test -f 'recur.c'; then $(CYGPATH_W) 'recur.c'; else $(CYGPATH_W) '$(srcdir)/recur.c'; fi`
+
+libwget_a-res.o: res.c
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libwget_a_CFLAGS) $(CFLAGS) -MT libwget_a-res.o -MD -MP -MF $(DEPDIR)/libwget_a-res.Tpo -c -o libwget_a-res.o `test -f 'res.c' || echo '$(srcdir)/'`res.c
+@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/libwget_a-res.Tpo $(DEPDIR)/libwget_a-res.Po
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='res.c' object='libwget_a-res.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libwget_a_CFLAGS) $(CFLAGS) -c -o libwget_a-res.o `test -f 'res.c' || echo '$(srcdir)/'`res.c
+
+libwget_a-res.obj: res.c
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libwget_a_CFLAGS) $(CFLAGS) -MT libwget_a-res.obj -MD -MP -MF $(DEPDIR)/libwget_a-res.Tpo -c -o libwget_a-res.obj `if test -f 'res.c'; then $(CYGPATH_W) 'res.c'; else $(CYGPATH_W) '$(srcdir)/res.c'; fi`
+@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/libwget_a-res.Tpo $(DEPDIR)/libwget_a-res.Po
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='res.c' object='libwget_a-res.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libwget_a_CFLAGS) $(CFLAGS) -c -o libwget_a-res.obj `if test -f 'res.c'; then $(CYGPATH_W) 'res.c'; else $(CYGPATH_W) '$(srcdir)/res.c'; fi`
+
+libwget_a-retr.o: retr.c
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libwget_a_CFLAGS) $(CFLAGS) -MT libwget_a-retr.o -MD -MP -MF $(DEPDIR)/libwget_a-retr.Tpo -c -o libwget_a-retr.o `test -f 'retr.c' || echo '$(srcdir)/'`retr.c
+@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/libwget_a-retr.Tpo $(DEPDIR)/libwget_a-retr.Po
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='retr.c' object='libwget_a-retr.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libwget_a_CFLAGS) $(CFLAGS) -c -o libwget_a-retr.o `test -f 'retr.c' || echo '$(srcdir)/'`retr.c
+
+libwget_a-retr.obj: retr.c
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libwget_a_CFLAGS) $(CFLAGS) -MT libwget_a-retr.obj -MD -MP -MF $(DEPDIR)/libwget_a-retr.Tpo -c -o libwget_a-retr.obj `if test -f 'retr.c'; then $(CYGPATH_W) 'retr.c'; else $(CYGPATH_W) '$(srcdir)/retr.c'; fi`
+@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/libwget_a-retr.Tpo $(DEPDIR)/libwget_a-retr.Po
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='retr.c' object='libwget_a-retr.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libwget_a_CFLAGS) $(CFLAGS) -c -o libwget_a-retr.obj `if test -f 'retr.c'; then $(CYGPATH_W) 'retr.c'; else $(CYGPATH_W) '$(srcdir)/retr.c'; fi`
+
+libwget_a-spider.o: spider.c
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libwget_a_CFLAGS) $(CFLAGS) -MT libwget_a-spider.o -MD -MP -MF $(DEPDIR)/libwget_a-spider.Tpo -c -o libwget_a-spider.o `test -f 'spider.c' || echo '$(srcdir)/'`spider.c
+@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/libwget_a-spider.Tpo $(DEPDIR)/libwget_a-spider.Po
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='spider.c' object='libwget_a-spider.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libwget_a_CFLAGS) $(CFLAGS) -c -o libwget_a-spider.o `test -f 'spider.c' || echo '$(srcdir)/'`spider.c
+
+libwget_a-spider.obj: spider.c
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libwget_a_CFLAGS) $(CFLAGS) -MT libwget_a-spider.obj -MD -MP -MF $(DEPDIR)/libwget_a-spider.Tpo -c -o libwget_a-spider.obj `if test -f 'spider.c'; then $(CYGPATH_W) 'spider.c'; else $(CYGPATH_W) '$(srcdir)/spider.c'; fi`
+@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/libwget_a-spider.Tpo $(DEPDIR)/libwget_a-spider.Po
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='spider.c' object='libwget_a-spider.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libwget_a_CFLAGS) $(CFLAGS) -c -o libwget_a-spider.obj `if test -f 'spider.c'; then $(CYGPATH_W) 'spider.c'; else $(CYGPATH_W) '$(srcdir)/spider.c'; fi`
+
+libwget_a-url.o: url.c
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libwget_a_CFLAGS) $(CFLAGS) -MT libwget_a-url.o -MD -MP -MF $(DEPDIR)/libwget_a-url.Tpo -c -o libwget_a-url.o `test -f 'url.c' || echo '$(srcdir)/'`url.c
+@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/libwget_a-url.Tpo $(DEPDIR)/libwget_a-url.Po
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='url.c' object='libwget_a-url.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libwget_a_CFLAGS) $(CFLAGS) -c -o libwget_a-url.o `test -f 'url.c' || echo '$(srcdir)/'`url.c
+
+libwget_a-url.obj: url.c
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libwget_a_CFLAGS) $(CFLAGS) -MT libwget_a-url.obj -MD -MP -MF $(DEPDIR)/libwget_a-url.Tpo -c -o libwget_a-url.obj `if test -f 'url.c'; then $(CYGPATH_W) 'url.c'; else $(CYGPATH_W) '$(srcdir)/url.c'; fi`
+@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/libwget_a-url.Tpo $(DEPDIR)/libwget_a-url.Po
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='url.c' object='libwget_a-url.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libwget_a_CFLAGS) $(CFLAGS) -c -o libwget_a-url.obj `if test -f 'url.c'; then $(CYGPATH_W) 'url.c'; else $(CYGPATH_W) '$(srcdir)/url.c'; fi`
+
+libwget_a-warc.o: warc.c
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libwget_a_CFLAGS) $(CFLAGS) -MT libwget_a-warc.o -MD -MP -MF $(DEPDIR)/libwget_a-warc.Tpo -c -o libwget_a-warc.o `test -f 'warc.c' || echo '$(srcdir)/'`warc.c
+@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/libwget_a-warc.Tpo $(DEPDIR)/libwget_a-warc.Po
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='warc.c' object='libwget_a-warc.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libwget_a_CFLAGS) $(CFLAGS) -c -o libwget_a-warc.o `test -f 'warc.c' || echo '$(srcdir)/'`warc.c
+
+libwget_a-warc.obj: warc.c
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libwget_a_CFLAGS) $(CFLAGS) -MT libwget_a-warc.obj -MD -MP -MF $(DEPDIR)/libwget_a-warc.Tpo -c -o libwget_a-warc.obj `if test -f 'warc.c'; then $(CYGPATH_W) 'warc.c'; else $(CYGPATH_W) '$(srcdir)/warc.c'; fi`
+@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/libwget_a-warc.Tpo $(DEPDIR)/libwget_a-warc.Po
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='warc.c' object='libwget_a-warc.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libwget_a_CFLAGS) $(CFLAGS) -c -o libwget_a-warc.obj `if test -f 'warc.c'; then $(CYGPATH_W) 'warc.c'; else $(CYGPATH_W) '$(srcdir)/warc.c'; fi`
+
+libwget_a-xattr.o: xattr.c
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libwget_a_CFLAGS) $(CFLAGS) -MT libwget_a-xattr.o -MD -MP -MF $(DEPDIR)/libwget_a-xattr.Tpo -c -o libwget_a-xattr.o `test -f 'xattr.c' || echo '$(srcdir)/'`xattr.c
+@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/libwget_a-xattr.Tpo $(DEPDIR)/libwget_a-xattr.Po
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='xattr.c' object='libwget_a-xattr.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libwget_a_CFLAGS) $(CFLAGS) -c -o libwget_a-xattr.o `test -f 'xattr.c' || echo '$(srcdir)/'`xattr.c
+
+libwget_a-xattr.obj: xattr.c
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libwget_a_CFLAGS) $(CFLAGS) -MT libwget_a-xattr.obj -MD -MP -MF $(DEPDIR)/libwget_a-xattr.Tpo -c -o libwget_a-xattr.obj `if test -f 'xattr.c'; then $(CYGPATH_W) 'xattr.c'; else $(CYGPATH_W) '$(srcdir)/xattr.c'; fi`
+@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/libwget_a-xattr.Tpo $(DEPDIR)/libwget_a-xattr.Po
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='xattr.c' object='libwget_a-xattr.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libwget_a_CFLAGS) $(CFLAGS) -c -o libwget_a-xattr.obj `if test -f 'xattr.c'; then $(CYGPATH_W) 'xattr.c'; else $(CYGPATH_W) '$(srcdir)/xattr.c'; fi`
+
+libwget_a-utils.o: utils.c
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libwget_a_CFLAGS) $(CFLAGS) -MT libwget_a-utils.o -MD -MP -MF $(DEPDIR)/libwget_a-utils.Tpo -c -o libwget_a-utils.o `test -f 'utils.c' || echo '$(srcdir)/'`utils.c
+@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/libwget_a-utils.Tpo $(DEPDIR)/libwget_a-utils.Po
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='utils.c' object='libwget_a-utils.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libwget_a_CFLAGS) $(CFLAGS) -c -o libwget_a-utils.o `test -f 'utils.c' || echo '$(srcdir)/'`utils.c
+
+libwget_a-utils.obj: utils.c
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libwget_a_CFLAGS) $(CFLAGS) -MT libwget_a-utils.obj -MD -MP -MF $(DEPDIR)/libwget_a-utils.Tpo -c -o libwget_a-utils.obj `if test -f 'utils.c'; then $(CYGPATH_W) 'utils.c'; else $(CYGPATH_W) '$(srcdir)/utils.c'; fi`
+@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/libwget_a-utils.Tpo $(DEPDIR)/libwget_a-utils.Po
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='utils.c' object='libwget_a-utils.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libwget_a_CFLAGS) $(CFLAGS) -c -o libwget_a-utils.obj `if test -f 'utils.c'; then $(CYGPATH_W) 'utils.c'; else $(CYGPATH_W) '$(srcdir)/utils.c'; fi`
+
+libwget_a-exits.o: exits.c
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libwget_a_CFLAGS) $(CFLAGS) -MT libwget_a-exits.o -MD -MP -MF $(DEPDIR)/libwget_a-exits.Tpo -c -o libwget_a-exits.o `test -f 'exits.c' || echo '$(srcdir)/'`exits.c
+@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/libwget_a-exits.Tpo $(DEPDIR)/libwget_a-exits.Po
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='exits.c' object='libwget_a-exits.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libwget_a_CFLAGS) $(CFLAGS) -c -o libwget_a-exits.o `test -f 'exits.c' || echo '$(srcdir)/'`exits.c
+
+libwget_a-exits.obj: exits.c
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libwget_a_CFLAGS) $(CFLAGS) -MT libwget_a-exits.obj -MD -MP -MF $(DEPDIR)/libwget_a-exits.Tpo -c -o libwget_a-exits.obj `if test -f 'exits.c'; then $(CYGPATH_W) 'exits.c'; else $(CYGPATH_W) '$(srcdir)/exits.c'; fi`
+@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/libwget_a-exits.Tpo $(DEPDIR)/libwget_a-exits.Po
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='exits.c' object='libwget_a-exits.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libwget_a_CFLAGS) $(CFLAGS) -c -o libwget_a-exits.obj `if test -f 'exits.c'; then $(CYGPATH_W) 'exits.c'; else $(CYGPATH_W) '$(srcdir)/exits.c'; fi`
+
+libwget_a-build_info.o: build_info.c
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libwget_a_CFLAGS) $(CFLAGS) -MT libwget_a-build_info.o -MD -MP -MF $(DEPDIR)/libwget_a-build_info.Tpo -c -o libwget_a-build_info.o `test -f 'build_info.c' || echo '$(srcdir)/'`build_info.c
+@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/libwget_a-build_info.Tpo $(DEPDIR)/libwget_a-build_info.Po
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='build_info.c' object='libwget_a-build_info.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libwget_a_CFLAGS) $(CFLAGS) -c -o libwget_a-build_info.o `test -f 'build_info.c' || echo '$(srcdir)/'`build_info.c
+
+libwget_a-build_info.obj: build_info.c
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libwget_a_CFLAGS) $(CFLAGS) -MT libwget_a-build_info.obj -MD -MP -MF $(DEPDIR)/libwget_a-build_info.Tpo -c -o libwget_a-build_info.obj `if test -f 'build_info.c'; then $(CYGPATH_W) 'build_info.c'; else $(CYGPATH_W) '$(srcdir)/build_info.c'; fi`
+@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/libwget_a-build_info.Tpo $(DEPDIR)/libwget_a-build_info.Po
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='build_info.c' object='libwget_a-build_info.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libwget_a_CFLAGS) $(CFLAGS) -c -o libwget_a-build_info.obj `if test -f 'build_info.c'; then $(CYGPATH_W) 'build_info.c'; else $(CYGPATH_W) '$(srcdir)/build_info.c'; fi`
+
+libwget_a-iri.o: iri.c
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libwget_a_CFLAGS) $(CFLAGS) -MT libwget_a-iri.o -MD -MP -MF $(DEPDIR)/libwget_a-iri.Tpo -c -o libwget_a-iri.o `test -f 'iri.c' || echo '$(srcdir)/'`iri.c
+@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/libwget_a-iri.Tpo $(DEPDIR)/libwget_a-iri.Po
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='iri.c' object='libwget_a-iri.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libwget_a_CFLAGS) $(CFLAGS) -c -o libwget_a-iri.o `test -f 'iri.c' || echo '$(srcdir)/'`iri.c
+
+libwget_a-iri.obj: iri.c
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libwget_a_CFLAGS) $(CFLAGS) -MT libwget_a-iri.obj -MD -MP -MF $(DEPDIR)/libwget_a-iri.Tpo -c -o libwget_a-iri.obj `if test -f 'iri.c'; then $(CYGPATH_W) 'iri.c'; else $(CYGPATH_W) '$(srcdir)/iri.c'; fi`
+@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/libwget_a-iri.Tpo $(DEPDIR)/libwget_a-iri.Po
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='iri.c' object='libwget_a-iri.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libwget_a_CFLAGS) $(CFLAGS) -c -o libwget_a-iri.obj `if test -f 'iri.c'; then $(CYGPATH_W) 'iri.c'; else $(CYGPATH_W) '$(srcdir)/iri.c'; fi`
+
+libwget_a-metalink.o: metalink.c
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libwget_a_CFLAGS) $(CFLAGS) -MT libwget_a-metalink.o -MD -MP -MF $(DEPDIR)/libwget_a-metalink.Tpo -c -o libwget_a-metalink.o `test -f 'metalink.c' || echo '$(srcdir)/'`metalink.c
+@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/libwget_a-metalink.Tpo $(DEPDIR)/libwget_a-metalink.Po
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='metalink.c' object='libwget_a-metalink.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libwget_a_CFLAGS) $(CFLAGS) -c -o libwget_a-metalink.o `test -f 'metalink.c' || echo '$(srcdir)/'`metalink.c
+
+libwget_a-metalink.obj: metalink.c
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libwget_a_CFLAGS) $(CFLAGS) -MT libwget_a-metalink.obj -MD -MP -MF $(DEPDIR)/libwget_a-metalink.Tpo -c -o libwget_a-metalink.obj `if test -f 'metalink.c'; then $(CYGPATH_W) 'metalink.c'; else $(CYGPATH_W) '$(srcdir)/metalink.c'; fi`
+@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/libwget_a-metalink.Tpo $(DEPDIR)/libwget_a-metalink.Po
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='metalink.c' object='libwget_a-metalink.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libwget_a_CFLAGS) $(CFLAGS) -c -o libwget_a-metalink.obj `if test -f 'metalink.c'; then $(CYGPATH_W) 'metalink.c'; else $(CYGPATH_W) '$(srcdir)/metalink.c'; fi`
+
+libwget_a-version.o: version.c
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libwget_a_CFLAGS) $(CFLAGS) -MT libwget_a-version.o -MD -MP -MF $(DEPDIR)/libwget_a-version.Tpo -c -o libwget_a-version.o `test -f 'version.c' || echo '$(srcdir)/'`version.c
+@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/libwget_a-version.Tpo $(DEPDIR)/libwget_a-version.Po
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='version.c' object='libwget_a-version.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libwget_a_CFLAGS) $(CFLAGS) -c -o libwget_a-version.o `test -f 'version.c' || echo '$(srcdir)/'`version.c
+
+libwget_a-version.obj: version.c
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libwget_a_CFLAGS) $(CFLAGS) -MT libwget_a-version.obj -MD -MP -MF $(DEPDIR)/libwget_a-version.Tpo -c -o libwget_a-version.obj `if test -f 'version.c'; then $(CYGPATH_W) 'version.c'; else $(CYGPATH_W) '$(srcdir)/version.c'; fi`
+@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/libwget_a-version.Tpo $(DEPDIR)/libwget_a-version.Po
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='version.c' object='libwget_a-version.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libwget_a_CFLAGS) $(CFLAGS) -c -o libwget_a-version.obj `if test -f 'version.c'; then $(CYGPATH_W) 'version.c'; else $(CYGPATH_W) '$(srcdir)/version.c'; fi`
+
 ID: $(am__tagged_files)
 	$(am__define_uniq_tagged_files); mkid -fID $$unique
 tags: tags-am
@@ -2322,7 +2897,7 @@ distdir-am: $(DISTFILES)
 check-am: all-am
 	$(MAKE) $(AM_MAKEFLAGS) $(check_LIBRARIES)
 check: check-am
-all-am: Makefile $(PROGRAMS) config.h
+all-am: Makefile $(PROGRAMS) $(LIBRARIES) config.h
 installdirs:
 	for dir in "$(DESTDIR)$(bindir)"; do \
 	  test -z "$$dir" || $(MKDIR_P) "$$dir"; \
@@ -2361,7 +2936,7 @@ maintainer-clean-generic:
 clean: clean-am
 
 clean-am: clean-binPROGRAMS clean-checkLIBRARIES clean-generic \
-	mostlyclean-am
+	clean-noinstLIBRARIES mostlyclean-am
 
 distclean: distclean-am
 		-rm -f $(DEPDIR)/ftp-opie.Po
@@ -2420,6 +2995,39 @@ distclean: distclean-am
 	-rm -f ./$(DEPDIR)/libunittest_a-version.Po
 	-rm -f ./$(DEPDIR)/libunittest_a-warc.Po
 	-rm -f ./$(DEPDIR)/libunittest_a-xattr.Po
+	-rm -f ./$(DEPDIR)/libwget_a-build_info.Po
+	-rm -f ./$(DEPDIR)/libwget_a-connect.Po
+	-rm -f ./$(DEPDIR)/libwget_a-convert.Po
+	-rm -f ./$(DEPDIR)/libwget_a-cookies.Po
+	-rm -f ./$(DEPDIR)/libwget_a-css-url.Po
+	-rm -f ./$(DEPDIR)/libwget_a-css_.Po
+	-rm -f ./$(DEPDIR)/libwget_a-exits.Po
+	-rm -f ./$(DEPDIR)/libwget_a-ftp-basic.Po
+	-rm -f ./$(DEPDIR)/libwget_a-ftp-ls.Po
+	-rm -f ./$(DEPDIR)/libwget_a-ftp.Po
+	-rm -f ./$(DEPDIR)/libwget_a-hash.Po
+	-rm -f ./$(DEPDIR)/libwget_a-host.Po
+	-rm -f ./$(DEPDIR)/libwget_a-hsts.Po
+	-rm -f ./$(DEPDIR)/libwget_a-html-parse.Po
+	-rm -f ./$(DEPDIR)/libwget_a-html-url.Po
+	-rm -f ./$(DEPDIR)/libwget_a-http.Po
+	-rm -f ./$(DEPDIR)/libwget_a-init.Po
+	-rm -f ./$(DEPDIR)/libwget_a-iri.Po
+	-rm -f ./$(DEPDIR)/libwget_a-log.Po
+	-rm -f ./$(DEPDIR)/libwget_a-main.Po
+	-rm -f ./$(DEPDIR)/libwget_a-metalink.Po
+	-rm -f ./$(DEPDIR)/libwget_a-netrc.Po
+	-rm -f ./$(DEPDIR)/libwget_a-progress.Po
+	-rm -f ./$(DEPDIR)/libwget_a-ptimer.Po
+	-rm -f ./$(DEPDIR)/libwget_a-recur.Po
+	-rm -f ./$(DEPDIR)/libwget_a-res.Po
+	-rm -f ./$(DEPDIR)/libwget_a-retr.Po
+	-rm -f ./$(DEPDIR)/libwget_a-spider.Po
+	-rm -f ./$(DEPDIR)/libwget_a-url.Po
+	-rm -f ./$(DEPDIR)/libwget_a-utils.Po
+	-rm -f ./$(DEPDIR)/libwget_a-version.Po
+	-rm -f ./$(DEPDIR)/libwget_a-warc.Po
+	-rm -f ./$(DEPDIR)/libwget_a-xattr.Po
 	-rm -f ./$(DEPDIR)/log.Po
 	-rm -f ./$(DEPDIR)/main.Po
 	-rm -f ./$(DEPDIR)/metalink.Po
@@ -2536,6 +3144,39 @@ maintainer-clean: maintainer-clean-am
 	-rm -f ./$(DEPDIR)/libunittest_a-version.Po
 	-rm -f ./$(DEPDIR)/libunittest_a-warc.Po
 	-rm -f ./$(DEPDIR)/libunittest_a-xattr.Po
+	-rm -f ./$(DEPDIR)/libwget_a-build_info.Po
+	-rm -f ./$(DEPDIR)/libwget_a-connect.Po
+	-rm -f ./$(DEPDIR)/libwget_a-convert.Po
+	-rm -f ./$(DEPDIR)/libwget_a-cookies.Po
+	-rm -f ./$(DEPDIR)/libwget_a-css-url.Po
+	-rm -f ./$(DEPDIR)/libwget_a-css_.Po
+	-rm -f ./$(DEPDIR)/libwget_a-exits.Po
+	-rm -f ./$(DEPDIR)/libwget_a-ftp-basic.Po
+	-rm -f ./$(DEPDIR)/libwget_a-ftp-ls.Po
+	-rm -f ./$(DEPDIR)/libwget_a-ftp.Po
+	-rm -f ./$(DEPDIR)/libwget_a-hash.Po
+	-rm -f ./$(DEPDIR)/libwget_a-host.Po
+	-rm -f ./$(DEPDIR)/libwget_a-hsts.Po
+	-rm -f ./$(DEPDIR)/libwget_a-html-parse.Po
+	-rm -f ./$(DEPDIR)/libwget_a-html-url.Po
+	-rm -f ./$(DEPDIR)/libwget_a-http.Po
+	-rm -f ./$(DEPDIR)/libwget_a-init.Po
+	-rm -f ./$(DEPDIR)/libwget_a-iri.Po
+	-rm -f ./$(DEPDIR)/libwget_a-log.Po
+	-rm -f ./$(DEPDIR)/libwget_a-main.Po
+	-rm -f ./$(DEPDIR)/libwget_a-metalink.Po
+	-rm -f ./$(DEPDIR)/libwget_a-netrc.Po
+	-rm -f ./$(DEPDIR)/libwget_a-progress.Po
+	-rm -f ./$(DEPDIR)/libwget_a-ptimer.Po
+	-rm -f ./$(DEPDIR)/libwget_a-recur.Po
+	-rm -f ./$(DEPDIR)/libwget_a-res.Po
+	-rm -f ./$(DEPDIR)/libwget_a-retr.Po
+	-rm -f ./$(DEPDIR)/libwget_a-spider.Po
+	-rm -f ./$(DEPDIR)/libwget_a-url.Po
+	-rm -f ./$(DEPDIR)/libwget_a-utils.Po
+	-rm -f ./$(DEPDIR)/libwget_a-version.Po
+	-rm -f ./$(DEPDIR)/libwget_a-warc.Po
+	-rm -f ./$(DEPDIR)/libwget_a-xattr.Po
 	-rm -f ./$(DEPDIR)/log.Po
 	-rm -f ./$(DEPDIR)/main.Po
 	-rm -f ./$(DEPDIR)/metalink.Po
@@ -2572,18 +3213,18 @@ uninstall-am: uninstall-binPROGRAMS
 
 .PHONY: CTAGS GTAGS TAGS all all-am am--depfiles check check-am clean \
 	clean-binPROGRAMS clean-checkLIBRARIES clean-generic \
-	cscopelist-am ctags ctags-am distclean distclean-compile \
-	distclean-generic distclean-hdr distclean-local distclean-tags \
-	distdir dvi dvi-am html html-am info info-am install \
-	install-am install-binPROGRAMS install-data install-data-am \
-	install-dvi install-dvi-am install-exec install-exec-am \
-	install-html install-html-am install-info install-info-am \
-	install-man install-pdf install-pdf-am install-ps \
-	install-ps-am install-strip installcheck installcheck-am \
-	installdirs maintainer-clean maintainer-clean-generic \
-	mostlyclean mostlyclean-compile mostlyclean-generic pdf pdf-am \
-	ps ps-am tags tags-am uninstall uninstall-am \
-	uninstall-binPROGRAMS
+	clean-noinstLIBRARIES cscopelist-am ctags ctags-am distclean \
+	distclean-compile distclean-generic distclean-hdr \
+	distclean-local distclean-tags distdir dvi dvi-am html html-am \
+	info info-am install install-am install-binPROGRAMS \
+	install-data install-data-am install-dvi install-dvi-am \
+	install-exec install-exec-am install-html install-html-am \
+	install-info install-info-am install-man install-pdf \
+	install-pdf-am install-ps install-ps-am install-strip \
+	installcheck installcheck-am installdirs maintainer-clean \
+	maintainer-clean-generic mostlyclean mostlyclean-compile \
+	mostlyclean-generic pdf pdf-am ps ps-am tags tags-am uninstall \
+	uninstall-am uninstall-binPROGRAMS
 
 .PRECIOUS: Makefile
 

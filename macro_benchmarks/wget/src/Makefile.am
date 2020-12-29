@@ -59,6 +59,13 @@ wget_SOURCES = connect.c convert.c cookies.c ftp.c	\
 		options.h progress.h ptimer.h recur.h res.h retr.h	\
 		spider.h ssl.h sysdep.h url.h warc.h utils.h wget.h iri.h	\
 		exits.h version.h metalink.h xattr.h
+
+noinst_LIBRARIES = libwget.a
+libwget_a_SOURCES = $(wget_SOURCES)
+nodist_libwget_a_SOURCES = version.c
+
+libwget_a_CFLAGS = -DLIBWGET
+
 nodist_wget_SOURCES = version.c
 EXTRA_wget_SOURCES = iri.c
 LDADD = $(LIBOBJS) ../lib/libgnu.a $(GETADDRINFO_LIB) $(HOSTENT_LIB)\
@@ -105,5 +112,6 @@ libunittest_a_SOURCES = $(wget_SOURCES) build_info.c
 nodist_libunittest_a_SOURCES = version.c
 libunittest_a_CPPFLAGS = -DTESTING "-I$(top_builddir)/lib" "-I$(top_srcdir)/lib"
 libunittest_a_LIBADD = $(LIBOBJS)
+libwget_a_LIBADD = $(LIBOBJS)
 
 CLEANFILES = *~ *.bak core core.[0-9]* build_info.c version.c

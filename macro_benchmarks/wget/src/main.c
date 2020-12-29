@@ -1347,8 +1347,13 @@ const char *program_argstring; /* Needed by wget_warc.c. */
 struct ptimer *timer;
 int cleaned_up;
 
+#ifdef LIBWGET
+int
+call_wget(int argc, char **argv)
+#else
 int
 main (int argc, char **argv)
+#endif
 {
   char **url, **t, *p;
   int i, ret, longindex;
