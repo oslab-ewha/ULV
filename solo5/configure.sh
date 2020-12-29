@@ -146,9 +146,9 @@ config_host_linux()
     fi
 
     [ -n "${OPT_ONLY_TOOLS}" ] && return
-    CONFIG_HVT=1
+    CONFIG_HVT=
     CONFIG_LKL=1
-    CONFIG_SPT=1
+    CONFIG_SPT=
     if ! command -v pkg-config >/dev/null; then
         die "pkg-config is required"
     fi
@@ -173,11 +173,11 @@ config_host_linux()
     if ! PKG_LIBS=${MAKECONF_SPT_LIBS} gcc_check_lib -lseccomp; then
         die "Could not link with -lseccomp"
     fi
-    [ "${CONFIG_ARCH}" = "x86_64" ] && CONFIG_VIRTIO=1
-    [ "${CONFIG_ARCH}" = "x86_64" ] && CONFIG_MUEN=1
+    [ "${CONFIG_ARCH}" = "x86_64" ] && CONFIG_VIRTIO=
+    [ "${CONFIG_ARCH}" = "x86_64" ] && CONFIG_MUEN=
     [ "${CONFIG_ARCH}" = "ppc64le" ] && CONFIG_HVT=
     CONFIG_GENODE=
-    [ "${CONFIG_ARCH}" = "x86_64" ] && CONFIG_XEN=1
+    [ "${CONFIG_ARCH}" = "x86_64" ] && CONFIG_XEN=
 }
 
 config_host_freebsd()
