@@ -30,6 +30,9 @@
 #define __SC_COMP_3264(_nr, _32, _64, _comp) __SC_3264(_nr, _32, _64)
 #endif
 
+#define __NR_utime	132
+__SYSCALL(__NR_utime, sys_utime)
+
 #if 0
 #define __NR_io_setup 0
 __SC_COMP(__NR_io_setup, sys_io_setup, compat_sys_io_setup)
@@ -130,9 +133,9 @@ __SYSCALL(__NR_ioprio_get, sys_ioprio_get)
 __SYSCALL(__NR_flock, sys_flock)
 
 /* fs/namei.c */
-#define __NR_mknodat 33
+#define __NR_mknodat 259
 __SYSCALL(__NR_mknodat, sys_mknodat)
-#define __NR_mkdirat 34
+#define __NR_mkdirat 258
 __SYSCALL(__NR_mkdirat, sys_mkdirat)
 #define __NR_unlinkat 35
 __SYSCALL(__NR_unlinkat, sys_unlinkat)
@@ -149,7 +152,7 @@ __SYSCALL(__NR_renameat, sys_renameat)
 /* fs/namespace.c */
 #define __NR_umount2 39
 __SYSCALL(__NR_umount2, sys_umount)
-#define __NR_mount 40
+#define __NR_mount 165
 __SC_COMP(__NR_mount, sys_mount, compat_sys_mount)
 #define __NR_pivot_root 41
 __SYSCALL(__NR_pivot_root, sys_pivot_root)
@@ -174,7 +177,7 @@ __SC_COMP_3264(__NR3264_ftruncate, sys_ftruncate64, sys_ftruncate, \
 
 #define __NR_fallocate 47
 __SC_COMP(__NR_fallocate, sys_fallocate, compat_sys_fallocate)
-#define __NR_faccessat 48
+#define __NR_faccessat 269
 __SYSCALL(__NR_faccessat, sys_faccessat)
 #define __NR_chdir 49
 __SYSCALL(__NR_chdir, sys_chdir)
@@ -208,7 +211,7 @@ __SYSCALL(__NR_pipe2, sys_pipe2)
 __SYSCALL(__NR_quotactl, sys_quotactl)
 
 /* fs/readdir.c */
-#define __NR_getdents64 61
+#define __NR_getdents64 217
 __SYSCALL(__NR_getdents64, sys_getdents64)
 
 /* fs/read_write.c */
@@ -332,7 +335,7 @@ __SYSCALL(__NR_unshare, sys_unshare)
 
 /* kernel/futex.c */
 #if defined(__ARCH_WANT_TIME32_SYSCALLS) || __BITS_PER_LONG != 32
-#define __NR_futex 98
+#define __NR_futex 202
 __SC_3264(__NR_futex, sys_futex_time32, sys_futex)
 #endif
 #define __NR_set_robust_list 99
@@ -512,7 +515,7 @@ __SC_COMP(__NR_getrlimit, sys_getrlimit, compat_sys_getrlimit)
 __SC_COMP(__NR_setrlimit, sys_setrlimit, compat_sys_setrlimit)
 #endif
 
-#define __NR_getrusage 165
+#define __NR_getrusage 98
 __SC_COMP(__NR_getrusage, sys_getrusage, compat_sys_getrusage)
 #define __NR_umask 166
 __SYSCALL(__NR_umask, sys_umask)
@@ -607,7 +610,7 @@ __SYSCALL(__NR_socketpair, sys_socketpair)
 __SYSCALL(__NR_bind, sys_bind)
 #define __NR_listen 201
 __SYSCALL(__NR_listen, sys_listen)
-#define __NR_accept 202
+#define __NR_accept 43
 __SYSCALL(__NR_accept, sys_accept)
 #define __NR_connect 203
 __SYSCALL(__NR_connect, sys_connect)
@@ -738,7 +741,7 @@ __SC_3264(__NR_clock_adjtime, sys_clock_adjtime32, sys_clock_adjtime)
 __SYSCALL(__NR_syncfs, sys_syncfs)
 #define __NR_setns 268
 __SYSCALL(__NR_setns, sys_setns)
-#define __NR_sendmmsg 269
+#define __NR_sendmmsg 307
 __SC_COMP(__NR_sendmmsg, sys_sendmmsg, compat_sys_sendmmsg)
 #define __NR_process_vm_readv 270
 __SC_COMP(__NR_process_vm_readv, sys_process_vm_readv, \
@@ -866,7 +869,7 @@ __SYSCALL(__NR_clone3, sys_clone3)
 #endif
 
 #undef __NR_syscalls
-#define __NR_syscalls 436
+#define __NR_syscalls 437
 
 /*
  * 32 bit systems traditionally used different

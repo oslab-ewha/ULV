@@ -36,4 +36,4 @@ wget_test.spt: wget_test.o manifest.o $(LDS.spt) $(BINDINGS.lkl)
 .PHONY: clean
 
 clean:
-	rm -f *.o $(SPT)pac
+	rm -f *.o $(SPT)

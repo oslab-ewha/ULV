@@ -21,12 +21,13 @@ static asmlinkage long sys_virtio_mmio_device_add(long base, long size,
 
 typedef long (*syscall_handler_t)(long arg1, ...);
 
-#undef __SYSCALL
-#define __SYSCALL(nr, sym) [nr] = (syscall_handler_t)sym,
+#undef __SYSCALL_64
+#define __SYSCALL_64(nr, sym, qua) [nr] = (syscall_handler_t)sym,
 
 syscall_handler_t syscall_table[__NR_syscalls] = {
 	[0 ... __NR_syscalls - 1] =  (syscall_handler_t)sys_ni_syscall,
-#include <asm/unistd.h>
+
+#include <asm/syscalls_64.h>
 
 #if __BITS_PER_LONG == 32
 #include <asm/unistd_32.h>

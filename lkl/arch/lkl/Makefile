@@ -34,6 +34,11 @@ LKL_ENTRY_POINTS += \
 	__x86.get_pc_thunk.cx __x86.get_pc_thunk.si __x86.get_pc_thunk.di
 endif
 
+###
+# Syscall table generation
+archheaders:
+	$(Q)$(MAKE) $(build)=arch/lkl/entry/syscalls all
+
 core-y += arch/lkl/kernel/
 core-y += arch/lkl/mm/
 core-y += arch/lkl/drivers/

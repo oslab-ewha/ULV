@@ -2,6 +2,8 @@
 
 __SYSCALL(__NR_virtio_mmio_device_add, sys_virtio_mmio_device_add)
 
+#define __ARCH_WANT_SYS_UTIME
+
 #define __SC_ASCII(t, a) #t "," #a
 
 #define __ASCII_MAP0(m,...)

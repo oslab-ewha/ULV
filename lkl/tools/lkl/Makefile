@@ -61,10 +61,12 @@ else
 endif
 
 # rule to build lkl.o
-$(OUTPUT)lib/lkl.o: bin/stat
+$(OUTPUT)lib/lkl.o: $(srctree)/.config $(srctree)/lkl.o
+
+$(srctree)/.config: $(srctree)/arch/lkl/configs/defconfig
 	$(Q)$(MAKE) -C ../.. ARCH=lkl $(KOPT) $(KCONFIG)
-# this workaround is for arm32 linker (ld.gold)
-	$(Q)export PATH=$(srctree)/tools/lkl/bin/:${PATH} ;\
+
+$(srctree)/lkl.o:
 	$(MAKE) -C ../.. ARCH=lkl $(KOPT) install INSTALL_PATH=$(OUTPUT)
 
 # rules to link libs
@@ -94,7 +96,7 @@ clean:
 	 -delete -o -name '\.*.d' -delete
 	$(call QUIET_CLEAN, headers)$(RM) -r $(OUTPUT)/include/lkl/
 	$(call QUIET_CLEAN, liblkl.a)$(RM) $(OUTPUT)/liblkl.a
-	$(call QUIET_CLEAN, targets)$(RM) $(TARGETS) bin/stat
+	$(call QUIET_CLEAN, targets)$(RM) $(TARGETS)
 
 clean-conf: clean
 	$(call QUIET_CLEAN, Makefile.conf)$(RM) $(OUTPUT)/Makefile.conf
