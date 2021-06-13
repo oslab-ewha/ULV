@@ -75,8 +75,8 @@ $(OUTPUT)%$(SOSUF): $(OUTPUT)%-in.o $(OUTPUT)liblkl.a
 	$(QUIET_LINK)$(CC) $(LDFLAGS) $(LDFLAGS_$*-y) -o $@ $^ $(LDLIBS) $(LDLIBS_$*-y)
 
 # liblkl is special
-$(OUTPUT)liblkl$(SOSUF): $(OUTPUT)%-in.o $(OUTPUT)lib/lkl.o
-$(OUTPUT)liblkl.a: $(OUTPUT)lib/liblkl-in.o $(OUTPUT)lib/lkl.o
+$(OUTPUT)liblkl$(SOSUF): $(OUTPUT)lib/lkl.o $(OUTPUT)%-in.o
+$(OUTPUT)liblkl.a: $(OUTPUT)lib/lkl.o $(OUTPUT)lib/liblkl-in.o
 	$(QUIET_AR)$(AR) -rc $@ $^
 
 # rule to link programs
@@ -97,6 +97,7 @@ clean:
 	$(call QUIET_CLEAN, headers)$(RM) -r $(OUTPUT)/include/lkl/
 	$(call QUIET_CLEAN, liblkl.a)$(RM) $(OUTPUT)/liblkl.a
 	$(call QUIET_CLEAN, targets)$(RM) $(TARGETS)
+	$(call QUIET_CLEAN, lkl.o)$(RM) $(srctree)/lkl.o
 
 clean-conf: clean
 	$(call QUIET_CLEAN, Makefile.conf)$(RM) $(OUTPUT)/Makefile.conf
