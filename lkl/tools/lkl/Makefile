@@ -61,12 +61,12 @@ else
 endif
 
 # rule to build lkl.o
-$(OUTPUT)lib/lkl.o: $(srctree)/.config $(srctree)/lkl.o
+$(srctree)lkl.o: $(srctree)/.config
 
 $(srctree)/.config: $(srctree)/arch/lkl/configs/defconfig
 	$(Q)$(MAKE) -C ../.. ARCH=lkl $(KOPT) $(KCONFIG)
 
-$(srctree)/lkl.o:
+$(srctree)/lkl.o: FORCE
 	$(MAKE) -C ../.. ARCH=lkl $(KOPT) install INSTALL_PATH=$(OUTPUT)
 
 # rules to link libs
@@ -75,8 +75,8 @@ $(OUTPUT)%$(SOSUF): $(OUTPUT)%-in.o $(OUTPUT)liblkl.a
 	$(QUIET_LINK)$(CC) $(LDFLAGS) $(LDFLAGS_$*-y) -o $@ $^ $(LDLIBS) $(LDLIBS_$*-y)
 
 # liblkl is special
-$(OUTPUT)liblkl$(SOSUF): $(OUTPUT)lib/lkl.o $(OUTPUT)%-in.o
-$(OUTPUT)liblkl.a: $(OUTPUT)lib/lkl.o $(OUTPUT)lib/liblkl-in.o
+$(OUTPUT)liblkl$(SOSUF): $(srctree)/lkl.o $(OUTPUT)%-in.o
+$(OUTPUT)liblkl.a: $(srctree)/lkl.o $(OUTPUT)lib/liblkl-in.o
 	$(QUIET_AR)$(AR) -rc $@ $^
 
 # rule to link programs
@@ -84,7 +84,7 @@ $(OUTPUT)liblkl.a: $(OUTPUT)lib/lkl.o $(OUTPUT)lib/liblkl-in.o
 #	$(QUIET_LINK)$(CC) $(LDFLAGS) $(LDFLAGS_$*-y) -o $@ $^ $(LDLIBS) $(LDLIBS_$*-y)
 
 # rule to build objects
-$(OUTPUT)%-in.o: $(OUTPUT)lib/lkl.o FORCE
+$(OUTPUT)%-in.o: $(srctree)/lkl.o FORCE
 	$(Q)$(MAKE) -f $(srctree)/tools/build/Makefile.build dir=$(patsubst %/,%,$(dir $*)) obj=$(notdir $*)
 
 
@@ -128,6 +128,5 @@ run-tests:
 FORCE: ;
 .PHONY: all clean FORCE run-tests
 .PHONY: headers_install libraries_install programs_install install
-.NOTPARALLEL : lib/lkl.o
 .SECONDARY:
 

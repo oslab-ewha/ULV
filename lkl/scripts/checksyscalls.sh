@@ -15,6 +15,17 @@ cat << EOF
 #include <asm/types.h>
 #include <asm/unistd.h>
 
+#define __IGNORE_setxattr
+#define __IGNORE_getxattr
+#define __IGNORE_fgetxattr
+#define __IGNORE_listxattr
+#define __IGNORE_llistxattr
+#define __IGNORE_io_setup
+#define __IGNORE_io_destroy
+#define __IGNORE_io_cancel
+#define __IGNORE_signalfd4
+#define __IGNORE_clone3
+
 /* *at */
 #define __IGNORE_open		/* openat */
 #define __IGNORE_link		/* linkat */
