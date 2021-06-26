@@ -116,8 +116,9 @@ _gdbm_internal_remap (GDBM_FILE dbf, size_t size)
 
   if (dbf->read_write)
     prot |= PROT_WRITE;
-  
-  p = mmap (NULL, dbf->mapped_size, prot, MAP_SHARED | GDBM_MMAP_FLAGS,
+
+  /* lkl with nommu does not support MAP_SHARED */
+  p = mmap (NULL, dbf->mapped_size, prot, MAP_PRIVATE | GDBM_MMAP_FLAGS,
 	    dbf->desc, dbf->mapped_off);
   if (p == MAP_FAILED)
     {

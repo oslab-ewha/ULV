@@ -98,8 +98,6 @@ solo5_app_main(const struct solo5_start_info *si)
 		__init_libc(envp, "lkl");
 	}
 
-	puts("gdbm test");
-
         if (mount_fs("/tmp/testfile", &fs) < 0) {
                 puts("failed to mount\n");
                 return 1;
