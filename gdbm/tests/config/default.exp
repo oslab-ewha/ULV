@@ -1,0 +1,221 @@
+verbose "STARTED" 1
+
+# Make sure we use POSIX locale
+set env(LC_ALL) "C"
+
+set gdbmtool_prompt "gdbmtool> "
+
+proc gdbmtool_start {args} {
+    global gdbmtool_spawn_id
+    global top_builddir
+    global gdbmtool_prompt
+
+    set cmd "$top_builddir/src/gdbmtool -q $args"
+    verbose "running $cmd" 1
+
+    set gdbmtool_spawn_id [remote_spawn host $cmd]
+    if { $gdbmtool_spawn_id < 0 || $gdbmtool_spawn_id == "" } {
+	perror "Spawning $cmd failed."
+	return 1;
+    }
+
+    remote_expect host 60 {
+	-re "\[\r\n\]?${gdbmtool_prompt}$" {
+	    verbose "gdbmtool initialized."
+	}
+	default {
+	    perror "gdbmtool not initialized"
+            return 1
+	}
+    }
+    return 0
+}
+
+proc gdbmtool_stop {} {
+    verbose "Stopping gdbmtool"
+    gdbmtool_command "quit"
+    remote_close host
+}
+
+proc gdbmtool_send {string} {
+    return [remote_send host "$string"]
+}
+
+proc gdbmtool_command {cmd} {
+    set res [gdbmtool_send "$cmd\n"]
+    remote_expect host 60 {
+	-ex "\r\n" { }
+	default {
+	    perror "gdbmtool_command for target failed";
+	    return -1
+	}
+    }
+    verbose "RESULT: $res" 2
+    return $res
+}
+
+proc gdbmtool_test { command expcode } {
+    gdbmtool_command $command
+    uplevel remote_expect host 60 $expcode
+#    set code [catch \
+#	{uplevel remote_expect host 60 $expcode} string];
+}
+
+# mu_test COMMAND PATTERN
+# COMMAND   - Command to send to the program
+# PATTERN   - A list of strings to expect in return
+# Return value:
+#        -3 - eof
+#        -2 - timeout
+#        -1 - generic failure
+#         1 - test fails
+#         0 - test succeeds
+proc seq_test { args } {
+    set command [lindex $args 0]
+    set pattern [lindex $args 1]
+
+    set result -1
+    if { "${command}" != "" } {
+	set res [gdbmtool_command "${command}"]
+	if { $res != "" } {
+	    return $result;
+        }
+    }
+
+    global timeout;
+    if [info exists timeout] {
+	set tmt $timeout;
+    } else {
+	set tmt 60;
+    }
+
+    set result 0
+    for {set i 0} {$result == 0 && $i < [llength $pattern]} {incr i} {
+	set regexp 0
+	switch -regexp -- "[lindex ${pattern} $i]" {
+	    ^-re.*$	{ set regexp 1; incr i }
+	    ^--         { incr i }
+	}
+
+	regsub "\[ \t\]*$" [lindex ${pattern} $i] "" pat
+	verbose "i=$i, pat=$pat" 2
+
+	if {$regexp} {
+	    verbose "REGEX for $pat / [llength $pat] " 3
+	    remote_expect host $tmt {
+	       -re "$pat\[ \r\t\]*\r\n" { }
+	       default {
+		   set result 1
+		   break
+	       }
+	       timeout {
+		   set result -2
+		   break
+	       }
+	       eof {
+		   set result -3
+		   break
+	       }
+	   }
+       } else {
+	   remote_expect host $tmt {
+	       -ex "$pat" {
+		   # go on
+	       }
+ 	       default {
+		   set result 1
+		   break
+	       }
+	       timeout {
+		   set result -2
+		   break
+	       }
+	       eof {
+		   set result -3
+		   break
+	       }
+	   }
+
+	   if {$result == 0} {
+	       remote_expect host $tmt {
+		   -re "\[ \t]*\r\n" { }
+		   default { set result 1 }
+		   timeout { set result -2 }
+		   eof { set result -3 }
+	       }
+	   }
+       }
+    }
+    return $result
+}
+
+# mail_test [-message MESSAGE][-default (FAIL|XFAIL)][-noprompt]
+#            COMMAND PATTERN [PATTERN...]
+# COMMAND   - Command to send to mail.
+# PATTERN   - Sequence to expect in return. 
+# MESSAGE   - [optional] message to output
+proc gdbmtool_test { args } {
+    global gdbmtool_prompt
+    global suppress_flag;
+    upvar timeout timeout
+
+    set default ""
+    set message ""
+    set wait_for_prompt 1
+    for {set i 0} {$i < [llength $args]} {incr i} {
+	set a [lindex $args $i]
+	if {"$a" == "-default"} {
+	    set default [lindex $args [expr $i + 1]]
+	    incr i
+	} elseif {"$a" == "-message"} {
+	    set message [lindex $args [expr $i + 1]]
+	    incr i
+	} elseif {"$a" == "-noprompt"} {
+	    set wait_for_prompt 0
+	} else {
+	    set args [lrange $args $i end]
+	    break
+	}
+    }
+    
+    if {"$message" == ""}  {
+	set message [lindex $args 0]
+    }
+
+    verbose "Message is \"$message\"" 2
+    
+    set command [lindex $args 0]
+    set pattern [lrange $args 1 end]
+
+    set result [seq_test $command $pattern]
+    if {$wait_for_prompt} {
+	remote_expect host 30 {
+		-re "\[\r\n\]?${gdbmtool_prompt}$" {}
+		default {
+			perror "gdbmtool not initialized"
+			return 1
+		}
+	}
+    }
+
+    if {$result == 0} {
+	pass "$message"
+    } elseif {$result == 1} {
+	if { "$default" == "" || "$default" != "FAIL" } {
+	    fail "$message"
+	} else {
+	    xfail "$message"
+	    set result 0
+	}
+    } elseif {$result == -2} {
+	fail "$message (timeout)"
+    } elseif {$result == -3} {
+	fail "$message (eof)"
+    } else {
+	fail "$message"
+    }
+    return $result
+}
+
+
+

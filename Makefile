@@ -8,6 +8,12 @@ musl/lib/libc.a: musl/config.mak
 musl/config.mak:
 	cd musl && ./configure
 
+gdbm/src/.libs/libgdbm.a: gdbm/Makefile
+	cd gdbm && make
+
+gdbm/Makefile:
+	cd gdbm && ./configure
+
 lkl/tools/lkl/liblkl.a:
 	cd lkl/tools/lkl && make
 
@@ -20,7 +26,7 @@ solo5/GNUmakefile:
 micro_benchmarks/syscall_test.spt: musl/lib/libc.a
 	cd micro_benchmarks && make
 
-macro_benchmarks/gdbm_test.spt: musl/lib/libc.a
+macro_benchmarks/gdbm_test.spt: musl/lib/libc.a gdbm/src/.libs/libgdbm.a
 	cd macro_benchmarks && make
 
 macro_benchmarks/wget_test.spt: musl/lib/libc.a macro_benchmarks/wget/src/libwget.a macro_benchmarks/wget/lib/libgnu.a

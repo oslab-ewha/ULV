@@ -1,0 +1,5 @@
+# This file is part of GDBM testsuite.                      -*- autoconf -*-
+AT_SETUP([gdbm_close error])
+AT_KEYWORDS([close])
+AT_CHECK(closerr,1,[],[ignore])
+AT_CLEANUP

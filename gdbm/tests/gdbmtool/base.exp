@@ -1,0 +1,9 @@
+gdbmtool_start
+gdbmtool_test "status" \
+    "No database name" \
+    "Database is not open" \
+    "define key string" \
+    "define content string"
+gdbmtool_test "version" \
+    -re "^GDBM version .*"
+gdbmtool_stop

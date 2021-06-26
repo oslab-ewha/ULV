@@ -1,0 +1,37 @@
+# This file is part of GDBM.                                   -*- autoconf -*-
+# Copyright (C) 2018-2020 Free Software Foundation, Inc.
+#
+# GDBM is free software; you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation; either version 2, or (at your option)
+# any later version.
+#
+# GDBM is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with GDBM. If not, see <http://www.gnu.org/licenses/>. */
+
+AT_SETUP([Input from stdin])
+AT_KEYWORDS([gdbmtool])
+
+AT_CHECK([
+
+AT_DATA([input],[
+status
+version
+quit
+])
+
+gdbmtool < input | sed 's/^GDBM version.*/GDBM version/'
+],
+[0],
+[No database name
+Database is not open
+define key string
+define content string
+GDBM version 
+])
+AT_CLEANUP

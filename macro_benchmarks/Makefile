@@ -27,7 +27,7 @@ manifest.c: manifest.json $(SOLO5)/include/solo5/mft_abi.h $(ELFTOOL)
 
 gdbm_test.spt: gdbm_test.o manifest.o $(LDS.spt) $(BINDINGS.lkl)
 	@echo "LD $@"
-	$(LD) $(LDFLAGS) -T $(LDS.spt) $(BINDINGS.lkl) $< manifest.o /usr/lib/x86_64-linux-gnu/libgdbm.a ../musl/lib/libc.a -o $@
+	$(LD) $(LDFLAGS) -T $(LDS.spt) $(BINDINGS.lkl) $< manifest.o ../gdbm/src/.libs/libgdbm.a ../musl/lib/libc.a -o $@
 
 wget_test.spt: wget_test.o manifest.o $(LDS.spt) $(BINDINGS.lkl)
 	@echo "LD $@"
