@@ -4,13 +4,13 @@
 #include <stdint.h>
 #include <lkl_host.h>
 
-#define PAGE_SIZE		4096
+#define PAGE_SIZE_VIRTIO		4096
 
 /* The following are copied from skbuff.h */
-#if (65536/PAGE_SIZE + 1) < 16
+#if (65536/PAGE_SIZE_VIRTIO + 1) < 16
 #define MAX_SKB_FRAGS 16UL
 #else
-#define MAX_SKB_FRAGS (65536/PAGE_SIZE + 1)
+#define MAX_SKB_FRAGS (65536/PAGE_SIZE_VIRTIO + 1)
 #endif
 
 #define VIRTIO_REQ_MAX_BUFS	(MAX_SKB_FRAGS + 2)

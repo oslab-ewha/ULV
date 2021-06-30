@@ -33,11 +33,12 @@ void __init setup_arch(char **cl)
 	bootmem_init();
 }
 
-static void __init lkl_run_kernel(void *arg)
+static void *__init lkl_run_kernel(void *arg)
 {
 	threads_init();
 	lkl_cpu_get();
 	start_kernel();
+	return NULL;
 }
 
 int __init lkl_start_kernel(struct lkl_host_operations *ops, void *mem_start, unsigned long mem_size)

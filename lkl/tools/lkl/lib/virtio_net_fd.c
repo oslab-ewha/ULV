@@ -18,7 +18,7 @@
 #include <limits.h>
 #endif
 #include <fcntl.h>
-#include <sys/poll.h>
+#include <poll.h>
 #include <sys/uio.h>
 
 #include "virtio.h"

@@ -4,12 +4,13 @@
 extern void dbg_entrance();
 static int dbg_running = 0;
 
-static void dbg_thread(void* arg) {
+static void *dbg_thread(void* arg) {
 	lkl_host_ops.thread_detach();
 	printf("======Enter Debug======\n");
 	dbg_entrance();
 	printf("======Exit Debug======\n");
 	dbg_running = 0;
+	return NULL;
 }
 
 void dbg_handler(int signum) {

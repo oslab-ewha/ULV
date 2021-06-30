@@ -145,7 +145,7 @@ struct thread_bootstrap_arg {
 	void *arg;
 };
 
-static void thread_bootstrap(void *_tba)
+static void *thread_bootstrap(void *_tba)
 {
 	struct thread_bootstrap_arg *tba = (struct thread_bootstrap_arg *)_tba;
 	struct thread_info *ti = tba->ti;
@@ -159,6 +159,7 @@ static void thread_bootstrap(void *_tba)
 
 	f(arg);
 	do_exit(0);
+	return NULL;
 }
 
 int copy_thread(unsigned long clone_flags, unsigned long esp,

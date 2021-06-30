@@ -139,7 +139,7 @@ static struct virtio_dev_ops net_ops = {
 	.release_queue = net_release_queue,
 };
 
-void poll_thread(void *arg)
+void *poll_thread(void *arg)
 {
 	struct virtio_net_dev *dev = arg;
 
@@ -158,6 +158,8 @@ void poll_thread(void *arg)
 		if (ret & LKL_DEV_NET_POLL_TX)
 			virtio_process_queue(&dev->dev, 1);
 	} while (1);
+
+	return NULL;
 }
 
 struct virtio_net_dev *registered_devs[MAX_NET_DEVS];

@@ -137,7 +137,7 @@ struct lkl_host_operations {
 	void (*mutex_lock)(struct lkl_mutex *mutex);
 	void (*mutex_unlock)(struct lkl_mutex *mutex);
 
-	lkl_thread_t (*thread_create)(void (*f)(void *), void *arg);
+	lkl_thread_t (*thread_create)(void *(*f)(void *), void *arg);
 	void (*thread_detach)(void);
 	void (*thread_exit)(void);
 	int (*thread_join)(lkl_thread_t tid);
@@ -156,7 +156,7 @@ struct lkl_host_operations {
 
 	unsigned long long (*time)(void);
 
-	void* (*timer_alloc)(void (*fn)(void *), void *arg);
+	void* (*timer_alloc)(void *fn, void *arg);
 	int (*timer_set_oneshot)(void *timer, unsigned long delta);
 	void (*timer_free)(void *timer);
 

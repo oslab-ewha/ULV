@@ -184,10 +184,11 @@ static void mutex_free(struct lkl_mutex *_mutex)
 	free(_mutex);
 }
 
-static lkl_thread_t thread_create(void (*fn)(void *), void *arg)
+static lkl_thread_t thread_create(void *(*fn)(void *), void *arg)
 {
 	pthread_t thread;
-	if (WARN_PTHREAD(pthread_create(&thread, NULL, (void* (*)(void *))fn, arg)))
+
+	if (WARN_PTHREAD(pthread_create(&thread, NULL, fn, arg)))
 		return 0;
 	else
 		return (lkl_thread_t) thread;
@@ -259,7 +260,7 @@ static unsigned long long time_ns(void)
 	return 1e9*ts.tv_sec + ts.tv_nsec;
 }
 
-static void *timer_alloc(void (*fn)(void *), void *arg)
+static void *timer_alloc(void *fn, void *arg)
 {
 	int err;
 	timer_t timer;
@@ -268,7 +269,7 @@ static void *timer_alloc(void (*fn)(void *), void *arg)
 		.sigev_value = {
 			.sival_ptr = arg,
 		},
-		.sigev_notify_function = (void (*)(union sigval))fn,
+		.sigev_notify_function = (void (*)(union sigval))fn
 	};
 
 	err = timer_create(CLOCK_REALTIME, &se, &timer);
