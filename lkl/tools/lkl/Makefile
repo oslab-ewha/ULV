@@ -37,7 +37,7 @@ all:
 conf: $(OUTPUT)Makefile.conf
 
 $(OUTPUT)Makefile.conf: Makefile.autoconf
-	$(call QUIET_AUTOCONF, headers)$(MAKE) -f Makefile.autoconf -s
+	$(call QUIET_AUTOCONF)$(MAKE) -f Makefile.autoconf -s
 
 -include $(OUTPUT)Makefile.conf
 
@@ -76,8 +76,8 @@ $(OUTPUT)%$(SOSUF): $(OUTPUT)%-in.o $(OUTPUT)liblkl.a
 
 # liblkl is special
 $(OUTPUT)liblkl$(SOSUF): $(srctree)/lkl.o $(OUTPUT)%-in.o
-$(OUTPUT)liblkl.a: $(srctree)/lkl.o $(OUTPUT)lib/liblkl-in.o
-	$(QUIET_AR)$(AR) -rc $@ $^
+$(OUTPUT)liblkl.a: setup_sysheaders $(srctree)/lkl.o $(OUTPUT)lib/liblkl-in.o
+	$(QUIET_AR)$(AR) -rc $@ $(filter-out setup_sysheaders, $^)
 
 # rule to link programs
 #$(OUTPUT)%$(EXESUF): $(OUTPUT)%-in.o $(OUTPUT)liblkl.a
@@ -121,6 +121,10 @@ programs_install: $(progs-y:%=$(OUTPUT)%$(EXESUF))
 
 install: headers_install libraries_install programs_install
 
+setup_sysheaders:
+	@if [ ! -d include/asm ]; then ln -sf /usr/include/asm-generic include/asm; fi
+	@if [ ! -d include/asm-generic ]; then ln -sf /usr/include/asm-generic include/asm-generic; fi
+	@if [ ! -d include/linux ]; then ln -sf /usr/include/linux include/linux; fi
 
 run-tests:
 	./tests/run.py $(tests)
@@ -128,5 +132,6 @@ run-tests:
 FORCE: ;
 .PHONY: all clean FORCE run-tests
 .PHONY: headers_install libraries_install programs_install install
+.PHONY: setup_sysheaders
 .SECONDARY:
 

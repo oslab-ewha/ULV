@@ -14,13 +14,11 @@
 #include <unistd.h>
 #include <net/if.h>
 #include <arpa/inet.h>
-#if 0
 #ifdef __linux__
 #include <linux/if_ether.h>
 #include <linux/if_packet.h>
 #elif __FreeBSD__
 #include <netinet/in.h>
-#endif
 #endif
 #include <fcntl.h>
 
@@ -34,7 +32,6 @@
 
 struct lkl_netdev *lkl_netdev_raw_create(const char *ifname)
 {
-#if 0
 #ifdef __linux__
 	int ret;
 	int ifindex =  if_nametoindex(ifname);
@@ -93,6 +90,4 @@ struct lkl_netdev *lkl_netdev_raw_create(const char *ifname)
 	fcntl(fd, F_SETFL, fd_flags | O_NONBLOCK);
 
 	return lkl_register_netdev_fd(fd, fd);
-#endif
-	return NULL;
 }

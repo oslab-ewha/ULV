@@ -15,13 +15,12 @@
 #include <string.h>
 #include <fcntl.h>
 #include <net/if.h>
-#if 0 
 #ifdef __linux__
 #include <linux/if_tun.h>
 #elif __FreeBSD__
 #include <net/if_tun.h>
 #endif
-#endif
+
 #include <sys/ioctl.h>
 
 #include "virtio.h"
@@ -32,7 +31,6 @@
 struct lkl_netdev *lkl_netdev_tap_init(const char *path, int offload,
 				       struct ifreq *ifr)
 {
-#if 0
 	struct lkl_netdev *nd;
 	int fd, vnet_hdr_sz = 0;
 #ifdef __linux__
@@ -89,13 +87,10 @@ struct lkl_netdev *lkl_netdev_tap_init(const char *path, int offload,
 
 	nd->has_vnet_hdr = (vnet_hdr_sz != 0);
 	return nd;
-#endif
-	return NULL;
 }
 
 struct lkl_netdev *lkl_netdev_tap_create(const char *ifname, int offload)
 {
-#if 0
 #ifdef __linux__
 	char *path = "/dev/net/tun";
 #elif __FreeBSD__
@@ -110,9 +105,7 @@ struct lkl_netdev *lkl_netdev_tap_create(const char *ifname, int offload)
 #endif
 	};
 
-	strncpy(ifr.ifr_name, ifname, IFNAMSIZ);
+	strncpy(ifr.ifr_name, ifname, IFNAMSIZ - 1);
 
 	return lkl_netdev_tap_init(path, offload, &ifr);
-#endif
-	return NULL;
 }
