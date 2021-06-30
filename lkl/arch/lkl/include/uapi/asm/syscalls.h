@@ -83,13 +83,6 @@ typedef __s64			s64;
 #undef __NR_umount
 #define __NR_umount __NR_umount2
 
-#ifdef CONFIG_64BIT
-#define __NR_newfstat __NR3264_fstat
-#define __NR_newfstatat __NR3264_fstatat
-#endif
-
-#define __NR_mmap_pgoff __NR3264_mmap
-
 #include <linux/time.h>
 #include <linux/times.h>
 #include <linux/timex.h>
@@ -335,6 +328,7 @@ long lkl_sys_halt(void);
 #pragma GCC diagnostic ignored "-Wpointer-to-int-cast"
 #endif
 
+#include <asm/unistd_64.h>
 #include <asm/syscall_defs.h>
 
 #if __BITS_PER_LONG == 32

@@ -194,6 +194,13 @@ void syscalls_cleanup(void)
 		lkl_ops->tls_free(task_key);
 }
 
+SYSCALL_DEFINE6(mmap, unsigned long, addr, unsigned long, len,
+		unsigned long, prot, unsigned long, flags,
+		unsigned long, fd, unsigned long, pgoff)
+{
+	return ksys_mmap_pgoff(addr, len, prot, flags, fd, pgoff);
+}
+
 SYSCALL_DEFINE3(virtio_mmio_device_add, long, base, long, size, unsigned int,
 		irq)
 {

@@ -101,15 +101,6 @@ static inline long long lkl_sys_lseek(unsigned int fd, __lkl__kernel_loff_t off,
 }
 #endif
 
-static inline void *lkl_sys_mmap(void *addr, size_t length, int prot, int flags,
-				 int fd, off_t offset)
-{
-	return (void *)lkl_sys_mmap_pgoff((long)addr, length, prot, flags, fd,
-					  offset >> 12);
-}
-
-#define lkl_sys_mmap2 lkl_sys_mmap_pgoff
-
 #ifdef __lkl__NR_openat
 /**
  * lkl_sys_open - wrapper for lkl_sys_openat

@@ -1,3 +1,6 @@
+#ifndef _UAPI_ASM_LKL_UNISTD_H_
+#define _UAPI_ASM_LKL_UNISTD_H_
+
 #define __ARCH_WANT_SYSCALL_NO_AT
 #define __ARCH_WANT_SYSCALL_DEPRECATED
 #define __ARCH_WANT_SYSCALL_NO_FLAGS
@@ -12,6 +15,13 @@
 #define __ARCH_WANT_SYS_NEWFSTATAT
 #endif
 
-#include <asm-generic/unistd.h>
+#undef __NR_syscalls
+#define __NR_syscalls 437
+
+#ifndef __KERNEL__
+#include <asm/unistd_64.h>
+#endif
 
 #define __NR_virtio_mmio_device_add		436
+
+#endif

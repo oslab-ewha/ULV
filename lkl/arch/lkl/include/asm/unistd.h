@@ -1,5 +1,9 @@
 #include <uapi/asm/unistd.h>
 
+#ifndef __SYSCALL
+#define __SYSCALL(x, y)
+#endif
+
 __SYSCALL(__NR_virtio_mmio_device_add, sys_virtio_mmio_device_add)
 
 #define __ARCH_WANT_SYS_UTIME
@@ -28,3 +32,5 @@ __SYSCALL(__NR_virtio_mmio_device_add, sys_virtio_mmio_device_add)
 	    __ASCII_MAP(x, __SC_ASCII, __VA_ARGS__) ")\\n\"\n"		\
 	    ".ascii \"#endif\\n\"\n"					\
 	    ".section .text\n");
+
+#include <asm/unistd_64.h>
