@@ -6,3 +6,4 @@
 /micro_benchmarks/manifest.c
 /macro_benchmarks/*.spt
 /macro_benchmarks/manifest.c
+/macro_benchmarks/manifest-wget.c

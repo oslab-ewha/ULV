@@ -21,6 +21,10 @@ manifest.c: manifest.json $(SOLO5)/include/solo5/mft_abi.h $(ELFTOOL)
 	@echo "ELFTOOL $<"
 	$(ELFTOOL) gen-manifest $< $@
 
+manifest-wget.c: manifest-wget.json $(SOLO5)/include/solo5/mft_abi.h $(ELFTOOL)
+	@echo "ELFTOOL $<"
+	$(ELFTOOL) gen-manifest $< $@
+
 %.o: %.c $(SOLO5)/include/solo5/solo5.h
 	@echo "CC $<"
 	$(CC) $(CFLAGS) $(CPPFLAGS) -c $< -o $@
@@ -31,9 +35,9 @@ gdbm_test.spt: gdbm_test.o manifest.o $(LIBGDBM) $(LDS.spt) $(BINDINGS.lkl)
 	@echo "LD $@"
 	$(LD) $(LDFLAGS) -T $(LDS.spt) $(BINDINGS.lkl) $< manifest.o $(LIBGDBM) ../musl/lib/libc.a -o $@
 
-wget_test.spt: wget_test.o manifest.o $(LDS.spt) $(BINDINGS.lkl)
+wget_test.spt: wget_test.o manifest-wget.o $(LDS.spt) $(BINDINGS.lkl)
 	@echo "LD $@"
-	$(LD) $(LDFLAGS) -T $(LDS.spt) $(BINDINGS.lkl) $< manifest.o wget/src/libwget.a wget/lib/libgnu.a ../musl/lib/libc.a -o $@
+	$(LD) $(LDFLAGS) -T $(LDS.spt) $(BINDINGS.lkl) $< manifest-wget.o wget/src/libwget.a wget/lib/libgnu.a ../musl/lib/libc.a -o $@
 
 .PHONY: clean
 
