@@ -42,8 +42,17 @@ solo5_result_t solo5_net_acquire(const char *name, solo5_handle_t *handle,
         struct solo5_net_info *info)
 {
     unsigned index;
-    const struct mft_entry *e =
-        mft_get_by_name(mft, name, MFT_DEV_NET_BASIC, &index);
+    const struct mft_entry *e;
+
+    if (name)
+        e = mft_get_by_name(mft, name, MFT_DEV_NET_BASIC, &index);
+    else {
+        for (index = 0;; index++) {
+            e = mft_get_by_index(mft, index, MFT_DEV_NONE);
+            if (e == NULL || e->type == MFT_DEV_NET_BASIC)
+                break;
+        }
+    }
     if (e == NULL)
         return SOLO5_R_EINVAL;
     assert(e->attached);

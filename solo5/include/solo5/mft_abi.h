@@ -43,6 +43,7 @@
  * Supported manifest entry types.
  */
 typedef enum mft_type {
+    MFT_DEV_NONE = 0,
     MFT_DEV_BLOCK_BASIC = 1,
     MFT_DEV_NET_BASIC,
     MFT_RESERVED_FIRST = (1U << 30)

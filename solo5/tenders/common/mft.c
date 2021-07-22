@@ -126,7 +126,7 @@ struct mft_entry *mft_get_by_index(const struct mft *mft, unsigned index,
 {
     if (index >= mft->entries)
         return NULL;
-    else if (mft->e[index].type == type)
+    else if (type == MFT_DEV_NONE || mft->e[index].type == type)
         return (struct mft_entry *)&mft->e[index];
     else
         return NULL;
