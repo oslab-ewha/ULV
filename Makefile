@@ -23,7 +23,7 @@ solo5/tenders/lkl/solo5-lkl: solo5/GNUmakefile lkl/tools/lkl/liblkl.a
 solo5/GNUmakefile:
 	cd solo5 && ./configure.sh
 
-micro_benchmarks/syscall_test.spt: musl/lib/libc.a
+micro_benchmarks/syscall_test.spt: musl/lib/libc.a solo5/bindings/lkl/solo5_lkl.o
 	cd micro_benchmarks && make
 
 macro_benchmarks/gdbm_test.spt: musl/lib/libc.a gdbm/src/.libs/libgdbm.a

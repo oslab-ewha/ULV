@@ -7,3 +7,4 @@ mount_fs
 umount_fs
 get_path
 free_path
+setup_network

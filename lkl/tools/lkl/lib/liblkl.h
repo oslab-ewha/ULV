@@ -3,11 +3,11 @@
 
 #define AT_FDCWD	-100
 
-extern void init_liblkl(void);
 extern int mount_fs(const char *path_host, void **pfs);
 extern int umount_fs(void *fs);
 extern char *get_path(void *fs, const char *path);
 extern void free_path(char *path);
+extern void setup_network(int addr_my, int addr_gw);
 
 long lkl_syscall(long, long *);
 

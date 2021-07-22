@@ -22,16 +22,20 @@
 #include "../crt_init.h"
 #include "solo5_version.h"
 
-extern void init_liblkl(void *heap_start, unsigned long heap_size);
+extern void init_liblkl(void *heap_start, unsigned long heap_size, solo5_handle_t handle);
 extern void __init_libc(char *envp[], const char *);
 
 static void
 start_lkl(void *heap_start, unsigned long heap_size)
 {
 	char	*envp[] = { 0 };
+	solo5_handle_t	handle;
+	struct solo5_net_info	info;
 
+	if (solo5_net_acquire(NULL, &handle, &info) != SOLO5_R_OK)
+		handle = 0;
 	__init_libc(envp, "lkl");
-	init_liblkl(heap_start, heap_size);
+	init_liblkl(heap_start, heap_size, handle);
 }
 
 void _start(void *arg)

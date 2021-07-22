@@ -5,15 +5,34 @@
 #include <string.h>
 #include <stdio.h>
 #include <lkl_host.h>
+#include "virtio.h"
+#include "../../../../solo5/include/solo5/solo5.h"
 
 typedef struct {
 	int	fd;
 	char	mpoint[32];
 } fs_t;
 
-void
-init_liblkl(void *mem_start, unsigned long mem_size)
+static struct lkl_netdev	*netdev;
+static int	idx;
+
+extern struct lkl_netdev *lkl_netdev_solo5_create(solo5_handle_t handle);
+
+static void
+init_network(solo5_handle_t handle)
 {
+	struct lkl_netdev	*nd;
+
+	nd = lkl_netdev_solo5_create(handle);
+	idx = lkl_netdev_add(nd, NULL);
+}
+
+void
+init_liblkl(void *mem_start, unsigned long mem_size, solo5_handle_t handle)
+{
+	if (handle) {
+		init_network(handle);
+	}
 	lkl_start_kernel(&lkl_host_ops, mem_start, mem_size);
 }
 
@@ -76,4 +95,18 @@ free_path(char *path)
 {
 	if (path)
 		free(path);
+}
+
+void
+setup_network(int addr_my, int addr_gw)
+{
+	int ifidx;
+
+	ifidx = lkl_netdev_get_ifindex(idx);
+	lkl_if_up(ifidx);
+#if 0 /* NOT SUPPORTED */
+	lkl_if_set_ipv4(ifidx, addr_my, 24);
+	lkl_if_set_ipv4_gateway(ifidx, 0, 0, addr_gw);
+	lkl_set_ipv4_gateway(addr_gw);
+#endif
 }
