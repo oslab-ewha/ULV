@@ -89,6 +89,11 @@ void lkl_cpu_change_owner(lkl_thread_t owner)
 	if (cpu.count > 1)
 		lkl_bug("bad count while changing owner\n");
 	cpu.owner = owner;
+	while (cpu.sleepers) {
+		/* Now, sleeper can be owner. Wakeup all sleepers */
+		cpu.sleepers--;
+		lkl_ops->sem_up(cpu.sem);
+	}
 	lkl_ops->mutex_unlock(cpu.lock);
 }
 

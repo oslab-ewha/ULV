@@ -102,6 +102,11 @@ long lkl_syscall(long no, long *params)
 	struct task_struct *task = host0;
 	long ret;
 
+	task = lkl_ops->tls_get(task_key);
+	if (task) {
+		/* Set this task as ready even if it is able to be woken up */
+		wake_up_process(task);
+	}
 	ret = lkl_cpu_get();
 	if (ret < 0)
 		return ret;
