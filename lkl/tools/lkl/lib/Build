@@ -9,6 +9,7 @@ liblkl-y += net.o
 liblkl-y += jmp_buf.o
 liblkl-$(LKL_HOST_CONFIG_POSIX) += posix-host.o
 liblkl-$(LKL_HOST_CONFIG_NT) += nt-host.o
+liblkl-y += pure_thread.o
 liblkl-y += utils.o
 liblkl-y += virtio_blk.o
 liblkl-y += virtio.o

@@ -137,9 +137,10 @@ struct lkl_host_operations {
 	void (*mutex_lock)(struct lkl_mutex *mutex);
 	void (*mutex_unlock)(struct lkl_mutex *mutex);
 
+	void (*thread_switch)(lkl_thread_t prev, lkl_thread_t next);
 	lkl_thread_t (*thread_create)(void *(*f)(void *), void *arg);
 	void (*thread_detach)(void);
-	void (*thread_exit)(void);
+	void (*thread_exit)(lkl_thread_t lthrd);
 	int (*thread_join)(lkl_thread_t tid);
 	lkl_thread_t (*thread_self)(void);
 	int (*thread_equal)(lkl_thread_t a, lkl_thread_t b);
