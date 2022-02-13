@@ -75,30 +75,10 @@ static void run_irq(int irq)
  */
 int lkl_trigger_irq(int irq)
 {
-	int ret;
-
 	if (!irq || irq > NR_IRQS)
 		return -EINVAL;
 
-	ret = lkl_cpu_try_run_irq(irq);
-	if (ret <= 0)
-		return ret;
-
-	/*
-	 * Since this can be called from Linux context (e.g. lkl_trigger_irq ->
-	 * IRQ -> softirq -> lkl_trigger_irq) make sure we are actually allowed
-	 * to run irqs at this point
-	 */
-	if (!irqs_enabled) {
-		set_irq_pending(irq);
-		lkl_cpu_put();
-		return 0;
-	}
-
-	run_irq(irq);
-
-	lkl_cpu_put();
-
+	set_irq_pending(irq);
 	return 0;
 }
 

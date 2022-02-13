@@ -3,6 +3,7 @@
 #include <linux/sched/task.h>
 #include <linux/sched/signal.h>
 #include <asm/host_ops.h>
+#include <asm/lkl_dbg.h>
 #include <asm/cpu.h>
 #include <asm/sched.h>
 
@@ -89,32 +90,10 @@ struct task_struct *__switch_to(struct task_struct *prev,
 {
 	struct thread_info *_prev = task_thread_info(prev);
 	struct thread_info *_next = task_thread_info(next);
-	unsigned long _prev_flags = _prev->flags;
-	struct lkl_jmp_buf _prev_jb;
 
 	_current_thread_info = task_thread_info(next);
-	_next->prev_sched = prev;
 	abs_prev = prev;
-
-	BUG_ON(!_next->tid);
-	lkl_cpu_change_owner(_next->tid);
-
-	if (test_bit(TIF_SCHED_JB, &_prev_flags)) {
-		/* Atomic. Must be done before wakeup next */
-		clear_ti_thread_flag(_prev, TIF_SCHED_JB);
-		_prev_jb = _prev->sched_jb;
-	}
-
-	lkl_ops->sem_up(_next->sched_sem);
-	if (test_bit(TIF_SCHED_JB, &_prev_flags)) {
-		lkl_ops->jmp_buf_longjmp(&_prev_jb, 1);
-	} else {
-		lkl_ops->sem_down(_prev->sched_sem);
-	}
-
-	if (_prev->dead)
-		lkl_ops->thread_exit();
-
+	lkl_ops->thread_switch(_prev->tid, _next->tid);
 	return abs_prev;
 }
 
@@ -123,20 +102,10 @@ int host_task_stub(void *unused)
 	return 0;
 }
 
-void switch_to_host_task(struct task_struct *task)
+static int
+user_task_stub(void *unused)
 {
-	if (WARN_ON(!test_tsk_thread_flag(task, TIF_HOST_THREAD)))
-		return;
-
-	task_thread_info(task)->tid = lkl_ops->thread_self();
-
-	if (current == task)
-		return;
-
-	wake_up_process(task);
-	thread_sched_jb();
-	lkl_ops->sem_down(task_thread_info(task)->sched_sem);
-	schedule_tail(abs_prev);
+	return 0;
 }
 
 struct thread_bootstrap_arg {
@@ -152,7 +121,8 @@ static void *thread_bootstrap(void *_tba)
 	int (*f)(void *) = tba->f;
 	void *arg = tba->arg;
 
-	lkl_ops->sem_down(ti->sched_sem);
+	DBG("enter: thread start: %s\n", dbg_thread(ti));
+
 	kfree(tba);
 	if (ti->prev_sched)
 		schedule_tail(ti->prev_sched);
@@ -162,14 +132,18 @@ static void *thread_bootstrap(void *_tba)
 	return NULL;
 }
 
+static lkl_thread_t	tid_user;
+
 int copy_thread(unsigned long clone_flags, unsigned long esp,
 		unsigned long unused, struct task_struct *p)
 {
 	struct thread_info *ti = task_thread_info(p);
 	struct thread_bootstrap_arg *tba;
 
-	if ((int (*)(void *))esp == host_task_stub) {
-		set_ti_thread_flag(ti, TIF_HOST_THREAD);
+	DBG("copy_thread: %s\n", dbg_thread(ti));
+
+	if ((int (*)(void *))esp == user_task_stub) {
+		ti->tid = tid_user;
 		return 0;
 	}
 
@@ -227,4 +201,27 @@ void threads_cleanup(void)
 	}
 
 	lkl_ops->sem_free(init_thread_union.thread_info.sched_sem);
+}
+
+#define CLONE_FLAGS (CLONE_VM | CLONE_FS | CLONE_FILES | CLONE_THREAD |	\
+		     CLONE_SIGHAND | SIGCHLD)
+
+void
+arch_cpu_idle_prepare(void)
+{
+	struct task_struct	*task_user;
+	pid_t	pid;
+
+	pid = kernel_thread(user_task_stub, NULL, CLONE_FLAGS);
+
+	task_user = find_task_by_pid_ns(pid, &init_pid_ns);
+	snprintf(task_user->comm, sizeof(task_user->comm), "user");
+}
+
+void
+switch_thread(lkl_thread_t thread)
+{
+	lkl_ops->thread_switch(0, 0);
+	tid_user = lkl_ops->thread_self();
+	lkl_ops->thread_switch(tid_user, thread);
 }

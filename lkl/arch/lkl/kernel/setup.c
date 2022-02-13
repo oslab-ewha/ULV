@@ -8,6 +8,7 @@
 #include <linux/syscalls.h>
 #include <linux/tick.h>
 #include <asm/host_ops.h>
+#include <asm/lkl_dbg.h>
 #include <asm/irq.h>
 #include <asm/unistd.h>
 #include <asm/syscalls.h>
@@ -36,13 +37,13 @@ void __init setup_arch(char **cl)
 static void *__init lkl_run_kernel(void *arg)
 {
 	threads_init();
-	lkl_cpu_get();
 	start_kernel();
 	return NULL;
 }
 
 int __init lkl_start_kernel(struct lkl_host_operations *ops, void *mem_start, unsigned long mem_size)
 {
+	lkl_thread_t	thread;
 	int	ret;
 
 	lkl_ops = ops;
@@ -61,29 +62,23 @@ int __init lkl_start_kernel(struct lkl_host_operations *ops, void *mem_start, un
 		return -ENOMEM;
 
 	ret = lkl_cpu_init();
-	if (ret)
-		goto out_free_init_sem;
-
-	ret = lkl_ops->thread_create(lkl_run_kernel, NULL);
-	if (!ret) {
-		ret = -ENOMEM;
-		goto out_free_init_sem;
+	if (ret) {
+		lkl_ops->sem_free(init_sem);
+		return ret;
 	}
+
+	thread = lkl_ops->thread_create(lkl_run_kernel, NULL);
+	if (!thread) {
+		lkl_ops->sem_free(init_sem);
+		return -ENOMEM;
+	}
+
+	switch_thread(thread);
 
 	lkl_ops->sem_down(init_sem);
 	lkl_ops->sem_free(init_sem);
-	current_thread_info()->tid = lkl_ops->thread_self();
-	lkl_cpu_change_owner(current_thread_info()->tid);
-
-	lkl_cpu_put();
-	is_running = 1;
 
 	return 0;
-
-out_free_init_sem:
-	lkl_ops->sem_free(init_sem);
-
-	return ret;
 }
 
 int lkl_is_running(void)
@@ -161,7 +156,6 @@ static int lkl_run_init(struct linux_binprm *bprm)
 	syscalls_init();
 
 	lkl_ops->sem_up(init_sem);
-	lkl_ops->thread_exit();
 
 	return 0;
 }
