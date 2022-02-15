@@ -215,6 +215,7 @@ arch_cpu_idle_prepare(void)
 	pid = kernel_thread(user_task_stub, NULL, CLONE_FLAGS);
 
 	task_user = find_task_by_pid_ns(pid, &init_pid_ns);
+	task_user->flags &= ~PF_KTHREAD;
 	snprintf(task_user->comm, sizeof(task_user->comm), "user");
 }
 

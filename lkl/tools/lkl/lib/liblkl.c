@@ -100,13 +100,15 @@ free_path(char *path)
 void
 setup_network(int addr_my, int addr_gw)
 {
-	int ifidx;
+	int	ifidx;
 
 	ifidx = lkl_netdev_get_ifindex(idx);
 	lkl_if_up(ifidx);
-#if 0 /* NOT SUPPORTED */
+	lkl_if_set_mtu(ifidx, 1500);
 	lkl_if_set_ipv4(ifidx, addr_my, 24);
-	lkl_if_set_ipv4_gateway(ifidx, 0, 0, addr_gw);
-	lkl_set_ipv4_gateway(addr_gw);
+	lkl_if_set_ipv4_gateway(ifidx, addr_my, 24, addr_gw);
+#if 0
+	//TODO: There's a serious delay if ARP cache does not exist
+	lkl_add_neighbor(ifidx, 2, ipaddr, macaddr);
 #endif
 }

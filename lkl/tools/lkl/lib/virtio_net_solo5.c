@@ -51,8 +51,9 @@ solo5_net_rx(struct lkl_netdev *nd, struct iovec *iov, int cnt)
 		if ((res = solo5_net_read(nd_solo5->handle, iov[i].iov_base + offset, size, &nread)) != SOLO5_R_OK) {
 			if (res != SOLO5_R_AGAIN) {
 				perror("failed to read from net\n");
+				return -1;
 			}
-			return 0;
+			return ret;
 		}
 		ret += nread;
 		if (size == nread) {
