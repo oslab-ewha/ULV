@@ -78,6 +78,8 @@ int __init lkl_start_kernel(struct lkl_host_operations *ops, void *mem_start, un
 	lkl_ops->sem_down(init_sem);
 	lkl_ops->sem_free(init_sem);
 
+	is_running = 1;
+
 	return 0;
 }
 
