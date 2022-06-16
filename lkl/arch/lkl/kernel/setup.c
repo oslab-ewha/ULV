@@ -73,7 +73,7 @@ int __init lkl_start_kernel(struct lkl_host_operations *ops, void *mem_start, un
 		return -ENOMEM;
 	}
 
-	switch_thread(thread);
+	handover_thread(thread);
 
 	lkl_ops->sem_down(init_sem);
 	lkl_ops->sem_free(init_sem);
@@ -153,6 +153,11 @@ static int lkl_run_init(struct linux_binprm *bprm)
 	init_pid_ns.child_reaper = 0;
 
 	current->mm->start_brk = current->mm->brk = memory_end;
+
+	{
+		extern void wakeup_user_thread(void);
+		wakeup_user_thread();
+	}
 
 	lkl_ops->sem_up(init_sem);
 

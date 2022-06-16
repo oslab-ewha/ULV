@@ -47,7 +47,7 @@ void free_thread_stack(struct task_struct *tsk);
 void threads_init(void);
 void threads_cleanup(void);
 
-void switch_thread(lkl_thread_t thread);
+void handover_thread(lkl_thread_t thread);
 
 #define TIF_SYSCALL_TRACE		0
 #define TIF_NOTIFY_RESUME		1

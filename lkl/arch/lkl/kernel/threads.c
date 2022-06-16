@@ -127,6 +127,7 @@ static void *thread_bootstrap(void *_tba)
 	return NULL;
 }
 
+/* user thread */
 static lkl_thread_t	tid_user;
 
 int copy_thread(unsigned long clone_flags, unsigned long esp,
@@ -202,7 +203,7 @@ void threads_cleanup(void)
 		     CLONE_SIGHAND | SIGCHLD)
 
 void
-arch_cpu_idle_prepare(void)
+wakeup_user_thread(void)
 {
 	struct task_struct	*task_user;
 	pid_t	pid;
@@ -215,7 +216,7 @@ arch_cpu_idle_prepare(void)
 }
 
 void
-switch_thread(lkl_thread_t thread)
+handover_thread(lkl_thread_t thread)
 {
 	lkl_ops->thread_switch(0, 0);
 	tid_user = lkl_ops->thread_self();
