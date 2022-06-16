@@ -16,6 +16,4 @@ static inline void thread_sched_jb(void)
 	}
 }
 
-int host_task_stub(void *unused);
-
 #endif /*  _ASM_LKL_SCHED_H */

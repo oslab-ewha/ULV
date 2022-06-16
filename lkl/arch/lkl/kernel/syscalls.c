@@ -68,15 +68,6 @@ long lkl_syscall(long no, long *params)
 	return ret;
 }
 
-int syscalls_init(void)
-{
-	return 0;
-}
-
-void syscalls_cleanup(void)
-{
-}
-
 SYSCALL_DEFINE6(mmap, unsigned long, addr, unsigned long, len,
 		unsigned long, prot, unsigned long, flags,
 		unsigned long, fd, unsigned long, pgoff)

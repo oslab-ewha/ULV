@@ -97,11 +97,6 @@ struct task_struct *__switch_to(struct task_struct *prev,
 	return abs_prev;
 }
 
-int host_task_stub(void *unused)
-{
-	return 0;
-}
-
 static int
 user_task_stub(void *unused)
 {
