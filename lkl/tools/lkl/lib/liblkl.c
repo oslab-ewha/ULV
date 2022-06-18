@@ -106,7 +106,7 @@ setup_network(int addr_my, int addr_gw)
 	lkl_if_up(ifidx);
 	lkl_if_set_mtu(ifidx, 1500);
 	lkl_if_set_ipv4(ifidx, addr_my, 24);
-	lkl_if_set_ipv4_gateway(ifidx, addr_my, 24, addr_gw);
+	lkl_set_ipv4_gateway(addr_gw);
 #if 0
 	//TODO: There's a serious delay if ARP cache does not exist
 	lkl_add_neighbor(ifidx, 2, ipaddr, macaddr);
