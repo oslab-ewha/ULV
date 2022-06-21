@@ -24,8 +24,8 @@
 .code64
 
 ENTRY(spt_launch)
-	movq %rdi, %rsp
+	/* movq %rdi, %rsp */
 	movq %rdx, %rdi
 
-	jmp *%rsi
+	callq *%rsi
 END(spt_launch)

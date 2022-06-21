@@ -117,13 +117,13 @@ endif # CONFIG_SPT
 
 ifdef CONFIG_LKL
 
-lkl_SRCS := lkl/lkl_main.c lkl/lkl_core.c lkl/lkl_launch_$(CONFIG_ARCH).S \
+lkl_SRCS := lkl/lkl_main.c lkl/lkl_core.c lkl/lkl_kernel.c lkl/lkl_launch_$(CONFIG_ARCH).S \
     lkl/lkl_module_net.c lkl/lkl_module_block.c
 
 lkl_OBJS := $(patsubst %.c,%.o,$(patsubst %.S,%.o,$(lkl_SRCS)))
 
 lkl/solo5-lkl: $(lkl_OBJS) $(common_LIB)
-	$(HOSTLINK)
+	$(HOSTLINK) ../../lkl/tools/lkl/liblkl.a -lpthread -lrt
 
 HOSTLDFLAGS += -Wl,-z -Wl,noexecstack
 HOSTLDLIBS += $(MAKECONF_SPT_LDLIBS)

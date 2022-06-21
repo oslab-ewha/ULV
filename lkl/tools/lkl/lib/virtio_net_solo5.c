@@ -16,6 +16,7 @@ struct lkl_netdev_solo5 {
 static int
 solo5_net_tx(struct lkl_netdev *nd, struct iovec *iov, int cnt)
 {
+#if 0 //TODO
 	struct lkl_netdev_solo5	*nd_solo5 = container_of(nd, struct lkl_netdev_solo5, dev);
 	int	i, ret = 0;
 
@@ -33,11 +34,14 @@ solo5_net_tx(struct lkl_netdev *nd, struct iovec *iov, int cnt)
 		ret += iov[i].iov_len;
 	}
 	return ret;
+#endif
+	return 0;
 }
 
 static int
 solo5_net_rx(struct lkl_netdev *nd, struct iovec *iov, int cnt)
 {
+#if 0 ///TODO
 	struct lkl_netdev_solo5	*nd_solo5 = container_of(nd, struct lkl_netdev_solo5, dev);
 	int	i, ret = 0;
 	int	offset = 0;
@@ -64,11 +68,14 @@ solo5_net_rx(struct lkl_netdev *nd, struct iovec *iov, int cnt)
 			offset += nread;
 	}
 	return ret;
+#endif
+	return 0;
 }
 
 static int
 solo5_net_poll(struct lkl_netdev *nd)
 {
+#if 0 ///TODO
 	struct lkl_netdev_solo5	*nd_solo5 = container_of(nd, struct lkl_netdev_solo5, dev);
 	solo5_handle_set_t	ready_set = 0;
 
@@ -76,6 +83,7 @@ solo5_net_poll(struct lkl_netdev *nd)
 	if (ready_set & 1U << nd_solo5->handle) {
 		return (LKL_DEV_NET_POLL_RX | LKL_DEV_NET_POLL_TX);
 	}
+#endif
 	return 0;
 }
 

@@ -149,7 +149,7 @@ struct spt *spt_init(size_t mem_size)
     if (epoll_ctl(spt->epollfd, EPOLL_CTL_ADD, spt->timerfd, &ev) == -1)
         err(1, "epoll_ctl(EPOLL_CTL_ADD) failed");
 
-    spt->sc_ctx = seccomp_init(SCMP_ACT_KILL);
+    spt->sc_ctx = seccomp_init(SCMP_ACT_NOTIFY);
     assert(spt->sc_ctx != NULL);
 
     return spt;
@@ -232,6 +232,9 @@ static inline int _memfd_create(const char *name, unsigned int flags)
     return syscall(__NR_memfd_create, name, flags);
 }
 
+void bootup_lkl(struct spt_boot_info *bi);
+void notify_sc_listen_fd(int fd);
+
 void spt_run(struct spt *spt, uint64_t p_entry)
 {
     typedef void (*start_fn_t)(void *arg);
@@ -252,59 +255,15 @@ void spt_run(struct spt *spt, uint64_t p_entry)
 #error Unsupported architecture
 #endif
 
-    /*
-     * We cannot use seccomp_load() to load the filter, as this calls free()
-     * which may call brk(), which we do not have in our seccomp whitelist.
-     * Instead, we export the BPF program via an anonymous memfd, release all
-     * resources from the libseccomp context and load the filter manually.
-     */
-    int bpf_fd = _memfd_create("bpf_filter", 0);
-    if (bpf_fd < 0)
-        err(1, "memfd_create() failed");
-    int rc = -1;
-    rc = seccomp_export_bpf(spt->sc_ctx, bpf_fd);
-    if (rc != 0)
-        errx(1, "seccomp_export_bpf() failed: %s", strerror(-rc));
-    struct stat sb;
-    rc = fstat(bpf_fd, &sb);
-    if (rc != 0)
-        err(1, "fstat() failed");
-    if (lseek(bpf_fd, 0, SEEK_SET) == (off_t)-1)
-        err(1, "lseek() failed");
-    /*
-     * bpf_prgm is intentionally allocated on our stack, that way libc malloc
-     * is not involved.
-     */
-    char bpf_prgm[sb.st_size];
-    ssize_t nbytes = read(bpf_fd, bpf_prgm, sb.st_size);
-    assert(nbytes == sb.st_size);
-    close(bpf_fd);
-    seccomp_release(spt->sc_ctx);
-    spt->sc_ctx = NULL;
-
-    /* Currently, seccomp is disabled */
-#if 0
-    rc = prctl(PR_SET_NO_NEW_PRIVS, 1, 0, 0, 0);
-    if (rc != 0)
-        err(1, "prctl(PR_SET_NO_NEW_PRIVS) failed");
-    struct sock_filter dummy[1];
-    struct sock_fprog prog = {
-        .len = (unsigned short) (sb.st_size / sizeof dummy[0]),
-        .filter = (struct sock_filter *)bpf_prgm
-    };
-    /*
-     * Check that we did not truncate the BPF filter due to overflow in the
-     * calculation above.
-     */
-    assert((sb.st_size / sizeof dummy[0]) <= USHRT_MAX);
-    rc = syscall(SYS_seccomp, SECCOMP_SET_MODE_FILTER, 0, &prog);
-    if (rc != 0)
-        err(1, "seccomp(SECCOMP_SET_MODE_FILTER) failed");
-#endif
+    struct spt_boot_info *bi = (struct spt_boot_info *)(spt->mem + SPT_BOOT_INFO_BASE);
+    bootup_lkl(bi);
+    seccomp_load(spt->sc_ctx);
+    notify_sc_listen_fd(seccomp_notify_fd(spt->sc_ctx));
 
     spt_launch(sp, start_fn, spt->mem + SPT_BOOT_INFO_BASE);
 
-    abort(); /* spt_launch() does not return */
+    seccomp_release(spt->sc_ctx);
+    spt->sc_ctx = NULL;
 }
 
 static int handle_cmdarg(char *cmdarg, struct mft *mft)

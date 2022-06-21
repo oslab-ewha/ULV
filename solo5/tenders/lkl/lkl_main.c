@@ -41,11 +41,11 @@
 extern struct spt_module __start_modules;
 extern struct spt_module __stop_modules;
 
-static void setup_modules(struct spt *spt, struct mft *mft)
+static void setup_modules(struct spt *spt)
 {
     for (struct spt_module *m = &__start_modules; m < &__stop_modules; m++) {
         assert(m->ops.setup);
-        if (m->ops.setup(spt, mft)) {
+        if (m->ops.setup(spt, NULL)) {
             warnx("Module `%s' setup failed", m->name);
             if (m->ops.usage) {
                 warnx("Please check you have correctly specified:\n    %s",
@@ -54,7 +54,7 @@ static void setup_modules(struct spt *spt, struct mft *mft)
             exit(1);
         }
     }
-
+#if 0 ////DEL
     bool fail = false;
     for (unsigned i = 0; i != mft->entries; i++) {
         if (mft->e[i].type >= MFT_RESERVED_FIRST)
@@ -68,6 +68,7 @@ static void setup_modules(struct spt *spt, struct mft *mft)
     if (fail)
         errx(1, "All declared devices must be attached. "
                 "See --help for syntax.");
+#endif
 }
 
 static int handle_cmdarg(char *cmdarg, struct mft *mft)
@@ -181,6 +182,7 @@ int main(int argc, char **argv)
     if (elf_fd == -1)
         err(1, "%s: Could not open", elf_filename);
 
+#if 0
     struct abi1_info *abi1;
     size_t abi1_size;
     if (elf_load_note(elf_fd, elf_filename, ABI1_NOTE_TYPE, ABI1_NOTE_ALIGN,
@@ -193,7 +195,6 @@ int main(int argc, char **argv)
         errx(1, "%s: Executable requests unsupported ABI version %u",
                 elf_filename, abi1->abi_version);
     free(abi1);
-
     struct mft *mft;
     size_t mft_size;
     if (elf_load_note(elf_fd, elf_filename, MFT1_NOTE_TYPE, MFT1_NOTE_ALIGN,
@@ -203,7 +204,7 @@ int main(int argc, char **argv)
         free(mft);
         errx(1, "%s: Solo5 manifest is invalid", elf_filename);
     }
-
+#endif
     /*
      * Scan command line arguments in a 2nd pass, and pass options through to
      * modules to handle.
@@ -223,7 +224,7 @@ int main(int argc, char **argv)
             argc--;
             argv++;
         }
-        if (handle_cmdarg(*argv, mft) == 0) {
+        if (handle_cmdarg(*argv, NULL /*mft*/) == 0) {
             /* Handled by module, consume and go on to next arg */
             matched = 1;
             argc--;
@@ -249,9 +250,9 @@ int main(int argc, char **argv)
             spt_guest_mprotect, spt, &p_entry, &p_end);
     close(elf_fd);
 
-    setup_modules(spt, mft);
+    setup_modules(spt);
 
-    spt_boot_info_init(spt, p_end, argc, argv, mft, mft_size);
+    spt_boot_info_init(spt, p_end, argc, argv, NULL, 0);
 
     spt_run(spt, p_entry);
 }

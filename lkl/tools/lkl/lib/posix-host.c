@@ -30,11 +30,9 @@
 #define SHARE_SEM 0
 #endif /* _POSIX_SEMAPHORES */
 
-extern void solo5_console_write(const char *buf, size_t size);
-
 static void print(const char *str, int len)
 {
-	solo5_console_write(str, len);
+	write(1, str, len);
 }
 
 struct lkl_mutex {
