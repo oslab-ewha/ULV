@@ -233,40 +233,21 @@ static inline int _memfd_create(const char *name, unsigned int flags)
 }
 
 void bootup_lkl(struct spt_boot_info *bi);
-void notify_sc_listen_fd(int fd);
+
+void run_user_thread(void (*)(void *));
 
 void spt_run(struct spt *spt, uint64_t p_entry)
 {
     typedef void (*start_fn_t)(void *arg);
     start_fn_t start_fn = (start_fn_t)(spt->mem + p_entry);
-    /*
-     * Set initial stack alignment based on arch-specific ABI requirements.
-     */
-#if defined(__x86_64__)
-    uint64_t sp = spt->mem_size - 0x8;
-#elif defined(__aarch64__)
-    uint64_t sp = spt->mem_size - 0x10;
-#elif defined(__powerpc64__)
-    /*
-     * Stack alignment on PPC64 is 0x10, minimum stack frame size is 112 bytes.
-     */
-    uint64_t sp = spt->mem_size - 112;
-#else
-#error Unsupported architecture
-#endif
 
     struct spt_boot_info *bi = (struct spt_boot_info *)(spt->mem + SPT_BOOT_INFO_BASE);
     bootup_lkl(bi);
-    seccomp_load(spt->sc_ctx);
-    notify_sc_listen_fd(seccomp_notify_fd(spt->sc_ctx));
 
-    spt_launch(sp, start_fn, spt->mem + SPT_BOOT_INFO_BASE);
-
-    seccomp_release(spt->sc_ctx);
-    spt->sc_ctx = NULL;
+    run_user_thread(start_fn);
 }
 
-static int handle_cmdarg(char *cmdarg, struct mft *mft)
+static int handle_cmdarg(char *cmdarg)
 {
     if (!strncmp("--x-exec-heap", cmdarg, 13)) {
         warnx("WARNING: The use of --x-exec-heap is dangerous and not"
@@ -277,43 +258,8 @@ static int handle_cmdarg(char *cmdarg, struct mft *mft)
     return -1;
 }
 
-static int setup(struct spt *spt, struct mft *mft)
+static int setup(struct spt *spt)
 {
-    int rc = -1;
-
-    rc = seccomp_rule_add(spt->sc_ctx, SCMP_ACT_ALLOW, SCMP_SYS(write), 1,
-            SCMP_A0(SCMP_CMP_EQ, 1));
-    if (rc != 0)
-        errx(1, "seccomp_rule_add(write, fd=1) failed: %s", strerror(-rc));
-    rc = seccomp_rule_add(spt->sc_ctx, SCMP_ACT_ALLOW, SCMP_SYS(exit_group), 0);
-    if (rc != 0)
-        errx(1, "seccomp_rule_add(exit_group) failed: %s", strerror(-rc));
-    rc = seccomp_rule_add(spt->sc_ctx, SCMP_ACT_ALLOW, SCMP_SYS(epoll_pwait), 1,
-            SCMP_A0(SCMP_CMP_EQ, spt->epollfd));
-    if (rc != 0)
-        errx(1, "seccomp_rule_add(epoll_pwait) failed: %s", strerror(-rc));
-    rc = seccomp_rule_add(spt->sc_ctx, SCMP_ACT_ALLOW,
-            SCMP_SYS(timerfd_settime), 1, SCMP_A0(SCMP_CMP_EQ, spt->timerfd));
-    if (rc != 0)
-        errx(1, "seccomp_rule_add(timerfd_settime) failed: %s", strerror(-rc));
-    rc = seccomp_rule_add(spt->sc_ctx, SCMP_ACT_ALLOW, SCMP_SYS(clock_gettime),
-            1, SCMP_A0(SCMP_CMP_EQ, CLOCK_MONOTONIC));
-    if (rc != 0)
-        errx(1, "seccomp_rule_add(clock_gettime, CLOCK_MONOTONIC) failed: %s",
-                strerror(-rc));
-    rc = seccomp_rule_add(spt->sc_ctx, SCMP_ACT_ALLOW, SCMP_SYS(clock_gettime),
-            1, SCMP_A0(SCMP_CMP_EQ, CLOCK_REALTIME));
-    if (rc != 0)
-        errx(1, "seccomp_rule_add(clock_gettime, CLOCK_REALTIME) failed: %s",
-                strerror(-rc));
-#if defined(__x86_64__)
-    rc = seccomp_rule_add(spt->sc_ctx, SCMP_ACT_ALLOW, SCMP_SYS(arch_prctl),
-            1, SCMP_A0(SCMP_CMP_EQ, ARCH_SET_FS));
-    if (rc != 0)
-        errx(1, "seccomp_rule_add(arch_prctl, ARCH_SET_FS) failed: %s",
-                strerror(-rc));
-#endif
-
     return 0;
 }
 

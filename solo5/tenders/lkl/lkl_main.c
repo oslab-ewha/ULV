@@ -18,10 +18,6 @@
  * CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
  */
 
-/*
- * spt_main.c: Main program.
- */
-
 #define _GNU_SOURCE
 #include <assert.h>
 #include <err.h>
@@ -45,7 +41,7 @@ static void setup_modules(struct spt *spt)
 {
     for (struct spt_module *m = &__start_modules; m < &__stop_modules; m++) {
         assert(m->ops.setup);
-        if (m->ops.setup(spt, NULL)) {
+        if (m->ops.setup(spt)) {
             warnx("Module `%s' setup failed", m->name);
             if (m->ops.usage) {
                 warnx("Please check you have correctly specified:\n    %s",
@@ -71,11 +67,11 @@ static void setup_modules(struct spt *spt)
 #endif
 }
 
-static int handle_cmdarg(char *cmdarg, struct mft *mft)
+static int handle_cmdarg(char *cmdarg)
 {
     for (struct spt_module *m = &__start_modules; m < &__stop_modules; m++) {
         if (m->ops.handle_cmdarg) {
-            if (m->ops.handle_cmdarg(cmdarg, mft) == 0) {
+            if (m->ops.handle_cmdarg(cmdarg) == 0) {
                 return 0;
             }
         }
@@ -224,7 +220,7 @@ int main(int argc, char **argv)
             argc--;
             argv++;
         }
-        if (handle_cmdarg(*argv, NULL /*mft*/) == 0) {
+        if (handle_cmdarg(*argv) == 0) {
             /* Handled by module, consume and go on to next arg */
             matched = 1;
             argc--;

@@ -30,125 +30,117 @@
 #include <string.h>
 #include <seccomp.h>
 #include <sys/epoll.h>
+#include <sys/timerfd.h>
+#include <unistd.h>
+#include <errno.h>
 
 #include "../common/tap_attach.h"
 #include "lkl.h"
 
-static bool module_in_use;
+int	fd_tap = -1;
 
-static int handle_cmdarg(char *cmdarg, struct mft *mft)
+static int	epollfd;
+static int	timerfd;
+
+static int
+handle_cmdarg(char *cmdarg)
 {
-    enum {
-        opt_net,
-        opt_net_mac
-    } which;
+	char	iface[20];
+	int	rc;
 
-    if (strncmp("--net:", cmdarg, 6) == 0)
-        which = opt_net;
-    else if (strncmp("--net-mac:", cmdarg, 10) == 0)
-        which = opt_net_mac;
-    else
-        return -1;
+	if (strncmp("--net=", cmdarg, 6) != 0)
+		return -1;
 
-    char name[MFT_NAME_SIZE];
-    char iface[20]; /* XXX should be IFNAMSIZ, needs extra header here */
-    int rc;
-    if (which == opt_net) {
-        rc = sscanf(cmdarg,
-                "--net:%" XSTR(MFT_NAME_MAX) "[A-Za-z0-9]="
-                "%19s", name, iface);
-        if (rc != 2)
-            return -1;
-        struct mft_entry *e = mft_get_by_name(mft, name, MFT_DEV_NET_BASIC,
-                NULL);
-        if (e == NULL) {
-            warnx("Resource not declared in manifest: '%s'", name);
-            return -1;
-        }
-        int fd = tap_attach(iface);
-        if (fd < 0) {
-            warnx("Could not attach interface: %s", iface);
-            return -1;
+	rc = sscanf(cmdarg, "--net=%19s", iface);
+        if (rc != 1)
+		return -1;
+
+        fd_tap = tap_attach(iface);
+        if (fd_tap < 0) {
+		warnx("Could not attach interface: %s", iface);
+		return -1;
         }
 
-        /* e->u.net_basic.mac[] is set either by option or generated later by
-         * setup().
-         */
-        e->u.net_basic.mtu = 1500; /* TODO */
-        e->b.hostfd = fd;
-        e->attached = true;
-        module_in_use = true;
-    }
-    else if (which == opt_net_mac) {
-        uint8_t mac[6];
-        rc = sscanf(cmdarg,
-                "--net-mac:%" XSTR(MFT_NAME_MAX) "[A-Za-z0-9]="
-                "%02"SCNx8":%02"SCNx8":%02"SCNx8":"
-                "%02"SCNx8":%02"SCNx8":%02"SCNx8,
-                name,
-                &mac[0], &mac[1], &mac[2], &mac[3], &mac[4], &mac[5]);
-        if (rc != 7)
-            return -1;
-        struct mft_entry *e = mft_get_by_name(mft, name, MFT_DEV_NET_BASIC,
-                NULL);
-        if (e == NULL) {
-            warnx("Resource not declared in manifest: '%s'", name);
-            return -1;
-        }
-        memcpy(e->u.net_basic.mac, mac, sizeof mac);
-    }
-
-    return 0;
+	return 0;
 }
 
-static int setup(struct spt *spt, struct mft *mft)
+static int
+setup(struct spt *spt)
 {
-    if (!module_in_use)
-        return 0;
+	struct epoll_event	epev;
 
-    for (unsigned i = 0; i != mft->entries; i++) {
-        if (mft->e[i].type != MFT_DEV_NET_BASIC || !mft->e[i].attached)
-            continue;
-        char no_mac[6] = { 0 };
-        if (memcmp(mft->e[i].u.net_basic.mac, no_mac, sizeof no_mac) == 0)
-            tap_attach_genmac(mft->e[i].u.net_basic.mac);
+	if (fd_tap < 0)
+		return 0;
 
-        int rc;
-        struct epoll_event ev;
-        ev.events = EPOLLIN;
-        /*
-         * i is the manifest index, i.e. the solo5_handle_t and will be returned
-         * by epoll() as part of any received event.
-         */
-        ev.data.u64 = i;
-        rc = epoll_ctl(spt->epollfd, EPOLL_CTL_ADD, mft->e[i].b.hostfd, &ev);
-        if (rc == -1)
-            err(1, "epoll_ctl(EPOLL_CTL_ADD, hostfd=%d) failed",
-                    mft->e[i].b.hostfd);
+	epollfd = spt->epollfd;
+	timerfd = spt->timerfd;
 
-        rc = seccomp_rule_add(spt->sc_ctx, SCMP_ACT_ALLOW, SCMP_SYS(read), 1,
-                SCMP_A0(SCMP_CMP_EQ, mft->e[i].b.hostfd));
-        if (rc != 0)
-            errx(1, "seccomp_rule_add(read, fd=%d) failed: %s",
-                    mft->e[i].b.hostfd, strerror(-rc));
-        rc = seccomp_rule_add(spt->sc_ctx, SCMP_ACT_ALLOW, SCMP_SYS(write), 1,
-                SCMP_A0(SCMP_CMP_EQ, mft->e[i].b.hostfd));
-        if (rc != 0)
-            errx(1, "seccomp_rule_add(write, fd=%d) failed: %s",
-                    mft->e[i].b.hostfd, strerror(-rc));
-    }
+	epev.events = EPOLLIN | EPOLLOUT;
+	if (epoll_ctl(epollfd, EPOLL_CTL_ADD, fd_tap, &epev) < 0) {
+		err(1, "epoll_ctl(EPOLL_CTL_ADD, fd=%d) failed", fd_tap);
+	}
 
-    return 0;
+	return 0;
 }
 
-static char *usage(void)
+static char *
+usage(void)
 {
-    return "--net:NAME=IFACE | @NN (attach tap at IFACE or at fd @NN as network NAME)\n"
-        "  [ --net-mac:NAME=HWADDR ] (set HWADDR for network NAME)";
+	return "--net=IFACE (attach tap at IFACE)\n";
+}
+
+int
+solo5_net_read(int fd_tap, uint8_t *buf, size_t size, size_t *read_size)
+{
+	long	nbytes;
+
+	nbytes = read(fd_tap, (char *)buf, size);
+	if (nbytes < 0) {
+		if (errno == EAGAIN)
+			return -EAGAIN;
+		else
+			return -EIO;
+	}
+
+	*read_size = (size_t)nbytes;
+	return 0;
+}
+
+int
+solo5_net_write(int fd_tap, const uint8_t *buf, size_t size)
+{
+	long	nbytes;
+
+	nbytes = write(fd_tap, (const char *)buf, size);
+	return (nbytes == (int)size) ? 0: -EIO;
+}
+
+int
+solo5_yield(void)
+{
+	/*
+	 * We can always safely restart this call on EINTR, since the internal
+	 * timerfd is independent of its invocation.
+	 */
+	while (1) {
+		struct epoll_event	epev;
+		int	ret;
+
+		ret = epoll_wait(epollfd, &epev, 1, -1);
+		if (ret > 0) {
+			int	evset = 0;
+			if (epev.events & EPOLLIN)
+				evset += 1;
+			if (epev.events & EPOLLOUT)
+				evset += 2;
+			return evset;
+		}
+	}
+
+	return 0;
 }
 
 DECLARE_MODULE(net,
-    .setup = setup,
-    .handle_cmdarg = handle_cmdarg,
-    .usage = usage
-)
+	       .setup = setup,
+	       .handle_cmdarg = handle_cmdarg,
+	       .usage = usage)

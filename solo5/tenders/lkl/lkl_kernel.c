@@ -5,15 +5,20 @@
 #include <unistd.h>
 #include <stdlib.h>
 #include <stdio.h>
+#include <linux/futex.h>
+#include <sys/time.h>
 
 #include "spt_abi.h"
+#include "lkl_thread.h"
 
-static pthread_t	syscall_listener;
+void start_lkl_kernel(void *mem_start, unsigned long mem_size);
+int add_lkl_network(int fd);
 
-void init_liblkl(void *mem_start, unsigned long mem_size, void *handle);
 long lkl_syscall(long, long *);
 
 static int	fd_sc_listen = -1;
+static int	going_to_shutdown;
+static int	lkl_started;
 
 #include <errno.h>
 
@@ -22,7 +27,13 @@ handle_syscall(struct seccomp_notif *req, struct seccomp_notif_resp *res)
 {
 	int	ret;
 
-	ret = lkl_syscall(req->data.nr, (long int *)req->data.args);
+	if (req->data.nr == 1000) {
+		going_to_shutdown = 1;
+		ret = 0;
+	}
+	else {
+		ret = lkl_syscall(req->data.nr, (long int *)req->data.args);
+	}
 
 	res->id = req->id;
 	if (ret < 0) {
@@ -39,20 +50,21 @@ handle_syscall(struct seccomp_notif *req, struct seccomp_notif_resp *res)
 	}
 }
 
-static void *
+static void
 handle_syscalls(void)
 {
-	while (1) {
+	while (!going_to_shutdown) {
 		struct seccomp_notif	*req;
 		struct seccomp_notif_resp	*res;
 
 		seccomp_notify_alloc(&req, &res);
+
 		if (seccomp_notify_receive(fd_sc_listen, req) == 0) {
 			handle_syscall(req, res);
 		}
+
 		seccomp_notify_free(req, res);
 	}
-	return NULL;
 }
 
 static void
@@ -70,17 +82,27 @@ typedef struct {
 	unsigned long	mem_size;
 } listener_ctx_t;
 
-static void *
+static int
 lkl_kernel_func(void *arg)
 {
 	listener_ctx_t	*ctx = (listener_ctx_t *)arg;
+	extern int	fd_tap;
 
-	init_liblkl(ctx->heap_start, ctx->mem_size, NULL);
-	wait_listener_fd_ready();
-	handle_syscalls();
+	if (fd_tap >= 0)
+		add_lkl_network(fd_tap);
+	start_lkl_kernel(ctx->heap_start, ctx->mem_size);
+
 	free(ctx);
 
-	return NULL;
+	futex_wakeup(&lkl_started);
+
+	wait_listener_fd_ready();
+	handle_syscalls();
+
+	/* TODO: call exit to clean up LKL-driven threads */
+	exit(0);
+
+	return 0;
 }
 
 void
@@ -89,10 +111,11 @@ bootup_lkl(struct spt_boot_info *bi)
 	listener_ctx_t	*ctx;
 
 	ctx = (listener_ctx_t *)malloc(sizeof(listener_ctx_t));
-	ctx->heap_start = (void *)((bi->kernel_end + 4096 - 1) & ~4096);
+	ctx->heap_start = (void *)((bi->kernel_end + 4096 - 1) & ~4095);
 	ctx->mem_size = bi->mem_size - bi->kernel_end;
 
-	pthread_create(&syscall_listener, NULL, lkl_kernel_func, ctx);
+	start_thread(lkl_kernel_func, 8192, ctx);
+	futex_wait(&lkl_started);
 }
 
 void

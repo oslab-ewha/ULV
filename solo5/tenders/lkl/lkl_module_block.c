@@ -35,42 +35,38 @@
 #include "../common/block_attach.h"
 #include "lkl.h"
 
-static bool module_in_use;
+static bool	module_in_use;
+static int	fd_block;
+static off_t	capacity;
 
-static int handle_cmdarg(char *cmdarg, struct mft *mft)
+static int
+handle_cmdarg(char *cmdarg)
 {
-    if (strncmp("--block:", cmdarg, 8) != 0)
-        return -1;
+	char	name[MFT_NAME_SIZE];
+	char	path[PATH_MAX + 1];
+	int	rc;
 
-    char name[MFT_NAME_SIZE];
-    char path[PATH_MAX + 1];
-    int rc = sscanf(cmdarg,
-            "--block:%" XSTR(MFT_NAME_MAX) "[A-Za-z0-9]="
-            "%" XSTR(PATH_MAX) "s", name, path);
-    if (rc != 2)
-        return -1;
-    struct mft_entry *e = mft_get_by_name(mft, name, MFT_DEV_BLOCK_BASIC, NULL);
-    if (e == NULL) {
-        warnx("Resource not declared in manifest: '%s'", name);
-        return -1;
-    }
+	if (strncmp("--block:", cmdarg, 8) != 0)
+		return -1;
 
-    off_t capacity;
-    int fd = block_attach(path, &capacity);
-    e->u.block_basic.capacity = capacity;
-    e->u.block_basic.block_size = 512;
-    e->b.hostfd = fd;
-    e->attached = true;
-    module_in_use = true;
+	rc = sscanf(cmdarg, "--block:%" XSTR(MFT_NAME_MAX) "[A-Za-z0-9]="
+		    "%" XSTR(PATH_MAX) "s", name, path);
+	if (rc != 2)
+		return -1;
 
-    return 0;
+	fd_block = block_attach(path, &capacity);
+
+	module_in_use = true;
+
+	return 0;
 }
 
-static int setup(struct spt *spt, struct mft *mft)
+static int
+setup(struct spt *spt)
 {
-    if (!module_in_use)
-        return 0;
-
+	if (!module_in_use)
+		return 0;
+#if 0 ///DEL
     for (unsigned i = 0; i != mft->entries; i++) {
         if (mft->e[i].type != MFT_DEV_BLOCK_BASIC || !mft->e[i].attached)
             continue;
@@ -106,17 +102,18 @@ static int setup(struct spt *spt, struct mft *mft)
             errx(1, "seccomp_rule_add(pwrite64, fd=%d) failed: %s",
                     mft->e[i].b.hostfd, strerror(-rc));
     }
+#endif
 
-    return 0;
+	return 0;
 }
 
-static char *usage(void)
+static char *
+usage(void)
 {
-    return "--block:NAME=PATH (attach block device/file at PATH as block storage NAME)";
+	return "--block:NAME=PATH (attach block device/file at PATH as block storage NAME)";
 }
 
 DECLARE_MODULE(block,
-    .setup = setup,
-    .handle_cmdarg = handle_cmdarg,
-    .usage = usage
-)
+	       .setup = setup,
+	       .handle_cmdarg = handle_cmdarg,
+	       .usage = usage)

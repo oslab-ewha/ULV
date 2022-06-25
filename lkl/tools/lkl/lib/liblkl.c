@@ -13,26 +13,20 @@ typedef struct {
 	char	mpoint[32];
 } fs_t;
 
-static struct lkl_netdev	*netdev;
-static int	idx;
+extern struct lkl_netdev *lkl_netdev_solo5_create(int fd);
 
-extern struct lkl_netdev *lkl_netdev_solo5_create(solo5_handle_t handle);
-
-static void
-init_network(solo5_handle_t handle)
+int
+add_lkl_network(int fd)
 {
 	struct lkl_netdev	*nd;
 
-	nd = lkl_netdev_solo5_create(handle);
-	idx = lkl_netdev_add(nd, NULL);
+	nd = lkl_netdev_solo5_create(fd);
+	return lkl_netdev_add(nd, NULL);
 }
 
 void
-init_liblkl(void *mem_start, unsigned long mem_size, solo5_handle_t handle)
+start_lkl_kernel(void *mem_start, unsigned long mem_size)
 {
-	if (handle) {
-		init_network(handle);
-	}
 	lkl_start_kernel(&lkl_host_ops, mem_start, mem_size);
 }
 
@@ -98,14 +92,14 @@ free_path(char *path)
 }
 
 void
-setup_network(int addr_my, int addr_gw)
+setup_lkl_network(int idx, int addr_my, int netmask, int addr_gw)
 {
 	int	ifidx;
 
 	ifidx = lkl_netdev_get_ifindex(idx);
 	lkl_if_up(ifidx);
 	lkl_if_set_mtu(ifidx, 1500);
-	lkl_if_set_ipv4(ifidx, addr_my, 24);
+	lkl_if_set_ipv4(ifidx, addr_my, netmask);
 	lkl_set_ipv4_gateway(addr_gw);
 #if 0
 	//TODO: There's a serious delay if ARP cache does not exist
