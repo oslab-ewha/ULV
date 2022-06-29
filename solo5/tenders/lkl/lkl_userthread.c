@@ -14,6 +14,10 @@
 
 void notify_sc_listen_fd(int fd);
 
+void lkl_launch(void *start_fn);
+
+static pid_t	pid_user_thread;
+
 static int
 func_user_thread(void *arg)
 {
@@ -26,7 +30,7 @@ func_user_thread(void *arg)
 	}
 
 	/* One dummy rule should be added. Because zero filter count incurs invalid error. */
-	seccomp_rule_add(ctx_filter, SCMP_ACT_ALLOW, SCMP_SYS(exit), 0);
+	seccomp_rule_add(ctx_filter, SCMP_ACT_ALLOW, 1000, 0);
 
 	if (seccomp_load(ctx_filter) < 0) {
 		err(1, "failed: seccomp_load");
@@ -39,20 +43,23 @@ func_user_thread(void *arg)
 
 	notify_sc_listen_fd(fd_notify);
 
-	((void (*)(void *))arg)(NULL);
+	lkl_launch(arg);
 
-	/* notify shutdown to lkl kernel */
-	syscall(1000);
+	/* Not reach */
 	seccomp_release(ctx_filter);
 
 	return 0;
 }
 
 void
-run_user_thread(void (*start_fn)(void *))
+run_user_thread(void *start_fn)
 {
-	pid_t	pid;
+	pid_user_thread = start_thread(func_user_thread, 4096, start_fn);
+	waitpid(pid_user_thread, NULL, 0);
+}
 
-	pid = start_thread(func_user_thread, 4096, start_fn);
-	waitpid(pid, NULL, 0);
+void
+kill_user_thread(void)
+{
+	kill(pid_user_thread, SIGTERM);
 }

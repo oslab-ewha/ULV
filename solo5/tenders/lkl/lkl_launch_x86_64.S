@@ -23,9 +23,15 @@
 
 .code64
 
-ENTRY(spt_launch)
-	/* movq %rdi, %rsp */
-	movq %rdx, %rdi
+ENTRY(lkl_launch)
+	/* push argc, argv, envp to stack. align to 16 bytes */
+	pushq $0
+	pushq $0
+	pushq $0
+	pushq $0
 
-	callq *%rsi
-END(spt_launch)
+	jmpq *%rdi
+retaddr:
+	ret
+
+END(lkl_launch)

@@ -17,23 +17,22 @@ int add_lkl_network(int fd);
 long lkl_syscall(long, long *);
 
 static int	fd_sc_listen = -1;
-static int	going_to_shutdown;
 static int	lkl_started;
 
 #include <errno.h>
+
+extern void kill_user_thread(void);
 
 static void
 handle_syscall(struct seccomp_notif *req, struct seccomp_notif_resp *res)
 {
 	int	ret;
 
-	if (req->data.nr == 1000) {
-		going_to_shutdown = 1;
-		ret = 0;
+	if (req->data.nr == 231) { /* exit_group */
+		kill_user_thread();
+		exit(0);
 	}
-	else {
-		ret = lkl_syscall(req->data.nr, (long int *)req->data.args);
-	}
+	ret = lkl_syscall(req->data.nr, (long int *)req->data.args);
 
 	res->id = req->id;
 	if (ret < 0) {
@@ -53,7 +52,7 @@ handle_syscall(struct seccomp_notif *req, struct seccomp_notif_resp *res)
 static void
 handle_syscalls(void)
 {
-	while (!going_to_shutdown) {
+	while (1) {
 		struct seccomp_notif	*req;
 		struct seccomp_notif_resp	*res;
 
@@ -90,6 +89,7 @@ lkl_kernel_func(void *arg)
 
 	if (fd_tap >= 0)
 		add_lkl_network(fd_tap);
+
 	start_lkl_kernel(ctx->heap_start, ctx->mem_size);
 
 	free(ctx);
