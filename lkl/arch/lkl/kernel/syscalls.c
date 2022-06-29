@@ -56,16 +56,7 @@ static long run_syscall(long no, long *params)
 
 long lkl_syscall(long no, long *params)
 {
-	long ret;
-
-	ret = run_syscall(no, params);
-
-	if (no == __NR_reboot) {
-		thread_sched_jb();
-		return ret;
-	}
-
-	return ret;
+	return run_syscall(no, params);
 }
 
 SYSCALL_DEFINE6(mmap, unsigned long, addr, unsigned long, len,

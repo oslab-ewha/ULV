@@ -9,10 +9,6 @@
 
 static int init_ti(struct thread_info *ti)
 {
-	ti->sched_sem = lkl_ops->sem_alloc(0);
-	if (!ti->sched_sem)
-		return -ENOMEM;
-
 	ti->dead = false;
 	ti->prev_sched = NULL;
 	ti->tid = 0;
@@ -54,13 +50,8 @@ void setup_thread_stack(struct task_struct *p, struct task_struct *org)
 
 static void kill_thread(struct thread_info *ti)
 {
-	if (!test_ti_thread_flag(ti, TIF_HOST_THREAD)) {
-		ti->dead = true;
-		lkl_ops->sem_up(ti->sched_sem);
-		lkl_ops->thread_join(ti->tid);
-	}
-	lkl_ops->sem_free(ti->sched_sem);
-
+	printk("KILL: %d\n", ti->task->pid);///TEST
+	ti->dead = true;
 }
 
 void free_thread_stack(struct task_struct *tsk)
@@ -187,16 +178,17 @@ void threads_cleanup(void)
 	for_each_process_thread(p, t) {
 		struct thread_info *ti = task_thread_info(t);
 
-		if (t->pid != 1 && !test_ti_thread_flag(ti, TIF_HOST_THREAD))
+		if (t->pid != 1) {
 			WARN(!(t->flags & PF_KTHREAD),
 			     "non kernel thread task %s\n", t->comm);
+		}
 		WARN(t->state == TASK_RUNNING,
 		     "thread %s still running while halting\n", t->comm);
 
 		kill_thread(ti);
 	}
 
-	lkl_ops->sem_free(init_thread_union.thread_info.sched_sem);
+	/// lkl_ops->sem_free(init_thread_union.thread_info.sched_sem);
 }
 
 #define CLONE_FLAGS (CLONE_VM | CLONE_FS | CLONE_FILES | CLONE_THREAD |	\

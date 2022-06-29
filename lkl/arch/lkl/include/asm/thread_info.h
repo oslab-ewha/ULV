@@ -17,7 +17,6 @@ struct thread_info {
 	unsigned long flags;
 	int preempt_count;
 	mm_segment_t addr_limit;
-	struct lkl_sem *sched_sem;
 	struct lkl_jmp_buf sched_jb;
 	bool dead;
 	lkl_thread_t tid;
@@ -56,8 +55,6 @@ void handover_thread(lkl_thread_t thread);
 #define TIF_RESTORE_SIGMASK		4
 #define TIF_MEMDIE			5
 #define TIF_NOHZ			6
-#define TIF_SCHED_JB			7
-#define TIF_HOST_THREAD			8
 
 #define __HAVE_THREAD_FUNCTIONS
 
