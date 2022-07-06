@@ -21,6 +21,8 @@ static int	lkl_started;
 
 #include <errno.h>
 
+static int	going_to_shutdown;
+
 extern void kill_user_thread(void);
 
 static void
@@ -30,7 +32,7 @@ handle_syscall(struct seccomp_notif *req, struct seccomp_notif_resp *res)
 
 	if (req->data.nr == 231) { /* exit_group */
 		kill_user_thread();
-		exit(0);
+		return;
 	}
 	ret = lkl_syscall(req->data.nr, (long int *)req->data.args);
 
@@ -52,7 +54,7 @@ handle_syscall(struct seccomp_notif *req, struct seccomp_notif_resp *res)
 static void
 handle_syscalls(void)
 {
-	while (1) {
+	while (!going_to_shutdown) {
 		struct seccomp_notif	*req;
 		struct seccomp_notif_resp	*res;
 

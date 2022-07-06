@@ -50,12 +50,12 @@ start_thread(thread_func_t func, int stack_size, void *ctx)
 	pid_t	pid;
 
 	stack = mmap(NULL, stack_size, PROT_READ | PROT_WRITE, MAP_PRIVATE | MAP_ANONYMOUS | MAP_STACK, -1, 0);
-	if (stack == MAP_FAILED) {
+	if (stack == MAP_FAILED)
 		err(1, "failed to mmap for create_thread()");
-	}
-	pid = clone(func, stack + stack_size, CLONE_VM | CLONE_FILES | SIGCHLD, ctx);
+
+	pid = clone(func, stack + stack_size, CLONE_VM | CLONE_FILES | CLONE_THREAD | CLONE_SIGHAND, ctx);
 	if (pid == -1)
-		err(1, "failed to clone");
+		err(1, "failed to clone: %d", errno);
 
 	return pid;
 }

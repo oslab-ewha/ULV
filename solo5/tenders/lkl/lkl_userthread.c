@@ -15,8 +15,7 @@
 void notify_sc_listen_fd(int fd);
 
 void lkl_launch(void *start_fn);
-
-static pid_t	pid_user_thread;
+static int	futex_killed;
 
 static int
 func_user_thread(void *arg)
@@ -54,12 +53,12 @@ func_user_thread(void *arg)
 void
 run_user_thread(void *start_fn)
 {
-	pid_user_thread = start_thread(func_user_thread, 4096, start_fn);
-	waitpid(pid_user_thread, NULL, 0);
+	start_thread(func_user_thread, 4096, start_fn);
+	futex_wait(&futex_killed);
 }
 
 void
 kill_user_thread(void)
 {
-	kill(pid_user_thread, SIGTERM);
+	futex_wakeup(&futex_killed);
 }
