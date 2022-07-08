@@ -497,8 +497,12 @@ static int add_inbuf(struct virtqueue *vq, struct port_buffer *buf)
 
 	ret = virtqueue_add_inbuf(vq, sg, 1, buf, GFP_ATOMIC);
 	virtqueue_kick(vq);
+
+	/* NOTE: temporary treatment. If enabled, buffers are indefinitely added. */
+#if 0
 	if (!ret)
 		ret = vq->num_free;
+#endif
 	return ret;
 }
 
@@ -2234,7 +2238,7 @@ static struct virtio_driver virtio_rproc_serial = {
 	.remove =	virtcons_remove,
 };
 
-static int __init init(void)
+static int __init init_virtcons(void)
 {
 	int err;
 
@@ -2271,7 +2275,7 @@ free:
 	return err;
 }
 
-static void __exit fini(void)
+static void __exit fini_virtcons(void)
 {
 	reclaim_dma_bufs();
 
@@ -2281,8 +2285,8 @@ static void __exit fini(void)
 	class_destroy(pdrvdata.class);
 	debugfs_remove_recursive(pdrvdata.debugfs_dir);
 }
-module_init(init);
-module_exit(fini);
+module_init(init_virtcons);
+module_exit(fini_virtcons);
 
 MODULE_DEVICE_TABLE(virtio, id_table);
 MODULE_DESCRIPTION("Virtio console driver");

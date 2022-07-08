@@ -122,8 +122,8 @@ lkl_SRCS := lkl/lkl_main.c lkl/lkl_core.c lkl/lkl_kernel.c lkl/lkl_userthread.c 
 
 lkl_OBJS := $(patsubst %.c,%.o,$(patsubst %.S,%.o,$(lkl_SRCS)))
 
-lkl/solo5-lkl: $(lkl_OBJS) $(common_LIB)
-	$(HOSTLINK) ../../lkl/tools/lkl/liblkl.a -lpthread -lrt
+lkl/solo5-lkl: $(lkl_OBJS) ../../lkl/tools/lkl/liblkl.a $(common_LIB)
+	$(HOSTLINK) -lpthread -lrt
 
 HOSTLDFLAGS += -Wl,-z -Wl,noexecstack
 HOSTLDLIBS += $(MAKECONF_SPT_LDLIBS)

@@ -12,6 +12,7 @@ liblkl-$(LKL_HOST_CONFIG_NT) += nt-host.o
 liblkl-y += pure_thread.o
 liblkl-y += utils.o
 liblkl-y += virtio_blk.o
+liblkl-y += virtio_cons.o
 liblkl-y += virtio.o
 liblkl-y += dbg.o
 liblkl-y += dbg_handler.o

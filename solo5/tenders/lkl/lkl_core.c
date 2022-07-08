@@ -235,6 +235,7 @@ static inline int _memfd_create(const char *name, unsigned int flags)
 void bootup_lkl(struct spt_boot_info *bi);
 
 void run_user_thread(void (*)(void *));
+void lkl_console_add(void);
 
 void spt_run(struct spt *spt, uint64_t p_entry)
 {
@@ -243,6 +244,7 @@ void spt_run(struct spt *spt, uint64_t p_entry)
 
     struct spt_boot_info *bi = (struct spt_boot_info *)(spt->mem + SPT_BOOT_INFO_BASE);
     bootup_lkl(bi);
+    lkl_console_add();
 
     run_user_thread(start_fn);
 }

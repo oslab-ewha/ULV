@@ -52,11 +52,14 @@ arch/lkl/include/generated/uapi/asm/syscall_defs.h: vmlinux
 	$(OBJCOPY) -j .syscall_defs -O binary --set-section-flags .syscall_defs=alloc $< $@
 	$(Q) export tmpfile=$(shell mktemp); \
 	sed 's/\x0//g' $@ > $$tmpfile; mv $$tmpfile $@ ; rm -f $$tmpfile
+
+$(INSTALL_PATH)/include/lkl/asm/host_ops.h: lkl.o
 	@$(srctree)/arch/lkl/scripts/headers_install.py \
 	$(subst -j,-j$(NPROC),$(findstring -j,$(MAKEFLAGS))) \
 	$(INSTALL_PATH)/include
 
-install: lkl.o headers arch/lkl/include/generated/uapi/asm/syscall_defs.h
+install: lkl.o headers arch/lkl/include/generated/uapi/asm/syscall_defs.h \
+	$(INSTALL_PATH)/include/lkl/asm/host_ops.h
 
 archclean:
 	$(Q)$(MAKE) $(clean)=$(boot)

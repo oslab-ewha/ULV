@@ -61,7 +61,7 @@ else
 endif
 
 # rule to build lkl.o
-$(srctree)lkl.o: $(srctree)/.config
+$(srctree)/lkl.o: $(srctree)/.config
 
 $(srctree)/.config: $(srctree)/arch/lkl/configs/defconfig
 	$(Q)$(MAKE) -C ../.. ARCH=lkl $(KOPT) $(KCONFIG)
