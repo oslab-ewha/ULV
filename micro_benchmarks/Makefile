@@ -1,39 +1,30 @@
-SOLO5 := ../solo5
-LKL := ../lkl
+BENCHS := syscall network
+BENCHS_MB := $(BENCHS:%=mb_%)
+BENCHS_BASE := $(BENCHS:%=%_test)
+BENCHS_SRC := $(BENCHS_BASE:%=%.c)
+BENCHS_OBJ := $(BENCHS_SRC:.c=.o)
 
-TOPDIR := $(SOLO5)
-LKLINC := -I$(LKL)/tools/lkl/lib
+LIBC_A = ../musl/lib/libc.a
 
-TESTS := syscall network
-TESTS_BASE := $(TESTS:%=%_test)
-TESTS_SRC := $(TESTS_BASE:%=%.c)
-TESTS_OBJ := $(TESTS_SRC:.c=.o)
-SPT := $(TESTS_OBJ:.o=.spt)
+CFLAGS = -g
+LDFLAGS = -static -nolibc
 
-all: $(SPT)
+all: $(BENCHS_MB)
 
-include $(SOLO5)/Makefile.common
-
-LDS.spt := $(SOLO5)/bindings/lkl/solo5_lkl.lds
-BINDINGS.lkl := $(SOLO5)/bindings/lkl/solo5_lkl.o
-
-ELFTOOL := $(SOLO5)/elftool/solo5-elftool
-
-manifest-%.c: manifest-%.json $(SOLO5)/include/solo5/mft_abi.h $(ELFTOOL)
-	@echo "ELFTOOL $<"
-	$(ELFTOOL) gen-manifest $< $@
-
-%.o: %.c $(SOLO5)/include/solo5/solo5.h
+%.o: %.c
 	@echo "CC $<"
 	$(CC) $(CFLAGS) $(CPPFLAGS) -c $< -o $@
 
 $(TESTS_OBJ): CFLAGS += $(LKLINC)
 
-%.spt: %.o manifest-%.o $(LDS.spt) $(BINDINGS.lkl)
+mb_%: %_test.o libmb.a
 	@echo "LD $@"
-	$(LD) $(LDFLAGS) -T $(LDS.spt) $(BINDINGS.lkl) $< ../musl/lib/libc.a manifest-$*.o -o $@
+	musl-gcc $(LDFLAGS) $^ -o $@ $(LIBC_A)
+
+libmb.a: libmb_stdio.o libmb_time.o libmb_net.o
+	ar rcs $@ $^
 
 .PHONY: clean
 
 clean:
-	rm -f *.o $(SPT)
+	rm -f *.o $(BENCHS)

@@ -1,76 +1,40 @@
-#include "solo5.h"
-#include "liblkl.h"
+#include <stdio.h>
+#include <unistd.h>
+#include <sys/stat.h>
+#include <sys/types.h>
+#include <fcntl.h>
+#include <sys/time.h>
+#include <sys/utsname.h>
+#include <errno.h>
 
-#define UNUSED(x) (void)(x)
+#include "libmb.h"
 
-static void
-puts(const char *s)
+void
+main(int argc, char *argv[])
 {
-	solo5_console_write(s, strlen(s));
-}
-
-int
-solo5_app_main(const struct solo5_start_info *si)
-{
-	struct utsname	uname;
+	struct utsname	utsname;
 	struct timeval	tv;
-	void	*fs;
-	char	*path_open;
-	uint64_t	elapsed;
-	char	buf[256];
-	solo5_time_t	start;
+	int	ret;
+	unsigned	elapsed;
 	int	i;
 
-	UNUSED(si);
+	setup_stdout();
 
-	puts("start uname() call 10000 times\n");
+	init_tickcount();
 
-	start = solo5_clock_monotonic();
 	for (i = 0; i < 10000; i++) {
-		lkl_sys_uname(&uname);
+		uname(&utsname);
 	}
 
-	elapsed = solo5_clock_monotonic() - start;
+	elapsed = get_tickcount();
+	printf("uname elapsed: %d\n", elapsed);
 
-	snprintf(buf, 256, "Elapsed time: %lluus\n", elapsed / 1000);
-	puts(buf);
+	init_tickcount();
 
-	puts("start gettimeofday() call 10000 times\n");
-
-	start = solo5_clock_monotonic();
 	for (i = 0; i < 10000; i++) {
-		lkl_sys_gettimeofday(&tv);
+		gettimeofday(&tv, NULL);
 	}
-
-	elapsed = solo5_clock_monotonic() - start;
-
-	snprintf(buf, 256, "Elapsed time: %lluus\n", elapsed / 1000);
-	puts(buf);
-
-	puts("start open()/close() call 10000 times\n");
-
-	if (mount_fs("/tmp/testfile", &fs) < 0) {
-		puts("failed to mount\n");
-		return 1;
-	}
-
-	path_open = get_path(fs, "/test.txt");
-
-	start = solo5_clock_monotonic();
-	for (i = 0; i < 10000; i++) {
-		int fd = lkl_sys_open(path_open, 0);
-		if (fd >= 0) {
-			lkl_sys_close(fd);
-		}
-	}
-
-	elapsed = solo5_clock_monotonic() - start;
-
-	free_path(path_open);
-	umount_fs(fs);
-
-	snprintf(buf, 256, "Elapsed time: %lluus\n", elapsed / 1000);
-	puts(buf);
-
-	return 0;
+	
+	elapsed = get_tickcount();
+	printf("gettimeofday elapsed: %d\n", elapsed);
 }
