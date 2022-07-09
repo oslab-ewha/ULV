@@ -117,12 +117,12 @@ endif # CONFIG_SPT
 
 ifdef CONFIG_LKL
 
-lkl_SRCS := lkl/lkl_main.c lkl/lkl_core.c lkl/lkl_kernel.c lkl/lkl_userthread.c lkl/lkl_thread.c \
-	lkl/lkl_launch_$(CONFIG_ARCH).S lkl/lkl_module_net.c lkl/lkl_module_block.c
+lkl_SRCS := lkl/sl5_main.c lkl/sl5_core.c lkl/sl5_kernel.c lkl/sl5_userthread.c lkl/sl5_thread.c \
+	lkl/sl5_launch_$(CONFIG_ARCH).S lkl/sl5_module_net.c lkl/sl5_module_block.c
 
 lkl_OBJS := $(patsubst %.c,%.o,$(patsubst %.S,%.o,$(lkl_SRCS)))
 
-lkl/solo5-lkl: $(lkl_OBJS) ../../lkl/tools/lkl/liblkl.a $(common_LIB)
+lkl/sl5: $(lkl_OBJS) ../../lkl/tools/lkl/liblkl.a $(common_LIB)
 	$(HOSTLINK) -lpthread -lrt
 
 HOSTLDFLAGS += -Wl,-z -Wl,noexecstack
@@ -134,7 +134,7 @@ HOSTLDFLAGS += -Wl,-Ttext-segment=0x40000000
 
 endif
 
-all_TARGETS += lkl/solo5-lkl
+all_TARGETS += lkl/sl5
 
 endif
 

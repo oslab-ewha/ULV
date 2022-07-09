@@ -18,13 +18,8 @@
  * CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
  */
 
-/*
- * spt.h: spt tender internal API definitions.
- *
- */
-
-#ifndef SPT_H
-#define SPT_H
+#ifndef _LKL_H_
+#define _LKL_H_
 
 #include <inttypes.h>
 #include <err.h>
@@ -32,40 +27,54 @@
 #include "../common/cc.h"
 #include "../common/elf.h"
 #include "../common/mft.h"
-#include "spt_abi.h"
 
-struct spt {
-    uint8_t *mem;
-    size_t mem_size;
-    struct spt_boot_info *bi;
-    int epollfd;
-    int timerfd;
-    void *sc_ctx;
+#define SL5_ABI_VERSION		1
+#define SL5_GUEST_MIN_BASE	0x100000
+#define SL5_HOST_MEM_BASE	0x10000
+#define SL5_INTERNAL_TIMERFD	(~1U)
+#define SL5_BOOT_INFO_BASE	(SL5_HOST_MEM_BASE + 0x1000)
+#define SL5_CMDLINE_SIZE	8192
+
+struct sl5_boot_info {
+	uint64_t mem_size;                  /* Memory size in bytes */
+	uint64_t kernel_end;                /* Address of end of kernel */
+	const char *cmdline;                /* Address of command line (C string) */
+	const void *mft;                    /* Address of application manifest */
+	int epollfd;                        /* epoll() set for yield() */
+	int timerfd;                        /* internal timerfd for yield() */
 };
 
-struct spt *spt_init(size_t mem_size);
+struct sl5 {
+	uint8_t	*mem;
+	size_t	mem_size;
+	struct	sl5_boot_info *bi;
+	int	epollfd;
+	int	timerfd;
+	void	*sc_ctx;
+};
 
-int spt_guest_mprotect(void *t_arg, uint64_t addr_start, uint64_t addr_end,
-        int prot);
+struct sl5 *sl5_init(size_t mem_size);
 
-void spt_boot_info_init(struct spt *spt, uint64_t p_end, int cmdline_argc,
-	char **cmdline_argv, struct mft *mft, size_t mft_size);
+int sl5_guest_mprotect(void *t_arg, uint64_t addr_start, uint64_t addr_end, int prot);
 
-void spt_run(struct spt *spt, uint64_t p_entry);
+void sl5_boot_info_init(struct sl5 *sl5, uint64_t p_end, int cmdline_argc,
+			char **cmdline_argv, struct mft *mft, size_t mft_size);
+
+void sl5_run(struct sl5 *sl5, uint64_t p_entry);
 
 /*
  * Operations provided by a module. (setup) is required, all other functions
  * are optional.
  */
-struct spt_module_ops {
-    int (*setup)(struct spt *spt);
-    int (*handle_cmdarg)(char *cmdarg);
-    char *(*usage)(void);
+struct sl5_module_ops {
+	int (*setup)(struct sl5 *sl5);
+	int (*handle_cmdarg)(char *cmdarg);
+	char *(*usage)(void);
 };
 
-struct spt_module {
-    const char name[32];
-    struct spt_module_ops ops;
+struct sl5_module {
+	const char	name[32];
+	struct sl5_module_ops	ops;
 };
 
 /*
@@ -73,17 +82,17 @@ struct spt_module {
  *
  * Usage:
  *
- * DECLARE_MODULE(module_name, <initializer of struct spt_module_ops>);
+ * DECLARE_MODULE(module_name, <initializer of struct sl5_module_ops>);
  *
  * Note that alignment of the struct is explicitly set, otherwise the linker
  * will pick a default that does not match the compiler's alignment.
  */
 #define DECLARE_MODULE(module_name, ...) \
-    static struct spt_module __module_ ##module_name \
+    static struct sl5_module __module_ ##module_name \
     __attribute((section("modules"), aligned(8))) \
     __attribute((used)) = { \
 	.name = #module_name, \
 	.ops = { __VA_ARGS__ } \
     };
 
-#endif /* SPT_H */
+#endif

@@ -11,7 +11,7 @@
 #include <errno.h>
 #include <err.h>
 
-#include "lkl_thread.h"
+#include "sl5_thread.h"
 
 static int
 futex(int *uaddr, int futex_op, int val, const struct timespec *timeout, int *uaddr2, int val3)

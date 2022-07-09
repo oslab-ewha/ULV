@@ -17,7 +17,7 @@ tests/*/*.xl
 tests/*/manifest.c
 tenders/hvt/solo5-hvt
 tenders/hvt/solo5-hvt-debug
-tenders/lkl/solo5-lkl
+tenders/lkl/sl5
 tenders/spt/solo5-spt
 elftool/solo5-elftool
 opam/release

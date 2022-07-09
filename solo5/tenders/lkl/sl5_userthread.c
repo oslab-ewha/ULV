@@ -10,11 +10,11 @@
 #include <sys/syscall.h>
 #include <stdlib.h>
 
-#include "lkl_thread.h"
+#include "sl5_thread.h"
 
 void notify_sc_listen_fd(int fd);
 
-void lkl_launch(void *start_fn);
+void sl5_launch(void *start_fn);
 static int	futex_killed;
 
 static int
@@ -42,7 +42,7 @@ func_user_thread(void *arg)
 
 	notify_sc_listen_fd(fd_notify);
 
-	lkl_launch(arg);
+	sl5_launch(arg);
 
 	/* Not reach */
 	seccomp_release(ctx_filter);

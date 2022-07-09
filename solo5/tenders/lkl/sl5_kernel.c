@@ -8,8 +8,8 @@
 #include <linux/futex.h>
 #include <sys/time.h>
 
-#include "spt_abi.h"
-#include "lkl_thread.h"
+#include "sl5.h"
+#include "sl5_thread.h"
 
 void start_lkl_kernel(void *mem_start, unsigned long mem_size);
 int add_lkl_network(int fd);
@@ -108,7 +108,7 @@ lkl_kernel_func(void *arg)
 }
 
 void
-bootup_lkl(struct spt_boot_info *bi)
+bootup_lkl(struct sl5_boot_info *bi)
 {
 	listener_ctx_t	*ctx;
 

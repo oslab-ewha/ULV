@@ -21,14 +21,17 @@
 #define ENTRY(x) .text; .globl x; .type x,%function; x:
 #define END(x)   .size x, . - x
 
-/* TODO/XXX: This calling convention is probably not 100% correct */
+.code64
 
-ENTRY(spt_launch)
-        mov  sp, x0
-        mov  x0, x2
-        mov  x30, xzr
+ENTRY(sl5_launch)
+	/* push argc, argv, envp to stack. align to 16 bytes */
+	pushq $0
+	pushq $0
+	pushq $0
+	pushq $0
 
-        blr x1
-        
-        ret
-END(spt_launch)
+	jmpq *%rdi
+retaddr:
+	ret
+
+END(sl5_launch)

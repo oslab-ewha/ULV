@@ -18,10 +18,6 @@
  * CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
  */
 
-/*
- * spt_module_net.c: Network device module.
- */
-
 #include <assert.h>
 #include <err.h>
 #include <inttypes.h>
@@ -35,7 +31,7 @@
 #include <errno.h>
 
 #include "../common/tap_attach.h"
-#include "lkl.h"
+#include "sl5.h"
 
 int	fd_tap = -1;
 
@@ -65,15 +61,15 @@ handle_cmdarg(char *cmdarg)
 }
 
 static int
-setup(struct spt *spt)
+setup(struct sl5 *sl5)
 {
 	struct epoll_event	epev;
 
 	if (fd_tap < 0)
 		return 0;
 
-	epollfd = spt->epollfd;
-	timerfd = spt->timerfd;
+	epollfd = sl5->epollfd;
+	timerfd = sl5->timerfd;
 
 	epev.events = EPOLLIN | EPOLLOUT;
 	if (epoll_ctl(epollfd, EPOLL_CTL_ADD, fd_tap, &epev) < 0) {
