@@ -45,7 +45,7 @@ func_user_thread(void *arg)
 	void	**stack;
 	int	fd_notify;
 
-	stack = mmap(NULL, 1024 * sizeof(void *), PROT_READ | PROT_WRITE, MAP_PRIVATE | MAP_ANONYMOUS | MAP_STACK, -1, 0);
+	stack = mmap(NULL, 16384 * sizeof(void *), PROT_READ | PROT_WRITE, MAP_PRIVATE | MAP_ANONYMOUS | MAP_STACK, -1, 0);
 	if (stack == MAP_FAILED)
 		err(1, "failed to mmap for create_thread()");
 
@@ -69,7 +69,7 @@ func_user_thread(void *arg)
 	notify_sc_listen_fd(fd_notify);
 
 	/* TODO: stack + 1024 causes seg fault */
-	stack = setup_stacks(stack + 1023, sl5->argc, sl5->argv);
+	stack = setup_stacks(stack + 16383, sl5->argc, sl5->argv);
 	sl5_launch(stack, sl5->start_fn);
 
 	/* Not reach */
