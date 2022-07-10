@@ -64,7 +64,7 @@ extern long __executable_start;
 static bool use_exec_heap = false;
 
 struct sl5 *
-sl5_init(size_t mem_size)
+sl5_init(size_t mem_size, int argc, char **argv)
 {
 	struct sl5	*sl5 = malloc(sizeof (struct sl5));
 	if (sl5 == NULL)
@@ -149,6 +149,9 @@ sl5_init(size_t mem_size)
 	sl5->sc_ctx = seccomp_init(SCMP_ACT_NOTIFY);
 	assert(sl5->sc_ctx != NULL);
 
+	sl5->argc = argc;
+	sl5->argv = argv;
+
 	return sl5;
 }
 
@@ -227,20 +230,17 @@ _memfd_create(const char *name, unsigned int flags)
 
 void bootup_lkl(struct sl5_boot_info *bi);
 
-void run_user_thread(void (*)(void *));
+void run_user_thread(struct sl5 *sl5);
 void lkl_console_add(void);
 
 void
-sl5_run(struct sl5 *sl5, uint64_t p_entry)
+sl5_run(struct sl5 *sl5)
 {
-	typedef void (*start_fn_t)(void *arg);
-	start_fn_t start_fn = (start_fn_t)(sl5->mem + p_entry);
-
 	struct sl5_boot_info *bi = (struct sl5_boot_info *)(sl5->mem + SL5_BOOT_INFO_BASE);
 	bootup_lkl(bi);
 	lkl_console_add();
 
-	run_user_thread(start_fn);
+	run_user_thread(sl5);
 }
 
 static int

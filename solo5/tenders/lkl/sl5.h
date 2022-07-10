@@ -50,17 +50,20 @@ struct sl5 {
 	struct	sl5_boot_info *bi;
 	int	epollfd;
 	int	timerfd;
+	int	argc;
+	char	**argv;
+	void	*start_fn;
 	void	*sc_ctx;
 };
 
-struct sl5 *sl5_init(size_t mem_size);
+struct sl5 *sl5_init(size_t mem_size, int argc, char **argv);
 
 int sl5_guest_mprotect(void *t_arg, uint64_t addr_start, uint64_t addr_end, int prot);
 
 void sl5_boot_info_init(struct sl5 *sl5, uint64_t p_end, int cmdline_argc,
 			char **cmdline_argv, struct mft *mft, size_t mft_size);
 
-void sl5_run(struct sl5 *sl5, uint64_t p_entry);
+void sl5_run(struct sl5 *sl5);
 
 /*
  * Operations provided by a module. (setup) is required, all other functions

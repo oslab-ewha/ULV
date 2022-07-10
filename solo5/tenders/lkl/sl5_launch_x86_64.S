@@ -24,13 +24,8 @@
 .code64
 
 ENTRY(sl5_launch)
-	/* push argc, argv, envp to stack. align to 16 bytes */
-	pushq $0
-	pushq $0
-	pushq $0
-	pushq $0
-
-	jmpq *%rdi
+	movq %rdi, %rsp
+	jmpq *%rsi
 retaddr:
 	ret
 

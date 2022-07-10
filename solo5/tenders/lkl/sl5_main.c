@@ -193,10 +193,8 @@ main(int argc, char *argv[])
 		err(1, "%s: Could not open", elf_filename);
 
 	assert(elf_filename == *argv);
-	argc--;
-	argv++;
 
-	struct sl5	*sl5 = sl5_init(mem_size);
+	struct sl5	*sl5 = sl5_init(mem_size, argc, argv);
 
 	elf_load(elf_fd, elf_filename, sl5->mem, sl5->mem_size, SL5_GUEST_MIN_BASE, sl5_guest_mprotect, sl5, &p_entry, &p_end);
 	close(elf_fd);
@@ -205,5 +203,6 @@ main(int argc, char *argv[])
 
 	sl5_boot_info_init(sl5, p_end, argc, argv, NULL, 0);
 
-	sl5_run(sl5, p_entry);
+	sl5->start_fn = sl5->mem + p_entry;
+	sl5_run(sl5);
 }
