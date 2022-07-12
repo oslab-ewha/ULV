@@ -61,33 +61,7 @@ static struct clocksource clocksource = {
 	.mask	= CLOCKSOURCE_MASK(64),
 };
 
-static void *timer;
-
 static int timer_irq;
-
-static void timer_fn(void *arg)
-{
-	lkl_trigger_irq(timer_irq);
-}
-
-static int clockevent_set_state_shutdown(struct clock_event_device *evt)
-{
-	if (timer) {
-		lkl_ops->timer_free(timer);
-		timer = NULL;
-	}
-
-	return 0;
-}
-
-static int clockevent_set_state_oneshot(struct clock_event_device *evt)
-{
-	timer = lkl_ops->timer_alloc(timer_fn, NULL);
-	if (!timer)
-		return -ENOMEM;
-
-	return 0;
-}
 
 static irqreturn_t timer_irq_handler(int irq, void *dev_id)
 {
@@ -98,18 +72,33 @@ static irqreturn_t timer_irq_handler(int irq, void *dev_id)
 	return IRQ_HANDLED;
 }
 
-static int clockevent_next_event(unsigned long ns,
-				 struct clock_event_device *evt)
+static int
+clockevent_alloc(struct clock_event_device *evt)
 {
-	return lkl_ops->timer_set_oneshot(timer, ns);
+	lkl_ops->clockevent_alloc(timer_irq);
+	return 0;
+}
+
+static int
+clockevent_free(struct clock_event_device *evt)
+{
+	lkl_ops->clockevent_free();
+	return 0;
+}
+
+static int
+clockevent_set_next(unsigned long ns, struct clock_event_device *evt)
+{
+	lkl_ops->clockevent_set_next(ns);
+	return 0;
 }
 
 static struct clock_event_device clockevent = {
 	.name			= "lkl",
 	.features		= CLOCK_EVT_FEAT_ONESHOT,
-	.set_state_oneshot	= clockevent_set_state_oneshot,
-	.set_next_event		= clockevent_next_event,
-	.set_state_shutdown	= clockevent_set_state_shutdown,
+	.set_state_oneshot	= clockevent_alloc,
+	.set_next_event		= clockevent_set_next,
+	.set_state_shutdown	= clockevent_free,
 };
 
 static struct irqaction irq0  = {
@@ -121,13 +110,7 @@ static struct irqaction irq0  = {
 
 void __init time_init(void)
 {
-	int ret;
-
-	if (!lkl_ops->timer_alloc || !lkl_ops->timer_free ||
-	    !lkl_ops->timer_set_oneshot || !lkl_ops->time) {
-		pr_err("lkl: no time or timer support provided by host\n");
-		return;
-	}
+	int	ret;
 
 	timer_irq = lkl_get_free_irq("timer");
 	setup_irq(timer_irq, &irq0);

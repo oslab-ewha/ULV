@@ -21,6 +21,7 @@
 #ifndef _LKL_H_
 #define _LKL_H_
 
+#include <sys/types.h>
 #include <inttypes.h>
 #include <err.h>
 

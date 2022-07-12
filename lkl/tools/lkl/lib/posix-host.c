@@ -29,6 +29,10 @@
 #define SHARE_SEM 0
 #endif /* _POSIX_SEMAPHORES */
 
+void ulvisor_clockevent_setnext(unsigned long ns);
+void ulvisor_clockevent_alloc(int irq);
+void ulvisor_clockevent_free(void);
+
 static void print(const char *str, int len)
 {
 	write(1, str, len);
@@ -92,45 +96,6 @@ static unsigned long long time_ns(void)
 	return 1e9*ts.tv_sec + ts.tv_nsec;
 }
 
-static void *timer_alloc(void *fn, void *arg)
-{
-	int err;
-	timer_t timer;
-	struct sigevent se =  {
-		.sigev_notify = SIGEV_THREAD,
-		.sigev_value = {
-			.sival_ptr = arg,
-		},
-		.sigev_notify_function = (void (*)(union sigval))fn
-	};
-
-	err = timer_create(CLOCK_REALTIME, &se, &timer);
-	if (err)
-		return NULL;
-
-	return (void *)(long)timer;
-}
-
-static int timer_set_oneshot(void *_timer, unsigned long ns)
-{
-	timer_t timer = (timer_t)(long)_timer;
-	struct itimerspec ts = {
-		.it_value = {
-			.tv_sec = ns / 1000000000,
-			.tv_nsec = ns % 1000000000,
-		},
-	};
-
-	return timer_settime(timer, 0, &ts, NULL);
-}
-
-static void timer_free(void *_timer)
-{
-	timer_t timer = (timer_t)(long)_timer;
-
-	timer_delete(timer);
-}
-
 static void panic(void)
 {
 	assert(0);
@@ -168,9 +133,9 @@ struct lkl_host_operations lkl_host_ops = {
 	.thread_self = pure_thread_self,
 	.thread_equal = thread_equal,
 	.time = time_ns,
-	.timer_alloc = timer_alloc,
-	.timer_set_oneshot = timer_set_oneshot,
-	.timer_free = timer_free,
+	.clockevent_alloc = ulvisor_clockevent_alloc,
+	.clockevent_set_next = ulvisor_clockevent_setnext,
+	.clockevent_free = ulvisor_clockevent_free,
 	.print = print,
 	.mem_alloc = malloc,
 	.mem_free = free,

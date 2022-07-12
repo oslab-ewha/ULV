@@ -107,9 +107,9 @@ struct lkl_host_operations {
 
 	unsigned long long (*time)(void);
 
-	void* (*timer_alloc)(void *fn, void *arg);
-	int (*timer_set_oneshot)(void *timer, unsigned long delta);
-	void (*timer_free)(void *timer);
+	void (*clockevent_alloc)(int irq);
+	void (*clockevent_set_next)(unsigned long ns_delta);
+	void (*clockevent_free)(void);
 
 	void* (*ioremap)(long addr, int size);
 	int (*iomem_access)(const volatile void *addr, void *val, int size,
