@@ -17,7 +17,6 @@
 #include <poll.h>
 #include <lkl_host.h>
 #include "iomem.h"
-#include "jmp_buf.h"
 #include "pure_thread.h"
 
 /* Let's see if the host has semaphore.h */
@@ -66,73 +65,6 @@ static int _warn_pthread(int ret, char *str_exp)
 /* pthread_* functions use the reverse convention */
 #define WARN_PTHREAD(exp) _warn_pthread(exp, #exp)
 
-static struct lkl_sem *sem_alloc(int count)
-{
-	struct lkl_sem *sem;
-
-	sem = malloc(sizeof(*sem));
-	if (!sem)
-		return NULL;
-
-#ifdef _POSIX_SEMAPHORES
-	if (sem_init(&sem->sem, SHARE_SEM, count) < 0) {
-		lkl_printf("sem_init: %s\n", strerror(errno));
-		free(sem);
-		return NULL;
-	}
-#else
-	pthread_mutex_init(&sem->lock, NULL);
-	sem->count = count;
-	WARN_PTHREAD(pthread_cond_init(&sem->cond, NULL));
-#endif /* _POSIX_SEMAPHORES */
-
-	return sem;
-}
-
-static void sem_free(struct lkl_sem *sem)
-{
-#ifdef _POSIX_SEMAPHORES
-	WARN_UNLESS(sem_destroy(&sem->sem));
-#else
-	WARN_PTHREAD(pthread_cond_destroy(&sem->cond));
-	WARN_PTHREAD(pthread_mutex_destroy(&sem->lock));
-#endif /* _POSIX_SEMAPHORES */
-	free(sem);
-}
-
-static void sem_up(struct lkl_sem *sem)
-{
-#ifdef _POSIX_SEMAPHORES
-	WARN_UNLESS(sem_post(&sem->sem));
-#else
-	WARN_PTHREAD(pthread_mutex_lock(&sem->lock));
-	sem->count++;
-	if (sem->count > 0)
-		WARN_PTHREAD(pthread_cond_signal(&sem->cond));
-	WARN_PTHREAD(pthread_mutex_unlock(&sem->lock));
-#endif /* _POSIX_SEMAPHORES */
-
-}
-
-static void sem_down(struct lkl_sem *sem)
-{
-#ifdef _POSIX_SEMAPHORES
-	int err;
-
-	do {
-		err = sem_wait(&sem->sem);
-	} while (err < 0 && errno == EINTR);
-	if (err < 0 && errno != EINTR)
-		lkl_printf("sem_wait: %s\n", strerror(errno));
-#else
-	WARN_PTHREAD(pthread_mutex_lock(&sem->lock));
-	while (sem->count <= 0)
-		WARN_PTHREAD(pthread_cond_wait(&sem->cond, &sem->lock));
-	sem->count--;
-	WARN_PTHREAD(pthread_mutex_unlock(&sem->lock));
-#endif /* _POSIX_SEMAPHORES */
-}
-
 static void thread_detach(void)
 {
 	WARN_PTHREAD(pthread_detach(pthread_self()));
@@ -149,35 +81,6 @@ static int thread_join(lkl_thread_t tid)
 static int thread_equal(lkl_thread_t a, lkl_thread_t b)
 {
 	return pthread_equal((pthread_t)a, (pthread_t)b);
-}
-
-static struct lkl_tls_key *tls_alloc(void (*destructor)(void *))
-{
-	struct lkl_tls_key *ret = malloc(sizeof(struct lkl_tls_key));
-
-	if (WARN_PTHREAD(pthread_key_create(&ret->key, destructor))) {
-		free(ret);
-		return NULL;
-	}
-	return ret;
-}
-
-static void tls_free(struct lkl_tls_key *key)
-{
-	WARN_PTHREAD(pthread_key_delete(key->key));
-	free(key);
-}
-
-static int tls_set(struct lkl_tls_key *key, void *data)
-{
-	if (WARN_PTHREAD(pthread_setspecific(key->key, data)))
-		return -1;
-	return 0;
-}
-
-static void *tls_get(struct lkl_tls_key *key)
-{
-	return pthread_getspecific(key->key);
 }
 
 static unsigned long long time_ns(void)
@@ -233,15 +136,6 @@ static void panic(void)
 	assert(0);
 }
 
-static long _gettid(void)
-{
-#ifdef	__FreeBSD__
-	return (long)pthread_self();
-#else
-	return syscall(SYS_gettid);
-#endif
-}
-
 static void *page_alloc(unsigned long size)
 {
 	void *addr;
@@ -273,14 +167,6 @@ struct lkl_host_operations lkl_host_ops = {
 	.thread_join = thread_join,
 	.thread_self = pure_thread_self,
 	.thread_equal = thread_equal,
-	.sem_alloc = sem_alloc,
-	.sem_free = sem_free,
-	.sem_up = sem_up,
-	.sem_down = sem_down,
-	.tls_alloc = tls_alloc,
-	.tls_free = tls_free,
-	.tls_set = tls_set,
-	.tls_get = tls_get,
 	.time = time_ns,
 	.timer_alloc = timer_alloc,
 	.timer_set_oneshot = timer_set_oneshot,
@@ -293,9 +179,6 @@ struct lkl_host_operations lkl_host_ops = {
 	.ioremap = lkl_ioremap,
 	.iomem_access = lkl_iomem_access,
 	.virtio_devices = lkl_virtio_devs,
-	.gettid = _gettid,
-	.jmp_buf_set = jmp_buf_set,
-	.jmp_buf_longjmp = jmp_buf_longjmp,
 	.memcpy = memcpy,
 #ifdef LKL_HOST_CONFIG_VFIO_PCI
 	.pci_ops = &vfio_pci_ops,

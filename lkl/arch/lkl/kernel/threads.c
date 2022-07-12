@@ -4,7 +4,6 @@
 #include <linux/sched/signal.h>
 #include <asm/host_ops.h>
 #include <asm/lkl_dbg.h>
-#include <asm/cpu.h>
 #include <asm/sched.h>
 
 static int init_ti(struct thread_info *ti)
@@ -50,7 +49,6 @@ void setup_thread_stack(struct task_struct *p, struct task_struct *org)
 
 static void kill_thread(struct thread_info *ti)
 {
-	printk("KILL: %d\n", ti->task->pid);///TEST
 	ti->dead = true;
 }
 
@@ -187,8 +185,6 @@ void threads_cleanup(void)
 
 		kill_thread(ti);
 	}
-
-	/// lkl_ops->sem_free(init_thread_union.thread_info.sched_sem);
 }
 
 #define CLONE_FLAGS (CLONE_VM | CLONE_FS | CLONE_FILES | CLONE_THREAD |	\

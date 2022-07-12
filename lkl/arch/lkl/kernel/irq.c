@@ -8,7 +8,6 @@
 #include <linux/tick.h>
 #include <asm/irqflags.h>
 #include <asm/host_ops.h>
-#include <asm/cpu.h>
 
 /*
  * To avoid much overhead we use an indirect approach: the irqs are marked using

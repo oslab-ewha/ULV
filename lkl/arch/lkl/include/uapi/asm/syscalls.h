@@ -259,7 +259,6 @@ typedef __kernel_rwf_t		rwf_t;
 #define s_addr s_addr
 
 long lkl_syscall(long no, long *params);
-long lkl_sys_halt(void);
 
 #define __MAP0(m,...)
 #define __MAP1(m,t,a) m(t,a)

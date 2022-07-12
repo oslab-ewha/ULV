@@ -12,7 +12,6 @@
 #include <asm/irq.h>
 #include <asm/unistd.h>
 #include <asm/syscalls.h>
-#include <asm/cpu.h>
 
 struct lkl_host_operations *lkl_ops;
 static char cmd_line[COMMAND_LINE_SIZE];
@@ -43,7 +42,6 @@ static void *__init lkl_run_kernel(void *arg)
 int __init lkl_start_kernel(struct lkl_host_operations *ops, void *mem_start, unsigned long mem_size)
 {
 	lkl_thread_t	thread;
-	int	ret;
 
 	lkl_ops = ops;
 
@@ -55,10 +53,6 @@ int __init lkl_start_kernel(struct lkl_host_operations *ops, void *mem_start, un
 			COMMAND_LINE_SIZE);
 
 	memcpy(cmd_line, boot_command_line, COMMAND_LINE_SIZE);
-
-	ret = lkl_cpu_init();
-	if (ret)
-		return ret;
 
 	thread = lkl_ops->thread_create(lkl_run_kernel, NULL);
 	if (!thread)
@@ -79,7 +73,7 @@ int lkl_is_running(void)
 
 void machine_halt(void)
 {
-	lkl_cpu_shutdown();
+	/* TODO: */
 }
 
 void machine_power_off(void)
@@ -92,30 +86,6 @@ void machine_restart(char *unused)
 	machine_halt();
 }
 
-long lkl_sys_halt(void)
-{
-	long err;
-	long params[6] = {LINUX_REBOOT_MAGIC1,
-		LINUX_REBOOT_MAGIC2, LINUX_REBOOT_CMD_RESTART, };
-
-	err = lkl_syscall(__NR_reboot, params);
-	if (err < 0)
-		return err;
-
-	is_running = false;
-
-	lkl_cpu_wait_shutdown();
-
-	threads_cleanup();
-	/* Shutdown the clockevents source. */
-	tick_suspend_local();
-	free_mem();
-	lkl_ops->thread_join(current_thread_info()->tid);
-
-	return 0;
-}
-
-
 static int lkl_run_init(struct linux_binprm *bprm);
 
 static struct linux_binfmt lkl_run_init_binfmt = {
@@ -125,7 +95,7 @@ static struct linux_binfmt lkl_run_init_binfmt = {
 
 static int lkl_run_init(struct linux_binprm *bprm)
 {
-	int ret;
+	int	ret;
 
 	if (strcmp("/init", bprm->filename) != 0)
 		return -EINVAL;
