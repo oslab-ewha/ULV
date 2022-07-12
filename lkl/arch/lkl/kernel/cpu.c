@@ -18,8 +18,6 @@
  * semaphore.
  */
 struct lkl_cpu {
-	/* lock that protects the CPU status data */
-	struct lkl_mutex *lock;
 	/*
 	 * Since we must free the cpu lock during shutdown we need a
 	 * synchronization algorithm between lkl_cpu_shutdown() and the CPU
@@ -75,17 +73,14 @@ static void lkl_cpu_cleanup(bool shutdown)
 		lkl_ops->sem_free(cpu.shutdown_sem);
 	if (cpu.sem)
 		lkl_ops->sem_free(cpu.sem);
-	if (cpu.lock)
-		lkl_ops->mutex_free(cpu.lock);
 }
 
 int lkl_cpu_init(void)
 {
-	cpu.lock = lkl_ops->mutex_alloc(0);
 	cpu.sem = lkl_ops->sem_alloc(0);
 	cpu.shutdown_sem = lkl_ops->sem_alloc(0);
 
-	if (!cpu.lock || !cpu.sem || !cpu.shutdown_sem) {
+	if (!cpu.sem || !cpu.shutdown_sem) {
 		lkl_cpu_cleanup(false);
 		return -ENOMEM;
 	}

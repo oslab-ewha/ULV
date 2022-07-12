@@ -1,4 +1,5 @@
 #include <string.h>
+#include <stdlib.h>
 #include <lkl_host.h>
 #include "virtio.h"
 #include "endian.h"
@@ -34,9 +35,35 @@ struct virtio_net_dev {
 	struct virtio_dev dev;
 	struct lkl_virtio_net_config config;
 	struct lkl_netdev *nd;
-	struct lkl_mutex **queue_locks;
+	pthread_mutex_t **queue_locks;
 	pthread_t thread_poll;
 };
+
+static pthread_mutex_t *
+mutex_alloc(int recursive)
+{
+	pthread_mutex_t	*mutex;
+	pthread_mutexattr_t	attr;
+	int	kind;
+
+	mutex = malloc(sizeof(pthread_mutex_t));
+	if (mutex == NULL)
+		return NULL;
+	pthread_mutexattr_init(&attr);
+	kind = recursive ? PTHREAD_MUTEX_RECURSIVE: PTHREAD_MUTEX_ERRORCHECK;
+	pthread_mutexattr_settype(&attr, kind);
+
+	pthread_mutex_init(mutex, &attr);
+
+	return mutex;
+}
+
+static void
+mutex_free(pthread_mutex_t *mutex)
+{
+	pthread_mutex_destroy(mutex);
+	free(mutex);
+}
 
 static int net_check_features(struct virtio_dev *dev)
 {
@@ -48,12 +75,12 @@ static int net_check_features(struct virtio_dev *dev)
 
 static void net_acquire_queue(struct virtio_dev *dev, int queue_idx)
 {
-	lkl_host_ops.mutex_lock(netdev_of(dev)->queue_locks[queue_idx]);
+	pthread_mutex_lock(netdev_of(dev)->queue_locks[queue_idx]);
 }
 
 static void net_release_queue(struct virtio_dev *dev, int queue_idx)
 {
-	lkl_host_ops.mutex_unlock(netdev_of(dev)->queue_locks[queue_idx]);
+	pthread_mutex_unlock(netdev_of(dev)->queue_locks[queue_idx]);
 }
 
 /*
@@ -180,29 +207,29 @@ static int dev_register(struct virtio_net_dev *dev)
 	}
 }
 
-static void free_queue_locks(struct lkl_mutex **queues, int num_queues)
+static void free_queue_locks(pthread_mutex_t **queues, int num_queues)
 {
 	int i = 0;
 	if (!queues)
 		return;
 
 	for (i = 0; i < num_queues; i++)
-		lkl_host_ops.mutex_free(queues[i]);
+		mutex_free(queues[i]);
 
 	lkl_host_ops.mem_free(queues);
 }
 
-static struct lkl_mutex **init_queue_locks(int num_queues)
+static pthread_mutex_t **init_queue_locks(int num_queues)
 {
+	pthread_mutex_t **ret = lkl_host_ops.mem_alloc(sizeof(pthread_mutex_t *) * num_queues);
 	int i;
-	struct lkl_mutex **ret = lkl_host_ops.mem_alloc(
-		sizeof(struct lkl_mutex*) * num_queues);
+
 	if (!ret)
 		return NULL;
 
-	memset(ret, 0, sizeof(struct lkl_mutex *) * num_queues);
+	memset(ret, 0, sizeof(pthread_mutex_t *) * num_queues);
 	for (i = 0; i < num_queues; i++) {
-		ret[i] = lkl_host_ops.mutex_alloc(1);
+		ret[i] = mutex_alloc(1);
 		if (!ret[i]) {
 			free_queue_locks(ret, i);
 			return NULL;

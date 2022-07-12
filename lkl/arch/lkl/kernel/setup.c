@@ -16,7 +16,6 @@
 
 struct lkl_host_operations *lkl_ops;
 static char cmd_line[COMMAND_LINE_SIZE];
-static void *init_sem;
 static int is_running;
 void (*pm_power_off)(void) = NULL;
 
@@ -57,28 +56,18 @@ int __init lkl_start_kernel(struct lkl_host_operations *ops, void *mem_start, un
 
 	memcpy(cmd_line, boot_command_line, COMMAND_LINE_SIZE);
 
-	init_sem = lkl_ops->sem_alloc(0);
-	if (!init_sem)
-		return -ENOMEM;
-
 	ret = lkl_cpu_init();
-	if (ret) {
-		lkl_ops->sem_free(init_sem);
+	if (ret)
 		return ret;
-	}
 
 	thread = lkl_ops->thread_create(lkl_run_kernel, NULL);
-	if (!thread) {
-		lkl_ops->sem_free(init_sem);
+	if (!thread)
 		return -ENOMEM;
-	}
 
 	handover_thread(thread);
 
-	lkl_ops->sem_down(init_sem);
-	lkl_ops->sem_free(init_sem);
-
-	is_running = 1;
+	while (!is_running)
+		schedule();
 
 	return 0;
 }
@@ -159,7 +148,7 @@ static int lkl_run_init(struct linux_binprm *bprm)
 		wakeup_user_thread();
 	}
 
-	lkl_ops->sem_up(init_sem);
+	is_running = 1;
 
 	return 0;
 }
