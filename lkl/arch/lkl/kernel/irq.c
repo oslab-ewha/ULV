@@ -19,30 +19,16 @@
  * which irqs were triggered we first search the index and then the
  * corresponding part of the arrary.
  */
-static unsigned long irq_status[NR_IRQS/IRQ_STATUS_BITS];
-static unsigned long irq_index_status;
+static unsigned long irq_status;
 
-static inline unsigned long test_and_clear_irq_index_status(void)
+static inline unsigned long test_and_clear_irq_status(void)
 {
-	if (!irq_index_status)
-		return 0;
-	return __sync_fetch_and_and(&irq_index_status, 0);
-}
-
-static inline unsigned long test_and_clear_irq_status(int index)
-{
-	if (!&irq_status[index])
-		return 0;
-	return __sync_fetch_and_and(&irq_status[index], 0);
+	return __sync_fetch_and_and(&irq_status, 0);
 }
 
 void set_irq_pending(int irq)
 {
-	int index = irq / IRQ_STATUS_BITS;
-	int bit = irq % IRQ_STATUS_BITS;
-
-	__sync_fetch_and_or(&irq_status[index], BIT(bit));
-	__sync_fetch_and_or(&irq_index_status, BIT(index));
+	__sync_fetch_and_or(&irq_status, BIT(irq));
 }
 
 static struct irq_info {
@@ -93,19 +79,14 @@ static inline void for_each_bit(unsigned long word, void (*f)(int, int), int j)
 	}
 }
 
-static inline void deliver_irq(int bit, int index)
+static inline void deliver_irq(int bit, int unused)
 {
-	run_irq(index * IRQ_STATUS_BITS + bit);
-}
-
-static inline void check_irq_status(int i, int unused)
-{
-	for_each_bit(test_and_clear_irq_status(i), deliver_irq, i);
+	run_irq(bit);
 }
 
 void run_irqs(void)
 {
-	for_each_bit(test_and_clear_irq_index_status(), check_irq_status, 0);
+	for_each_bit(test_and_clear_irq_status(), deliver_irq, 0);
 }
 
 int show_interrupts(struct seq_file *p, void *v)
