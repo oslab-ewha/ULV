@@ -1,4 +1,0 @@
-boot-n += boot.o test.o
-disk-n += disk.o cla.o test.o
-disk-vfio-pci-n += disk-vfio-pci.o cla.o test.o
-net-test-n += net-test.o cla.o test.o
