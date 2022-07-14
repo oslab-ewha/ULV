@@ -20,38 +20,6 @@ start_lkl_kernel(void *mem_start, unsigned long mem_size)
 }
 
 int
-mount_fs(const char *path_host, void **pfs)
-{
-	struct lkl_disk	disk;
-	fs_t	*fs;
-	int	ret;
-
-	disk.fd = open(path_host, O_RDWR);
-	if (disk.fd < 0)
-		return -1;
-	disk.ops = NULL;
-
-	ret = lkl_disk_add(&disk);
-	if (ret < 0) {
-		close(disk.fd);
-		return -2;
-	}
-
-	fs = (fs_t *)malloc(sizeof(fs_t));
-	ret = lkl_mount_dev(ret, 0, "ext4", 0, NULL, fs->mpoint, 32);
-	if (ret) {
-		close(disk.fd);
-		free(fs);
-		return -3;
-	}
-
-	fs->fd = disk.fd;
-
-	*pfs = fs;
-	return 0;
-}
-
-int
 umount_fs(void *_fs)
 {
 	fs_t	*fs = (fs_t *)_fs;

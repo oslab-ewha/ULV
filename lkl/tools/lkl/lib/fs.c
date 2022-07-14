@@ -433,16 +433,3 @@ int lkl_errdir(struct lkl_dir *dir)
 	return dir->len;
 }
 
-int lkl_dirfd(struct lkl_dir *dir)
-{
-	return dir->fd;
-}
-
-int lkl_set_fd_limit(unsigned int fd_limit)
-{
-	struct lkl_rlimit rlim = {
-		.rlim_cur = fd_limit,
-		.rlim_max = fd_limit,
-	};
-	return lkl_sys_setrlimit(LKL_RLIMIT_NOFILE, &rlim);
-}

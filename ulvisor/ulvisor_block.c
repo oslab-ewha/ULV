@@ -32,38 +32,29 @@
 #include "block_attach.h"
 #include "ulvisor.h"
 
-static bool	module_in_use;
 static int	fd_block;
 static off_t	capacity;
 
 static int
 handle_cmdarg(char *cmdarg)
 {
-	char	name[256];
-	char	path[PATH_MAX + 1];
-	int	rc;
+	char	path[256];
+	int	n_scanned;
 
-	if (strncmp("--block:", cmdarg, 8) != 0)
+	if (strncmp("--block=", cmdarg, 8) != 0)
 		return -1;
 
-	rc = sscanf(cmdarg, "--block:%256[A-Za-z0-9]="
-		    "%256s", name, path);
-	if (rc != 2)
+	n_scanned = sscanf(cmdarg, "--block=%256s", path);
+	if (n_scanned != 1)
 		return -1;
 
 	fd_block = block_attach(path, &capacity);
 
-	module_in_use = true;
+	{
+		extern int ulvisor_add_block(int fd);
 
-	return 0;
-}
-
-static int
-setup(ulvisor_t *ulvisor)
-{
-	if (!module_in_use)
-		return 0;
-
+		ulvisor_add_block(fd_block);
+	}
 	return 0;
 }
 
@@ -74,6 +65,6 @@ usage(void)
 }
 
 DECLARE_MODULE(block,
-	       .setup = setup,
+	       .setup = NULL,
 	       .handle_cmdarg = handle_cmdarg,
 	       .usage = usage)

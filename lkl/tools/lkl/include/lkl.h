@@ -362,14 +362,6 @@ struct lkl_disk {
 };
 
 /**
- * lkl_disk_add - add a new disk
- *
- * @disk - the host disk handle
- * @returns a disk id (0 is valid) or a strictly negative value in case of error
- */
-int lkl_disk_add(struct lkl_disk *disk);
-
-/**
  * lkl_disk_remove - remove a disk
  *
  * This function makes a cleanup of the @disk's virtio_dev structure
@@ -534,15 +526,6 @@ struct lkl_linux_dirent64 *lkl_readdir(struct lkl_dir *dir);
  * @returns - 0 if no error occurred, or a negative value otherwise
  */
 int lkl_errdir(struct lkl_dir *dir);
-
-/**
- * lkl_dirfd - gets the file descriptor associated with the directory handle
- *
- * @dir - the directory handle as returned by lkl_opendir
- * @returns - a positive value,which is the LKL file descriptor associated with
- * the directory handle, or a negative value otherwise
- */
-int lkl_dirfd(struct lkl_dir *dir);
 
 /**
  * lkl_if_up - activate network interface
@@ -903,12 +886,6 @@ int lkl_if_add_linklocal(int ifindex, int af,  void *addr, int netprefix_len);
  * @addr - ip address of the entry in network byte order
  */
 int lkl_if_wait_ipv6_dad(int ifindex, void *addr);
-
-/**
- * lkl_set_fd_limit - set the maximum number of file descriptors allowed
- * @fd_limit - fd max limit
- */
-int lkl_set_fd_limit(unsigned int fd_limit);
 
 /**
  * lkl_qdisc_add - set qdisc rule onto an interface
