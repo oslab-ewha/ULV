@@ -1,6 +1,4 @@
 CFLAGS_posix-host.o += -D_FILE_OFFSET_BITS=64
-CFLAGS_virtio_net_vde.o += $(pkg-config --cflags vdeplug 2>/dev/null)
-CFLAGS_nt-host.o += -D_WIN32_WINNT=0x0600
 
 liblkl-y += liblkl.o
 liblkl-y += fs.o
@@ -14,6 +12,4 @@ liblkl-y += virtio_cons.o
 liblkl-y += virtio.o
 liblkl-y += dbg.o
 liblkl-y += dbg_handler.o
-liblkl-y += virtio_net.o
-liblkl-y += virtio_net_solo5.o
 liblkl-$(LKL_HOST_CONFIG_VFIO_PCI) += vfio_pci.o

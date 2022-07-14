@@ -102,9 +102,10 @@ PROGRAMS = $(bin_PROGRAMS)
 am_ulvisor_OBJECTS = ulvisor.$(OBJEXT) ulvisor_core.$(OBJEXT) \
 	ulvisor_net.$(OBJEXT) ulvisor_block.$(OBJEXT) \
 	ulvisor_elf.$(OBJEXT) ulvisor_launch.$(OBJEXT) \
-	ulvisor_clockevent.$(OBJEXT) tap_attach.$(OBJEXT) \
-	block_attach.$(OBJEXT) ulvisor_kernel.$(OBJEXT) \
-	ulvisor_app.$(OBJEXT) ulvisor_thread.$(OBJEXT)
+	ulvisor_clockevent.$(OBJEXT) ulvisor_virtio_net.$(OBJEXT) \
+	tap_attach.$(OBJEXT) block_attach.$(OBJEXT) \
+	ulvisor_kernel.$(OBJEXT) ulvisor_app.$(OBJEXT) \
+	ulvisor_thread.$(OBJEXT)
 ulvisor_OBJECTS = $(am_ulvisor_OBJECTS)
 ulvisor_DEPENDENCIES = ../lkl/tools/lkl/liblkl.a
 AM_V_P = $(am__v_P_@AM_V@)
@@ -128,7 +129,8 @@ am__depfiles_remade = ./$(DEPDIR)/block_attach.Po \
 	./$(DEPDIR)/ulvisor_clockevent.Po ./$(DEPDIR)/ulvisor_core.Po \
 	./$(DEPDIR)/ulvisor_elf.Po ./$(DEPDIR)/ulvisor_kernel.Po \
 	./$(DEPDIR)/ulvisor_launch.Po ./$(DEPDIR)/ulvisor_net.Po \
-	./$(DEPDIR)/ulvisor_thread.Po
+	./$(DEPDIR)/ulvisor_thread.Po \
+	./$(DEPDIR)/ulvisor_virtio_net.Po
 am__mv = mv -f
 CPPASCOMPILE = $(CCAS) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) \
 	$(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CCASFLAGS) $(CCASFLAGS)
@@ -273,7 +275,7 @@ CLEANFILES = *~
 DISTCLEANFILES = *~
 ulvisor_SOURCES = ulvisor.c ulvisor_core.c ulvisor_net.c ulvisor_block.c ulvisor_elf.c \
 		ulvisor_launch.S \
-		ulvisor_clockevent.c \
+		ulvisor_clockevent.c ulvisor_virtio_net.c \
 		tap_attach.c block_attach.c \
 		ulvisor_kernel.c ulvisor_app.c ulvisor_thread.c \
 		ulvisor.h block_attach.h tap_attach.h ulvisor_cc.h ulvisor_elf.h ulvisor_thread.h
@@ -377,6 +379,7 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/ulvisor_launch.Po@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/ulvisor_net.Po@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/ulvisor_thread.Po@am__quote@ # am--include-marker
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/ulvisor_virtio_net.Po@am__quote@ # am--include-marker
 
 $(am__depfiles_remade):
 	@$(MKDIR_P) $(@D)
@@ -553,6 +556,7 @@ distclean: distclean-am
 	-rm -f ./$(DEPDIR)/ulvisor_launch.Po
 	-rm -f ./$(DEPDIR)/ulvisor_net.Po
 	-rm -f ./$(DEPDIR)/ulvisor_thread.Po
+	-rm -f ./$(DEPDIR)/ulvisor_virtio_net.Po
 	-rm -f Makefile
 distclean-am: clean-am distclean-compile distclean-generic \
 	distclean-tags
@@ -610,6 +614,7 @@ maintainer-clean: maintainer-clean-am
 	-rm -f ./$(DEPDIR)/ulvisor_launch.Po
 	-rm -f ./$(DEPDIR)/ulvisor_net.Po
 	-rm -f ./$(DEPDIR)/ulvisor_thread.Po
+	-rm -f ./$(DEPDIR)/ulvisor_virtio_net.Po
 	-rm -f Makefile
 maintainer-clean-am: distclean-am maintainer-clean-generic
 

@@ -87,10 +87,6 @@ static int
 lkl_kernel_func(void *arg)
 {
 	listener_ctx_t	*ctx = (listener_ctx_t *)arg;
-	extern int	fd_tap;
-
-	if (fd_tap >= 0)
-		add_lkl_network(fd_tap);
 
 	start_lkl_kernel(ctx->heap_start, ctx->mem_size);
 

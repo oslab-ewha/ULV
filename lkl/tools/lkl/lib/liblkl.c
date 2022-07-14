@@ -13,17 +13,6 @@ typedef struct {
 	char	mpoint[32];
 } fs_t;
 
-extern struct lkl_netdev *lkl_netdev_solo5_create(int fd);
-
-int
-add_lkl_network(int fd)
-{
-	struct lkl_netdev	*nd;
-
-	nd = lkl_netdev_solo5_create(fd);
-	return lkl_netdev_add(nd, NULL);
-}
-
 void
 start_lkl_kernel(void *mem_start, unsigned long mem_size)
 {

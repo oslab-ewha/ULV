@@ -26,9 +26,10 @@
 #include <string.h>
 #include <seccomp.h>
 #include <sys/epoll.h>
-#include <sys/timerfd.h>
 #include <unistd.h>
 #include <errno.h>
+
+#include <sys/uio.h>
 
 #include "tap_attach.h"
 #include "ulvisor.h"
@@ -36,7 +37,8 @@
 int	fd_tap = -1;
 
 static int	epollfd;
-static int	timerfd;
+
+extern void ulvisor_add_netdev(void);
 
 static int
 handle_cmdarg(char *cmdarg)
@@ -69,12 +71,13 @@ setup(ulvisor_t *ulvisor)
 		return 0;
 
 	epollfd = ulvisor->epollfd;
-	timerfd = ulvisor->timerfd;
 
 	epev.events = EPOLLIN | EPOLLOUT;
 	if (epoll_ctl(epollfd, EPOLL_CTL_ADD, fd_tap, &epev) < 0) {
 		err(1, "epoll_ctl(EPOLL_CTL_ADD, fd=%d) failed", fd_tap);
 	}
+
+	ulvisor_add_netdev();
 
 	return 0;
 }
@@ -85,39 +88,93 @@ usage(void)
 	return "--net=IFACE (attach tap at IFACE)\n";
 }
 
-int
-solo5_net_read(int fd_tap, uint8_t *buf, size_t size, size_t *read_size)
+static ssize_t
+net_read(uint8_t *buf, size_t size)
 {
-	long	nbytes;
+	size_t	nread_total = 0;
+	ssize_t	nread;
 
-	nbytes = read(fd_tap, (char *)buf, size);
-	if (nbytes < 0) {
-		if (errno == EAGAIN)
-			return -EAGAIN;
-		else
+again:
+	nread = read(fd_tap, buf, size);
+	if (nread < 0) {
+		if (errno != EAGAIN)
 			return -EIO;
+		return nread_total;
 	}
 
-	*read_size = (size_t)nbytes;
-	return 0;
+	nread_total += nread;
+	if (nread < size) {
+		buf += nread;
+		size -= nread;
+		goto again;
+	}
+
+	return nread_total;
+}
+
+static int
+net_write(const uint8_t *buf, size_t size)
+{
+	size_t	nwrite_total = 0;
+	ssize_t	nwrite;
+
+again:
+	nwrite = write(fd_tap, (const void *)buf, size);
+	if (nwrite < 0)
+		return -EIO;
+
+	nwrite_total += nwrite;
+	if (nwrite < size) {
+		buf += nwrite;
+		size -= nwrite;
+		goto again;
+	}
+
+	return nwrite_total;
 }
 
 int
-solo5_net_write(int fd_tap, const uint8_t *buf, size_t size)
+ulvisor_net_read(struct iovec *iov, int cnt)
 {
-	long	nbytes;
+	int	nread_total = 0;
+	int	i;
 
-	nbytes = write(fd_tap, (const char *)buf, size);
-	return (nbytes == (int)size) ? 0: -EIO;
+	for (i = 0; i < cnt; i++, iov++) {
+		ssize_t	nread;
+
+		if ((nread = net_read(iov->iov_base, iov->iov_len)) < 0)
+			return -1;
+
+		nread_total += nread;
+		if (nread < iov->iov_len)
+			break;
+	}
+	return nread_total;
 }
 
 int
-solo5_yield(void)
+ulvisor_net_write(struct iovec *iov, int cnt)
 {
-	/*
-	 * We can always safely restart this call on EINTR, since the internal
-	 * timerfd is independent of its invocation.
-	 */
+	int	nwrite_total = 0;
+	int	i;
+
+	for (i = 0; i < cnt; i++, iov++) {
+		int	nwrite;
+		int	res;
+
+		if ((nwrite = net_write(iov->iov_base, iov->iov_len)) < 0)
+			return -1;
+
+		nwrite_total += nwrite;
+		if (nwrite < iov->iov_len)
+			break;
+	}
+	return nwrite_total;
+}
+
+int
+ulvisor_net_poll(void)
+{
 	while (1) {
 		struct epoll_event	epev;
 		int	ret;
