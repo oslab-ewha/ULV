@@ -228,14 +228,14 @@ _memfd_create(const char *name, unsigned int flags)
 void bootup_lkl(struct ulvisor_boot_info *bi);
 
 void run_app_thread(ulvisor_t *ulvisor);
-void lkl_console_add(void);
+void ulvisor_add_console(void);
 
 void
 ulvisor_run(ulvisor_t *ulvisor)
 {
 	struct ulvisor_boot_info *bi = (struct ulvisor_boot_info *)(ulvisor->mem + ULVISOR_BOOT_INFO_BASE);
+	ulvisor_add_console();
 	bootup_lkl(bi);
-	lkl_console_add();
 
 	run_app_thread(ulvisor);
 }

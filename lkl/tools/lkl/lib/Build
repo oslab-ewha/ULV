@@ -7,7 +7,6 @@ liblkl-y += net.o
 liblkl-y += posix-host.o
 liblkl-y += pure_thread.o
 liblkl-y += utils.o
-liblkl-y += virtio_cons.o
 liblkl-y += virtio.o
 liblkl-y += dbg.o
 liblkl-y += dbg_handler.o
