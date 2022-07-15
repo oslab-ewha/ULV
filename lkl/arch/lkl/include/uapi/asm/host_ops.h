@@ -130,6 +130,4 @@ int lkl_start_kernel(struct lkl_host_operations *lkl_ops, void *mem_start, unsig
  */
 int lkl_is_running(void);
 
-int lkl_printf(const char *, ...);
-
 #endif

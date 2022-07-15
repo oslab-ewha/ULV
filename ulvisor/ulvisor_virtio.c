@@ -70,7 +70,8 @@ struct _virtio_req {
 	uint16_t idx;
 };
 
-static inline uint16_t virtio_get_used_event(struct virtio_queue *q)
+static inline uint16_t
+virtio_get_used_event(struct virtio_queue *q)
 {
 	return q->avail->ring[q->num];
 }
@@ -112,7 +113,8 @@ virtio_add_used(struct virtio_queue *q, uint16_t used_idx, uint16_t avail_idx, u
  * because there might already be an driver thread reading the idx and dequeuing
  * used buffers.
  */
-static inline void virtio_sync_used_idx(struct virtio_queue *q, uint16_t idx)
+static inline void
+virtio_sync_used_idx(struct virtio_queue *q, uint16_t idx)
 {
 	__sync_synchronize();
 	q->used->idx = htole16(idx);
@@ -120,7 +122,8 @@ static inline void virtio_sync_used_idx(struct virtio_queue *q, uint16_t idx)
 
 #define min_len(a, b) (a < b ? a : b)
 
-void virtio_req_complete(struct virtio_req *req, uint32_t len)
+void
+virtio_req_complete(struct virtio_req *req, uint32_t len)
 {
 	int send_irq = 0;
 	struct _virtio_req *_req = container_of(req, struct _virtio_req, req);
@@ -520,7 +523,7 @@ static const struct iomem_ops	virtio_ops = {
 	.write = virtio_write,
 };
 
-char virtio_devs[4096];
+char	virtio_devs[4096];
 static char	*devs = virtio_devs;
 static uint32_t	num_virtio_boot_devs;
 
@@ -571,71 +574,12 @@ virtio_dev_setup(struct virtio_dev *dev, int queues, int num_max)
 	}
 	devs += num_bytes;
 	dev->virtio_mmio_id = num_virtio_boot_devs++;
-#if 0
-		ret =
-		    lkl_sys_virtio_mmio_device_add((long)dev->base, mmio_size,
-						   dev->irq);
-		if (ret < 0) {
-			lkl_printf("can't register mmio device\n");
-			return -1;
-		}
-		dev->virtio_mmio_id = lkl_num_virtio_boot_devs + ret;
-#endif
-	return 0;
-}
-
-#if 0 ////DEL
-int virtio_dev_cleanup(struct virtio_dev *dev)
-{
-	char devname[100];
-	long fd, ret;
-	long mount_ret;
-
-	if (!lkl_is_running())
-		goto skip_unbind;
-
-	mount_ret = lkl_mount_fs("sysfs");
-	if (mount_ret < 0)
-		return mount_ret;
-
-	if (dev->virtio_mmio_id >= virtio_get_num_bootdevs())
-		ret = snprintf(devname, sizeof(devname), "virtio-mmio.%d.auto",
-			       dev->virtio_mmio_id - virtio_get_num_bootdevs());
-	else
-		ret = snprintf(devname, sizeof(devname), "virtio-mmio.%d",
-			       dev->virtio_mmio_id);
-	if (ret < 0 || (size_t) ret >= sizeof(devname))
-		return -LKL_ENOMEM;
-
-	fd = lkl_sys_open("/sysfs/bus/platform/drivers/virtio-mmio/unbind",
-			  LKL_O_WRONLY, 0);
-	if (fd < 0)
-		return fd;
-
-	ret = lkl_sys_write(fd, devname, strlen(devname));
-	if (ret < 0)
-		return ret;
-
-	ret = lkl_sys_close(fd);
-	if (ret < 0)
-		return ret;
-
-	if (mount_ret == 0) {
-		ret = lkl_sys_umount("/sysfs", 0);
-		if (ret < 0)
-			return ret;
-	}
-
-skip_unbind:
-	lkl_put_irq(dev->irq, "virtio");
-	unregister_iomem(dev->base);
-	lkl_host_ops.mem_free(dev->queue);
 
 	return 0;
 }
-#endif
 
-uint32_t virtio_get_num_bootdevs(void)
+uint32_t
+virtio_get_num_bootdevs(void)
 {
 	return num_virtio_boot_devs;
 }

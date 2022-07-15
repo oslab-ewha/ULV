@@ -1,4 +1,3 @@
 CFLAGS_posix-host.o += -D_FILE_OFFSET_BITS=64
 
 liblkl-y += liblkl.o
-liblkl-y += utils.o

@@ -4,7 +4,8 @@
 #include "ulvisor_pure_thread.h"
 
 #ifdef DEBUG
-#define DBG(fmt, ...) lkl_printf("PTHDBG: " fmt, ##__VA_ARGS__)
+#include <stdio.h>
+#define DBG(fmt, ...) printf("PTHDBG: " fmt, ##__VA_ARGS__)
 #else
 #define DBG(fmt, ...) do {} while (0)
 #endif

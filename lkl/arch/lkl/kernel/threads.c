@@ -164,7 +164,7 @@ void threads_init(void)
 
 	ret = init_ti(ti);
 	if (ret < 0)
-		lkl_printf("lkl: failed to allocate init schedule semaphore\n");
+		printk("lkl: failed to allocate init schedule semaphore\n");
 
 	ti->tid = lkl_ops->thread_self();
 }

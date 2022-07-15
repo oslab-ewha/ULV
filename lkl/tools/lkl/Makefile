@@ -31,7 +31,6 @@ else
 endif
 export OUTPUT
 
-
 all:
 
 conf: $(OUTPUT)Makefile.conf
@@ -88,9 +87,6 @@ $(OUTPUT)%-in.o: $(srctree)/lkl.o FORCE
 	$(Q)$(MAKE) -f $(srctree)/tools/build/Makefile.build dir=$(patsubst %/,%,$(dir $*)) obj=$(notdir $*)
 
 
-$(OUTPUT)cpfromfs$(EXESUF): cptofs$(EXESUF)
-	$(Q)if ! [ -e $@ ]; then ln -s $< $@; fi
-
 clean:
 	$(call QUIET_CLEAN, objects)find $(OUTPUT) -name '*.o' -delete -o -name '\.*.cmd'\
 	 -delete -o -name '\.*.d' -delete
@@ -125,9 +121,6 @@ setup_sysheaders:
 	@if [ ! -d include/asm ]; then ln -sf /usr/include/asm-generic include/asm; fi
 	@if [ ! -d include/asm-generic ]; then ln -sf /usr/include/asm-generic include/asm-generic; fi
 	@if [ ! -d include/linux ]; then ln -sf /usr/include/linux include/linux; fi
-
-run-tests:
-	./tests/run.py $(tests)
 
 FORCE: ;
 .PHONY: all clean FORCE run-tests
