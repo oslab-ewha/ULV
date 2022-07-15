@@ -1,7 +1,7 @@
-#ifndef _LKL_LIB_PURE_THREAD_H
-#define _LKL_LIB_PURE_THREAD_H
+#ifndef _ULVISOR_PURE_THREAD_H_
+#define _ULVISOR_PURE_THREAD_H_
 
-#include <lkl_host.h>
+typedef unsigned long	lkl_thread_t;
 
 void pure_thread_switch(lkl_thread_t prev, lkl_thread_t next);
 lkl_thread_t pure_thread_create(void *(*fn)(void *), void *arg);

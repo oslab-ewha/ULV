@@ -59,10 +59,7 @@ struct lkl_dev_pci_ops {
  *
  * @thread_create - create a new thread and run f(arg) in its context; returns a
  * thread handle or 0 if the thread could not be created
- * @thread_detach - on POSIX systems, free up resources held by
- * pthreads. Noop on Win32.
  * @thread_exit - terminates the current thread
- * @thread_join - wait for the given thread to terminate. Returns 0
  * for success, -1 otherwise
  *
  * @mem_alloc - allocate memory
@@ -87,18 +84,15 @@ struct lkl_dev_pci_ops {
  * @pci_ops - pointer to PCI host operations
  */
 struct lkl_host_operations {
-	const char *virtio_devices;
+	const char	*virtio_devices;
 
 	void (*print)(const char *str, int len);
 	void (*panic)(void);
 
 	void (*thread_switch)(lkl_thread_t prev, lkl_thread_t next);
 	lkl_thread_t (*thread_create)(void *(*f)(void *), void *arg);
-	void (*thread_detach)(void);
 	void (*thread_exit)(lkl_thread_t lthrd);
-	int (*thread_join)(lkl_thread_t tid);
 	lkl_thread_t (*thread_self)(void);
-	int (*thread_equal)(lkl_thread_t a, lkl_thread_t b);
 
 	void* (*mem_alloc)(unsigned long);
 	void (*mem_free)(void *);

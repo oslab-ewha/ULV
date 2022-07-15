@@ -1,8 +1,7 @@
 #include <setjmp.h>
 #include <stdlib.h>
 
-#include "lkl_host.h"
-#include "pure_thread.h"
+#include "ulvisor_pure_thread.h"
 
 #ifdef DEBUG
 #define DBG(fmt, ...) lkl_printf("PTHDBG: " fmt, ##__VA_ARGS__)
