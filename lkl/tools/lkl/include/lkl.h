@@ -322,29 +322,6 @@ static inline long lkl_sys_epoll_wait(int fd, struct lkl_epoll_event *ev,
 }
 #endif
 
-
-
-/**
- * lkl_strerror - returns a string describing the given error code
- *
- * @err - error code
- * @returns - string for the given error code
- */
-const char *lkl_strerror(int err);
-
-/**
- * lkl_perror - prints a string describing the given error code
- *
- * @msg - prefix for the error message
- * @err - error code
- */
-void lkl_perror(char *msg, int err);
-
-/**
- * struct lkl_dev_blk_ops - block device host operations, defined in lkl_host.h.
- */
-struct lkl_dev_blk_ops;
-
 /**
  * lkl_disk - host disk handle
  *
@@ -895,15 +872,6 @@ int lkl_if_wait_ipv6_dad(int ifindex, void *addr);
  * @type - the type of qdisc (e.g., "fq")
  */
 int lkl_qdisc_add(int ifindex, const char *root, const char *type);
-
-/**
- * lkl_qdisc_parse_add - Add a qdisc entry for an interface with strings
- *
- * @ifindex - the ifindex of the interface
- * @entries - strings of qdisc configurations in the form of
- *            "root|type;root|type;..."
- */
-void lkl_qdisc_parse_add(int ifindex, const char *entries);
 
 /**
  * lkl_sysctl - write a sysctl value
