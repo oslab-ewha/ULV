@@ -1,8 +1,7 @@
 #include <string.h>
 #include <stdint.h>
-#include <lkl_host.h>
 
-#include "iomem.h"
+#include "ulvisor_iomem.h"
 
 #define IOMEM_OFFSET_BITS		24
 #define MAX_IOMEM_REGIONS		256
@@ -15,12 +14,13 @@
 	(void *)(uintptr_t)(i << IOMEM_OFFSET_BITS)
 
 static struct iomem_region {
-	void *data;
-	int size;
-	const struct lkl_iomem_ops *ops;
+	void	*data;
+	int	size;
+	const struct iomem_ops	*ops;
 } iomem_regions[MAX_IOMEM_REGIONS];
 
-void* register_iomem(void *data, int size, const struct lkl_iomem_ops *ops)
+void *
+ulvisor_register_iomem(void *data, int size, const struct iomem_ops *ops)
 {
 	int i;
 
@@ -40,20 +40,20 @@ void* register_iomem(void *data, int size, const struct lkl_iomem_ops *ops)
 	return IOMEM_INDEX_TO_ADDR(i);
 }
 
-void unregister_iomem(void *base)
+void
+ulvisor_unregister_iomem(void *base)
 {
 	unsigned int index = IOMEM_ADDR_TO_INDEX(base);
 
-	if (index >= MAX_IOMEM_REGIONS) {
-		lkl_printf("%s: invalid iomem_addr %p\n", __func__, base);
+	if (index >= MAX_IOMEM_REGIONS)
 		return;
-	}
 
 	iomem_regions[index].size = 0;
 	iomem_regions[index].ops = NULL;
 }
 
-void *lkl_ioremap(long addr, int size)
+void *
+ulvisor_ioremap(long addr, int size)
 {
 	int index = IOMEM_ADDR_TO_INDEX(addr);
 	struct iomem_region *iomem = &iomem_regions[index];
@@ -67,12 +67,13 @@ void *lkl_ioremap(long addr, int size)
 	return NULL;
 }
 
-int lkl_iomem_access(const volatile void *addr, void *res, int size, int write)
+int
+ulvisor_iomem_access(const volatile void *addr, void *res, int size, int write)
 {
-	int index = IOMEM_ADDR_TO_INDEX(addr);
-	struct iomem_region *iomem = &iomem_regions[index];
-	int offset = IOMEM_ADDR_TO_OFFSET(addr);
-	int ret;
+	int	index = IOMEM_ADDR_TO_INDEX(addr);
+	struct iomem_region	*iomem = &iomem_regions[index];
+	int	offset = IOMEM_ADDR_TO_OFFSET(addr);
+	int	ret;
 
 	if (index > MAX_IOMEM_REGIONS || !iomem_regions[index].ops ||
 	    offset + size > iomem_regions[index].size)

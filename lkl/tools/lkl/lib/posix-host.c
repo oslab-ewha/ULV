@@ -16,7 +16,7 @@
 #include <sys/mman.h>
 #include <poll.h>
 #include <lkl_host.h>
-#include "iomem.h"
+
 #include "pure_thread.h"
 
 /* Let's see if the host has semaphore.h */
@@ -32,6 +32,11 @@
 void ulvisor_clockevent_setnext(unsigned long ns);
 void ulvisor_clockevent_alloc(int irq);
 void ulvisor_clockevent_free(void);
+
+void *ulvisor_ioremap(long addr, int size);
+int ulvisor_iomem_access(const volatile void *addr, void *res, int size, int write);
+
+extern char virtio_devs[];
 
 static void print(const char *str, int len)
 {
@@ -141,9 +146,9 @@ struct lkl_host_operations lkl_host_ops = {
 	.mem_free = free,
 	.page_alloc = page_alloc,
 	.page_free = page_free,
-	.ioremap = lkl_ioremap,
-	.iomem_access = lkl_iomem_access,
-	.virtio_devices = lkl_virtio_devs,
+	.ioremap = ulvisor_ioremap,
+	.iomem_access = ulvisor_iomem_access,
+	.virtio_devices = virtio_devs,
 	.memcpy = memcpy,
 #ifdef LKL_HOST_CONFIG_VFIO_PCI
 	.pci_ops = &vfio_pci_ops,

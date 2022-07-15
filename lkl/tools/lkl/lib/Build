@@ -2,12 +2,10 @@ CFLAGS_posix-host.o += -D_FILE_OFFSET_BITS=64
 
 liblkl-y += liblkl.o
 liblkl-y += fs.o
-liblkl-y += iomem.o
 liblkl-y += net.o
 liblkl-y += posix-host.o
 liblkl-y += pure_thread.o
 liblkl-y += utils.o
-liblkl-y += virtio.o
 liblkl-y += dbg.o
 liblkl-y += dbg_handler.o
 liblkl-$(LKL_HOST_CONFIG_VFIO_PCI) += vfio_pci.o
