@@ -1,7 +1,10 @@
-#include <setjmp.h>
 #include <stdlib.h>
 
 #include "ulvisor_pure_thread.h"
+
+typedef char	ulv_jmpbuf[64];
+extern int ulv_setjmp(ulv_jmpbuf buf);
+extern void ulv_longjmp(ulv_jmpbuf buf, int val);
 
 #ifdef DEBUG
 #include <stdio.h>
@@ -19,7 +22,7 @@ typedef struct {
 	void *(*fn)(void *);
 	void	*arg;
 	char	stack[STACK_SIZE];
-	jmp_buf	jmpbuf;
+	ulv_jmpbuf	jmpbuf;
 } thinfo_t;
 
 static thinfo_t	*cur_thinfo;
@@ -39,23 +42,21 @@ create_thinfo(void *(*fn)(void *), void *arg)
 static void
 start_new_thread(thinfo_t *thinfo)
 {
+	thinfo_t	*thinfo_new;
+
 	DBG("new thread scheduled: %p\n", thinfo);
 
 	asm("movq %0, %%rax;"
-	    "movq %1, %%rbp;"
-	    "movq %%rbp, %%rsp;"
+	    "movq %1, %%rcx;"
+	    "movq %%rcx, %%rsp;"
 	    "pushq %%rax;"
-	    :: "l"(thinfo), "l"(THSTACK(thinfo)): "rax", "rbp");
+	    :: "l"(thinfo), "l"(THSTACK(thinfo)): "rax", "rcx");
 
-	{
-		thinfo_t	*thinfo_new;
+	asm("popq %0" : "=l"(thinfo_new));
 
-		asm("popq %0" : "=l"(thinfo_new));
-
-		thinfo_new->started = 1;
-		cur_thinfo = thinfo_new;
-		thinfo_new->fn(thinfo_new->arg);
-	}
+	thinfo_new->started = 1;
+	cur_thinfo = thinfo_new;
+	thinfo_new->fn(thinfo_new->arg);
 }
 
 void
@@ -66,7 +67,7 @@ pure_thread_switch(lkl_thread_t prev, lkl_thread_t next)
 	if (prev) {
 		thinfo_t	*thinfo_prev = (thinfo_t *)prev;
 
-		if (setjmp(thinfo_prev->jmpbuf)) {
+		if (ulv_setjmp(thinfo_prev->jmpbuf)) {
 			DBG("thread scheduled again: %p\n", thinfo_prev);
 			cur_thinfo = thinfo_prev;
 			return;
@@ -77,7 +78,7 @@ pure_thread_switch(lkl_thread_t prev, lkl_thread_t next)
 		thinfo_t	*thinfo_next = (thinfo_t *)next;
 
 		if (thinfo_next->started) {
-			longjmp(thinfo_next->jmpbuf, 1);
+			ulv_longjmp(thinfo_next->jmpbuf, 1);
 		}
 		else {
 			start_new_thread(thinfo_next);
