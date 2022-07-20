@@ -61,7 +61,7 @@ start_new_thread(thinfo_t *thinfo)
 void
 pure_thread_switch(lkl_thread_t prev, lkl_thread_t next)
 {
-	DBG("SWITCH: prev:%p -> next: %p\n", prev, next);
+	DBG("SWITCH: prev:%lx -> next: %lx\n", prev, next);
 
 	if (prev) {
 		thinfo_t	*thinfo_prev = (thinfo_t *)prev;
@@ -82,13 +82,15 @@ pure_thread_switch(lkl_thread_t prev, lkl_thread_t next)
 		else {
 			start_new_thread(thinfo_next);
 		}
-		DBG("never reached");
+		DBG("never reached!!!");
 	}
 	else {
 		thinfo_t	*thinfo = create_thinfo(NULL, NULL);
 
 		thinfo->started = 1;
 		cur_thinfo = thinfo;
+
+		DBG("created by switch: %p\n", thinfo);
 	}
 }
 
