@@ -18,3 +18,5 @@
 /Makefile
 /ulvisor/Makefile
 /ulvisor/ulvisor
+/ulvisor/libuc/Makefile
+/ulvisor/libuc/libuc.a

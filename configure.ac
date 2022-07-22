@@ -30,6 +30,7 @@ AC_DEFINE(_GNU_SOURCE, [], [GNU Supported Code])
 
 AC_CONFIG_FILES([Makefile
                  ulvisor/Makefile
+                 ulvisor/libuc/Makefile
 		 micro_benchmarks/Makefile
 		 ])
 

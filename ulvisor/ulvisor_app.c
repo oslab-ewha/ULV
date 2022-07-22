@@ -55,7 +55,7 @@ func_user_thread(void *arg)
 	}
 
 	/* One dummy rule should be added. Because zero filter count incurs invalid error. */
-	seccomp_rule_add(ctx_filter, SCMP_ACT_ALLOW, 1000, 0);
+	seccomp_rule_add(ctx_filter, SCMP_ACT_ALLOW, SCMP_SYS(mmap), 0);
 
 	if (seccomp_load(ctx_filter) < 0) {
 		err(1, "failed: seccomp_load");

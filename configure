@@ -4553,7 +4553,7 @@ $as_echo "#define _GNU_SOURCE /**/" >>confdefs.h
 
 # Checks for library functions.
 
-ac_config_files="$ac_config_files Makefile ulvisor/Makefile micro_benchmarks/Makefile"
+ac_config_files="$ac_config_files Makefile ulvisor/Makefile ulvisor/libuc/Makefile micro_benchmarks/Makefile"
 
 
 cat >confcache <<\_ACEOF
@@ -5293,6 +5293,7 @@ do
     "depfiles") CONFIG_COMMANDS="$CONFIG_COMMANDS depfiles" ;;
     "Makefile") CONFIG_FILES="$CONFIG_FILES Makefile" ;;
     "ulvisor/Makefile") CONFIG_FILES="$CONFIG_FILES ulvisor/Makefile" ;;
+    "ulvisor/libuc/Makefile") CONFIG_FILES="$CONFIG_FILES ulvisor/libuc/Makefile" ;;
     "micro_benchmarks/Makefile") CONFIG_FILES="$CONFIG_FILES micro_benchmarks/Makefile" ;;
 
   *) as_fn_error $? "invalid argument: \`$ac_config_target'" "$LINENO" 5;;

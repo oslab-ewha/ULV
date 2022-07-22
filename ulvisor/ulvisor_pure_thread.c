@@ -1,6 +1,5 @@
-#include <stdlib.h>
-
 #include "ulvisor_pure_thread.h"
+#include "libuc/libuc.h"
 
 typedef char	ulv_jmpbuf[64];
 extern int ulv_setjmp(ulv_jmpbuf buf);
@@ -15,7 +14,8 @@ extern void ulv_longjmp(ulv_jmpbuf buf, int val);
 
 #define STACK_SIZE	16384
 
-#define THSTACK(thinfo)	((thinfo)->stack + STACK_SIZE - 8)
+/* align to 16bytes */
+#define THSTACK(thinfo)	((char *)((unsigned long)((thinfo)->stack + STACK_SIZE) & 0xfffffffffffffff0))
 
 typedef struct {
 	int	started:1;
@@ -32,7 +32,7 @@ create_thinfo(void *(*fn)(void *), void *arg)
 {
 	thinfo_t	*thinfo;
 
-	thinfo = (thinfo_t *)malloc(sizeof(thinfo_t));
+	thinfo = (thinfo_t *)uc_malloc(sizeof(thinfo_t));
 	thinfo->started = 0;
 	thinfo->fn = fn;
 	thinfo->arg = arg;
@@ -114,7 +114,7 @@ pure_thread_exit(lkl_thread_t lthrd)
 
 	DBG("EXIT: %p\n", thinfo);
 
-	free(thinfo);
+	uc_free(thinfo);
 }
 
 lkl_thread_t
