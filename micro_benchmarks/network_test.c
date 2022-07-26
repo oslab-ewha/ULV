@@ -51,8 +51,6 @@ main(int argc, char *argv[])
 	struct sockaddr_in	addr;
 	int	ret;
 
-	setup_stdout();
-
 	if (argc < 4) {
 		usage();
 		return 1;

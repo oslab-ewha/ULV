@@ -775,7 +775,7 @@ musl/lib/libc.a: musl/config.mak
 	cd musl && make
 
 musl/config.mak:
-	cd musl && ./configure
+	cd musl && ./configure --disable-shared --target=x86_64-ulv
 
 # Tell versions [3.59,3.63) of GNU make to not export all variables.
 # Otherwise a system limit (for SysV at least) may be exceeded.
