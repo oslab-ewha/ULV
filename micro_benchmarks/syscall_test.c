@@ -9,9 +9,14 @@
 
 #include "libmb.h"
 
-void
-main(int argc, char *argv[])
+int
+main(int argc, char *argv[], char *envp[])
 {
+	struct utsname	utsname;
+
+	uname(&utsname);
+	return 0;
+#if 0 ///TODO
 	struct utsname	utsname;
 	struct timeval	tv;
 	int	ret;
@@ -37,4 +42,5 @@ main(int argc, char *argv[])
 	
 	elapsed = get_tickcount();
 	printf("gettimeofday elapsed: %d\n", elapsed);
+#endif
 }

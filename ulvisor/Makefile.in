@@ -86,7 +86,6 @@ POST_INSTALL = :
 NORMAL_UNINSTALL = :
 PRE_UNINSTALL = :
 POST_UNINSTALL = :
-bin_PROGRAMS = ulvisor$(EXEEXT)
 subdir = ulvisor
 ACLOCAL_M4 = $(top_srcdir)/aclocal.m4
 am__aclocal_m4_deps = $(top_srcdir)/configure.ac
@@ -97,20 +96,24 @@ mkinstalldirs = $(install_sh) -d
 CONFIG_HEADER = $(top_builddir)/config.h
 CONFIG_CLEAN_FILES =
 CONFIG_CLEAN_VPATH_FILES =
-am__installdirs = "$(DESTDIR)$(bindir)"
-PROGRAMS = $(bin_PROGRAMS)
-am_ulvisor_OBJECTS = ulvisor.$(OBJEXT) ulvisor_core.$(OBJEXT) \
-	ulvisor_net.$(OBJEXT) ulvisor_block.$(OBJEXT) \
-	ulvisor_elf.$(OBJEXT) ulvisor_launch.$(OBJEXT) \
-	ulvisor_hostops.$(OBJEXT) ulvisor_pure_thread.$(OBJEXT) \
-	ulvisor_clockevent.$(OBJEXT) ulvisor_iomem.$(OBJEXT) \
-	ulvisor_virtio.$(OBJEXT) ulvisor_virtio_net.$(OBJEXT) \
-	ulvisor_virtio_blk.$(OBJEXT) ulvisor_virtio_cons.$(OBJEXT) \
-	tap_attach.$(OBJEXT) block_attach.$(OBJEXT) \
-	ulvisor_kernel.$(OBJEXT) ulvisor_app.$(OBJEXT) \
+LIBRARIES = $(noinst_LIBRARIES)
+AR = ar
+ARFLAGS = cru
+AM_V_AR = $(am__v_AR_@AM_V@)
+am__v_AR_ = $(am__v_AR_@AM_DEFAULT_V@)
+am__v_AR_0 = @echo "  AR      " $@;
+am__v_AR_1 = 
+libulvisor_a_AR = $(AR) $(ARFLAGS)
+libulvisor_a_LIBADD =
+am_libulvisor_a_OBJECTS = ulvisor_net.$(OBJEXT) \
+	ulvisor_block.$(OBJEXT) ulvisor_hostops.$(OBJEXT) \
+	ulvisor_pure_thread.$(OBJEXT) ulvisor_clockevent.$(OBJEXT) \
+	ulvisor_iomem.$(OBJEXT) ulvisor_virtio.$(OBJEXT) \
+	ulvisor_virtio_net.$(OBJEXT) ulvisor_virtio_blk.$(OBJEXT) \
+	ulvisor_virtio_cons.$(OBJEXT) tap_attach.$(OBJEXT) \
+	block_attach.$(OBJEXT) ulvisor_syscall.$(OBJEXT) \
 	ulvisor_thread.$(OBJEXT) ulvisor_longjmp.$(OBJEXT)
-ulvisor_OBJECTS = $(am_ulvisor_OBJECTS)
-ulvisor_DEPENDENCIES = ../lkl/tools/lkl/liblkl.a libuc/libuc.a
+libulvisor_a_OBJECTS = $(am_libulvisor_a_OBJECTS)
 AM_V_P = $(am__v_P_@AM_V@)
 am__v_P_ = $(am__v_P_@AM_DEFAULT_V@)
 am__v_P_0 = false
@@ -127,14 +130,13 @@ DEFAULT_INCLUDES = -I.@am__isrc@ -I$(top_builddir)
 depcomp = $(SHELL) $(top_srcdir)/depcomp
 am__maybe_remake_depfiles = depfiles
 am__depfiles_remade = ./$(DEPDIR)/block_attach.Po \
-	./$(DEPDIR)/tap_attach.Po ./$(DEPDIR)/ulvisor.Po \
-	./$(DEPDIR)/ulvisor_app.Po ./$(DEPDIR)/ulvisor_block.Po \
-	./$(DEPDIR)/ulvisor_clockevent.Po ./$(DEPDIR)/ulvisor_core.Po \
-	./$(DEPDIR)/ulvisor_elf.Po ./$(DEPDIR)/ulvisor_hostops.Po \
-	./$(DEPDIR)/ulvisor_iomem.Po ./$(DEPDIR)/ulvisor_kernel.Po \
-	./$(DEPDIR)/ulvisor_launch.Po ./$(DEPDIR)/ulvisor_longjmp.Po \
-	./$(DEPDIR)/ulvisor_net.Po ./$(DEPDIR)/ulvisor_pure_thread.Po \
-	./$(DEPDIR)/ulvisor_thread.Po ./$(DEPDIR)/ulvisor_virtio.Po \
+	./$(DEPDIR)/tap_attach.Po ./$(DEPDIR)/ulvisor_block.Po \
+	./$(DEPDIR)/ulvisor_clockevent.Po \
+	./$(DEPDIR)/ulvisor_hostops.Po ./$(DEPDIR)/ulvisor_iomem.Po \
+	./$(DEPDIR)/ulvisor_longjmp.Po ./$(DEPDIR)/ulvisor_net.Po \
+	./$(DEPDIR)/ulvisor_pure_thread.Po \
+	./$(DEPDIR)/ulvisor_syscall.Po ./$(DEPDIR)/ulvisor_thread.Po \
+	./$(DEPDIR)/ulvisor_virtio.Po \
 	./$(DEPDIR)/ulvisor_virtio_blk.Po \
 	./$(DEPDIR)/ulvisor_virtio_cons.Po \
 	./$(DEPDIR)/ulvisor_virtio_net.Po
@@ -157,8 +159,8 @@ AM_V_CCLD = $(am__v_CCLD_@AM_V@)
 am__v_CCLD_ = $(am__v_CCLD_@AM_DEFAULT_V@)
 am__v_CCLD_0 = @echo "  CCLD    " $@;
 am__v_CCLD_1 = 
-SOURCES = $(ulvisor_SOURCES)
-DIST_SOURCES = $(ulvisor_SOURCES)
+SOURCES = $(libulvisor_a_SOURCES)
+DIST_SOURCES = $(libulvisor_a_SOURCES)
 RECURSIVE_TARGETS = all-recursive check-recursive cscopelist-recursive \
 	ctags-recursive dvi-recursive html-recursive info-recursive \
 	install-data-recursive install-dvi-recursive \
@@ -323,15 +325,15 @@ top_srcdir = @top_srcdir@
 CLEANFILES = *~
 DISTCLEANFILES = *~
 SUBDIRS = libuc
-ulvisor_SOURCES = ulvisor.c ulvisor_core.c ulvisor_net.c ulvisor_block.c ulvisor_elf.c \
-		ulvisor_launch.S ulvisor_hostops.c ulvisor_pure_thread.c ulvisor_pure_thread.h \
+noinst_LIBRARIES = libulvisor.a
+libulvisor_a_SOURCES = ulvisor_net.c ulvisor_block.c \
+		ulvisor_hostops.c ulvisor_pure_thread.c ulvisor_pure_thread.h \
 		ulvisor_clockevent.c ulvisor_iomem.c uivisor_iomem.h \
 		ulvisor_virtio.c ulvisor_virtio_net.c ulvisor_virtio_blk.c ulvisor_virtio_cons.c \
 		tap_attach.c block_attach.c \
-		ulvisor_kernel.c ulvisor_app.c ulvisor_thread.c ulvisor_longjmp.S \
+		ulvisor_syscall.c ulvisor_thread.c ulvisor_longjmp.S \
 		ulvisor.h block_attach.h tap_attach.h ulvisor_cc.h ulvisor_elf.h ulvisor_thread.h
 
-ulvisor_LDADD = ../lkl/tools/lkl/liblkl.a libuc/libuc.a -lseccomp -lpthread -lrt
 all: all-recursive
 
 .SUFFIXES:
@@ -365,52 +367,14 @@ $(top_srcdir)/configure: @MAINTAINER_MODE_TRUE@ $(am__configure_deps)
 $(ACLOCAL_M4): @MAINTAINER_MODE_TRUE@ $(am__aclocal_m4_deps)
 	cd $(top_builddir) && $(MAKE) $(AM_MAKEFLAGS) am--refresh
 $(am__aclocal_m4_deps):
-install-binPROGRAMS: $(bin_PROGRAMS)
-	@$(NORMAL_INSTALL)
-	@list='$(bin_PROGRAMS)'; test -n "$(bindir)" || list=; \
-	if test -n "$$list"; then \
-	  echo " $(MKDIR_P) '$(DESTDIR)$(bindir)'"; \
-	  $(MKDIR_P) "$(DESTDIR)$(bindir)" || exit 1; \
-	fi; \
-	for p in $$list; do echo "$$p $$p"; done | \
-	sed 's/$(EXEEXT)$$//' | \
-	while read p p1; do if test -f $$p \
-	  ; then echo "$$p"; echo "$$p"; else :; fi; \
-	done | \
-	sed -e 'p;s,.*/,,;n;h' \
-	    -e 's|.*|.|' \
-	    -e 'p;x;s,.*/,,;s/$(EXEEXT)$$//;$(transform);s/$$/$(EXEEXT)/' | \
-	sed 'N;N;N;s,\n, ,g' | \
-	$(AWK) 'BEGIN { files["."] = ""; dirs["."] = 1 } \
-	  { d=$$3; if (dirs[d] != 1) { print "d", d; dirs[d] = 1 } \
-	    if ($$2 == $$4) files[d] = files[d] " " $$1; \
-	    else { print "f", $$3 "/" $$4, $$1; } } \
-	  END { for (d in files) print "f", d, files[d] }' | \
-	while read type dir files; do \
-	    if test "$$dir" = .; then dir=; else dir=/$$dir; fi; \
-	    test -z "$$files" || { \
-	      echo " $(INSTALL_PROGRAM_ENV) $(INSTALL_PROGRAM) $$files '$(DESTDIR)$(bindir)$$dir'"; \
-	      $(INSTALL_PROGRAM_ENV) $(INSTALL_PROGRAM) $$files "$(DESTDIR)$(bindir)$$dir" || exit $$?; \
-	    } \
-	; done
 
-uninstall-binPROGRAMS:
-	@$(NORMAL_UNINSTALL)
-	@list='$(bin_PROGRAMS)'; test -n "$(bindir)" || list=; \
-	files=`for p in $$list; do echo "$$p"; done | \
-	  sed -e 'h;s,^.*/,,;s/$(EXEEXT)$$//;$(transform)' \
-	      -e 's/$$/$(EXEEXT)/' \
-	`; \
-	test -n "$$list" || exit 0; \
-	echo " ( cd '$(DESTDIR)$(bindir)' && rm -f" $$files ")"; \
-	cd "$(DESTDIR)$(bindir)" && rm -f $$files
+clean-noinstLIBRARIES:
+	-test -z "$(noinst_LIBRARIES)" || rm -f $(noinst_LIBRARIES)
 
-clean-binPROGRAMS:
-	-test -z "$(bin_PROGRAMS)" || rm -f $(bin_PROGRAMS)
-
-ulvisor$(EXEEXT): $(ulvisor_OBJECTS) $(ulvisor_DEPENDENCIES) $(EXTRA_ulvisor_DEPENDENCIES) 
-	@rm -f ulvisor$(EXEEXT)
-	$(AM_V_CCLD)$(LINK) $(ulvisor_OBJECTS) $(ulvisor_LDADD) $(LIBS)
+libulvisor.a: $(libulvisor_a_OBJECTS) $(libulvisor_a_DEPENDENCIES) $(EXTRA_libulvisor_a_DEPENDENCIES) 
+	$(AM_V_at)-rm -f libulvisor.a
+	$(AM_V_AR)$(libulvisor_a_AR) libulvisor.a $(libulvisor_a_OBJECTS) $(libulvisor_a_LIBADD)
+	$(AM_V_at)$(RANLIB) libulvisor.a
 
 mostlyclean-compile:
 	-rm -f *.$(OBJEXT)
@@ -420,19 +384,14 @@ distclean-compile:
 
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/block_attach.Po@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/tap_attach.Po@am__quote@ # am--include-marker
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/ulvisor.Po@am__quote@ # am--include-marker
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/ulvisor_app.Po@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/ulvisor_block.Po@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/ulvisor_clockevent.Po@am__quote@ # am--include-marker
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/ulvisor_core.Po@am__quote@ # am--include-marker
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/ulvisor_elf.Po@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/ulvisor_hostops.Po@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/ulvisor_iomem.Po@am__quote@ # am--include-marker
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/ulvisor_kernel.Po@am__quote@ # am--include-marker
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/ulvisor_launch.Po@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/ulvisor_longjmp.Po@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/ulvisor_net.Po@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/ulvisor_pure_thread.Po@am__quote@ # am--include-marker
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/ulvisor_syscall.Po@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/ulvisor_thread.Po@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/ulvisor_virtio.Po@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/ulvisor_virtio_blk.Po@am__quote@ # am--include-marker
@@ -632,12 +591,9 @@ distdir-am: $(DISTFILES)
 	done
 check-am: all-am
 check: check-recursive
-all-am: Makefile $(PROGRAMS)
+all-am: Makefile $(LIBRARIES)
 installdirs: installdirs-recursive
 installdirs-am:
-	for dir in "$(DESTDIR)$(bindir)"; do \
-	  test -z "$$dir" || $(MKDIR_P) "$$dir"; \
-	done
 install: install-recursive
 install-exec: install-exec-recursive
 install-data: install-data-recursive
@@ -672,24 +628,19 @@ maintainer-clean-generic:
 	@echo "it deletes files that may require special tools to rebuild."
 clean: clean-recursive
 
-clean-am: clean-binPROGRAMS clean-generic mostlyclean-am
+clean-am: clean-generic clean-noinstLIBRARIES mostlyclean-am
 
 distclean: distclean-recursive
 		-rm -f ./$(DEPDIR)/block_attach.Po
 	-rm -f ./$(DEPDIR)/tap_attach.Po
-	-rm -f ./$(DEPDIR)/ulvisor.Po
-	-rm -f ./$(DEPDIR)/ulvisor_app.Po
 	-rm -f ./$(DEPDIR)/ulvisor_block.Po
 	-rm -f ./$(DEPDIR)/ulvisor_clockevent.Po
-	-rm -f ./$(DEPDIR)/ulvisor_core.Po
-	-rm -f ./$(DEPDIR)/ulvisor_elf.Po
 	-rm -f ./$(DEPDIR)/ulvisor_hostops.Po
 	-rm -f ./$(DEPDIR)/ulvisor_iomem.Po
-	-rm -f ./$(DEPDIR)/ulvisor_kernel.Po
-	-rm -f ./$(DEPDIR)/ulvisor_launch.Po
 	-rm -f ./$(DEPDIR)/ulvisor_longjmp.Po
 	-rm -f ./$(DEPDIR)/ulvisor_net.Po
 	-rm -f ./$(DEPDIR)/ulvisor_pure_thread.Po
+	-rm -f ./$(DEPDIR)/ulvisor_syscall.Po
 	-rm -f ./$(DEPDIR)/ulvisor_thread.Po
 	-rm -f ./$(DEPDIR)/ulvisor_virtio.Po
 	-rm -f ./$(DEPDIR)/ulvisor_virtio_blk.Po
@@ -717,7 +668,7 @@ install-dvi: install-dvi-recursive
 
 install-dvi-am:
 
-install-exec-am: install-binPROGRAMS
+install-exec-am:
 
 install-html: install-html-recursive
 
@@ -742,19 +693,14 @@ installcheck-am:
 maintainer-clean: maintainer-clean-recursive
 		-rm -f ./$(DEPDIR)/block_attach.Po
 	-rm -f ./$(DEPDIR)/tap_attach.Po
-	-rm -f ./$(DEPDIR)/ulvisor.Po
-	-rm -f ./$(DEPDIR)/ulvisor_app.Po
 	-rm -f ./$(DEPDIR)/ulvisor_block.Po
 	-rm -f ./$(DEPDIR)/ulvisor_clockevent.Po
-	-rm -f ./$(DEPDIR)/ulvisor_core.Po
-	-rm -f ./$(DEPDIR)/ulvisor_elf.Po
 	-rm -f ./$(DEPDIR)/ulvisor_hostops.Po
 	-rm -f ./$(DEPDIR)/ulvisor_iomem.Po
-	-rm -f ./$(DEPDIR)/ulvisor_kernel.Po
-	-rm -f ./$(DEPDIR)/ulvisor_launch.Po
 	-rm -f ./$(DEPDIR)/ulvisor_longjmp.Po
 	-rm -f ./$(DEPDIR)/ulvisor_net.Po
 	-rm -f ./$(DEPDIR)/ulvisor_pure_thread.Po
+	-rm -f ./$(DEPDIR)/ulvisor_syscall.Po
 	-rm -f ./$(DEPDIR)/ulvisor_thread.Po
 	-rm -f ./$(DEPDIR)/ulvisor_virtio.Po
 	-rm -f ./$(DEPDIR)/ulvisor_virtio_blk.Po
@@ -775,24 +721,23 @@ ps: ps-recursive
 
 ps-am:
 
-uninstall-am: uninstall-binPROGRAMS
+uninstall-am:
 
 .MAKE: $(am__recursive_targets) install-am install-strip
 
 .PHONY: $(am__recursive_targets) CTAGS GTAGS TAGS all all-am \
-	am--depfiles check check-am clean clean-binPROGRAMS \
-	clean-generic cscopelist-am ctags ctags-am distclean \
+	am--depfiles check check-am clean clean-generic \
+	clean-noinstLIBRARIES cscopelist-am ctags ctags-am distclean \
 	distclean-compile distclean-generic distclean-tags distdir dvi \
 	dvi-am html html-am info info-am install install-am \
-	install-binPROGRAMS install-data install-data-am install-dvi \
-	install-dvi-am install-exec install-exec-am install-html \
-	install-html-am install-info install-info-am install-man \
-	install-pdf install-pdf-am install-ps install-ps-am \
-	install-strip installcheck installcheck-am installdirs \
-	installdirs-am maintainer-clean maintainer-clean-generic \
-	mostlyclean mostlyclean-compile mostlyclean-generic pdf pdf-am \
-	ps ps-am tags tags-am uninstall uninstall-am \
-	uninstall-binPROGRAMS
+	install-data install-data-am install-dvi install-dvi-am \
+	install-exec install-exec-am install-html install-html-am \
+	install-info install-info-am install-man install-pdf \
+	install-pdf-am install-ps install-ps-am install-strip \
+	installcheck installcheck-am installdirs installdirs-am \
+	maintainer-clean maintainer-clean-generic mostlyclean \
+	mostlyclean-compile mostlyclean-generic pdf pdf-am ps ps-am \
+	tags tags-am uninstall uninstall-am
 
 .PRECIOUS: Makefile
 
