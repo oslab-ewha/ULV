@@ -293,7 +293,7 @@ target_alias = @target_alias@
 top_build_prefix = @top_build_prefix@
 top_builddir = @top_builddir@
 top_srcdir = @top_srcdir@
-SUBDIRS = ulvisor micro_benchmarks
+SUBDIRS = libulv micro_benchmarks
 all: config.h
 	$(MAKE) $(AM_MAKEFLAGS) all-recursive
 
@@ -769,16 +769,13 @@ uninstall-am:
 .PRECIOUS: Makefile
 
 
-prep: musl/lib/libc.a lkl/tools/lkl/liblkl.a
+prep: musl/lib/libc.a
 
 musl/lib/libc.a: musl/config.mak
 	cd musl && make
 
 musl/config.mak:
 	cd musl && ./configure
-
-lkl/tools/lkl/liblkl.a:
-	cd lkl/tools/lkl && make
 
 # Tell versions [3.59,3.63) of GNU make to not export all variables.
 # Otherwise a system limit (for SysV at least) may be exceeded.

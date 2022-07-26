@@ -232,7 +232,11 @@ test -d "$srcdir/src/malloc/$malloc_dir" \
 test "$target" && \
 test "$target" != "$build" && \
 test -z "$CROSS_COMPILE" && \
-CROSS_COMPILE="$target-"
+if [ "$target" = "x86_64-ulv" ]; then
+  CROSS_COMPILE=
+else
+  CROSS_COMPILE="$target-"
+fi
 
 #
 # Find a C compiler to use

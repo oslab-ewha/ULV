@@ -16,7 +16,7 @@
 /macro_benchmarks/manifest.c
 /macro_benchmarks/manifest-wget.c
 /Makefile
+/libulv/Makefile
+/libulv/libulv.a
 /ulvisor/Makefile
-/ulvisor/libulvisor.a
 /ulvisor/libuc/Makefile
-/ulvisor/libuc/libuc.a

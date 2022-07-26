@@ -14,7 +14,6 @@
 
 @SET_MAKE@
 
-
 VPATH = @srcdir@
 am__is_gnu_make = { \
   if test -z '$(MAKELEVEL)'; then \
@@ -87,8 +86,7 @@ POST_INSTALL = :
 NORMAL_UNINSTALL = :
 PRE_UNINSTALL = :
 POST_UNINSTALL = :
-noinst_PROGRAMS = mb_syscall$(EXEEXT) mb_network$(EXEEXT)
-subdir = micro_benchmarks
+subdir = libulv
 ACLOCAL_M4 = $(top_srcdir)/aclocal.m4
 am__aclocal_m4_deps = $(top_srcdir)/configure.ac
 am__configure_deps = $(am__aclocal_m4_deps) $(CONFIGURE_DEPENDENCIES) \
@@ -98,7 +96,6 @@ mkinstalldirs = $(install_sh) -d
 CONFIG_HEADER = $(top_builddir)/config.h
 CONFIG_CLEAN_FILES =
 CONFIG_CLEAN_VPATH_FILES =
-PROGRAMS = $(noinst_PROGRAMS)
 LIBRARIES = $(noinst_LIBRARIES)
 AR = ar
 ARFLAGS = cru
@@ -106,19 +103,11 @@ AM_V_AR = $(am__v_AR_@AM_V@)
 am__v_AR_ = $(am__v_AR_@AM_DEFAULT_V@)
 am__v_AR_0 = @echo "  AR      " $@;
 am__v_AR_1 = 
-libmb_a_AR = $(AR) $(ARFLAGS)
-libmb_a_LIBADD =
-am_libmb_a_OBJECTS = libmb_stdio.$(OBJEXT) libmb_time.$(OBJEXT) \
-	libmb_net.$(OBJEXT)
-libmb_a_OBJECTS = $(am_libmb_a_OBJECTS)
-am_mb_network_OBJECTS = network_test.$(OBJEXT)
-mb_network_OBJECTS = $(am_mb_network_OBJECTS)
-mb_network_DEPENDENCIES = libmb.a ../libulv/libulv.a \
-	../musl/lib/libc.a ../libulv/libulv.a
-am_mb_syscall_OBJECTS = syscall_test.$(OBJEXT)
-mb_syscall_OBJECTS = $(am_mb_syscall_OBJECTS)
-mb_syscall_DEPENDENCIES = libmb.a ../libulv/libulv.a \
-	../musl/lib/libc.a ../libulv/libulv.a
+libulv_a_AR = $(AR) $(ARFLAGS)
+libulv_a_LIBADD =
+am_libulv_a_OBJECTS = ulv_syscall.$(OBJEXT) \
+	ulv_syscall_write.$(OBJEXT) ulv_syscall_uname.$(OBJEXT)
+libulv_a_OBJECTS = $(am_libulv_a_OBJECTS)
 AM_V_P = $(am__v_P_@AM_V@)
 am__v_P_ = $(am__v_P_@AM_DEFAULT_V@)
 am__v_P_0 = false
@@ -134,9 +123,9 @@ am__v_at_1 =
 DEFAULT_INCLUDES = -I.@am__isrc@ -I$(top_builddir)
 depcomp = $(SHELL) $(top_srcdir)/depcomp
 am__maybe_remake_depfiles = depfiles
-am__depfiles_remade = ./$(DEPDIR)/libmb_net.Po \
-	./$(DEPDIR)/libmb_stdio.Po ./$(DEPDIR)/libmb_time.Po \
-	./$(DEPDIR)/network_test.Po ./$(DEPDIR)/syscall_test.Po
+am__depfiles_remade = ./$(DEPDIR)/ulv_syscall.Po \
+	./$(DEPDIR)/ulv_syscall_uname.Po \
+	./$(DEPDIR)/ulv_syscall_write.Po
 am__mv = mv -f
 COMPILE = $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) \
 	$(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS)
@@ -150,10 +139,8 @@ AM_V_CCLD = $(am__v_CCLD_@AM_V@)
 am__v_CCLD_ = $(am__v_CCLD_@AM_DEFAULT_V@)
 am__v_CCLD_0 = @echo "  CCLD    " $@;
 am__v_CCLD_1 = 
-SOURCES = $(libmb_a_SOURCES) $(mb_network_SOURCES) \
-	$(mb_syscall_SOURCES)
-DIST_SOURCES = $(libmb_a_SOURCES) $(mb_network_SOURCES) \
-	$(mb_syscall_SOURCES)
+SOURCES = $(libulv_a_SOURCES)
+DIST_SOURCES = $(libulv_a_SOURCES)
 am__can_run_installinfo = \
   case $$AM_UPDATE_INFO_DIR in \
     n|no|NO) false;; \
@@ -192,7 +179,7 @@ CCAS = @CCAS@
 CCASDEPMODE = @CCASDEPMODE@
 CCASFLAGS = @CCASFLAGS@
 CCDEPMODE = @CCDEPMODE@
-CFLAGS = -g
+CFLAGS = @CFLAGS@
 CPP = @CPP@
 CPPFLAGS = @CPPFLAGS@
 CYGPATH_W = @CYGPATH_W@
@@ -275,15 +262,10 @@ top_builddir = @top_builddir@
 top_srcdir = @top_srcdir@
 CLEANFILES = *~
 DISTCLEANFILES = *~
-noinst_LIBRARIES = libmb.a
-common_LINK = musl-gcc -static -nolibc -o $@
-mb_syscall_SOURCES = syscall_test.c
-mb_syscall_LDADD = libmb.a ../libulv/libulv.a ../musl/lib/libc.a ../libulv/libulv.a
-mb_syscall_LINK = $(common_LINK)
-mb_network_SOURCES = network_test.c
-mb_network_LDADD = libmb.a ../libulv/libulv.a ../musl/lib/libc.a ../libulv/libulv.a
-mb_network_LINK = $(common_LINK)
-libmb_a_SOURCES = libmb_stdio.c libmb_time.c libmb_net.c
+noinst_LIBRARIES = libulv.a
+libulv_a_SOURCES = ulv_syscall.c ulv_syscall.h ulv_host_syscall.h \
+		ulv_syscall_write.c ulv_syscall_uname.c
+
 all: all-am
 
 .SUFFIXES:
@@ -297,9 +279,9 @@ $(srcdir)/Makefile.in: @MAINTAINER_MODE_TRUE@ $(srcdir)/Makefile.am  $(am__confi
 	      exit 1;; \
 	  esac; \
 	done; \
-	echo ' cd $(top_srcdir) && $(AUTOMAKE) --foreign micro_benchmarks/Makefile'; \
+	echo ' cd $(top_srcdir) && $(AUTOMAKE) --foreign libulv/Makefile'; \
 	$(am__cd) $(top_srcdir) && \
-	  $(AUTOMAKE) --foreign micro_benchmarks/Makefile
+	  $(AUTOMAKE) --foreign libulv/Makefile
 Makefile: $(srcdir)/Makefile.in $(top_builddir)/config.status
 	@case '$?' in \
 	  *config.status*) \
@@ -318,24 +300,13 @@ $(ACLOCAL_M4): @MAINTAINER_MODE_TRUE@ $(am__aclocal_m4_deps)
 	cd $(top_builddir) && $(MAKE) $(AM_MAKEFLAGS) am--refresh
 $(am__aclocal_m4_deps):
 
-clean-noinstPROGRAMS:
-	-test -z "$(noinst_PROGRAMS)" || rm -f $(noinst_PROGRAMS)
-
 clean-noinstLIBRARIES:
 	-test -z "$(noinst_LIBRARIES)" || rm -f $(noinst_LIBRARIES)
 
-libmb.a: $(libmb_a_OBJECTS) $(libmb_a_DEPENDENCIES) $(EXTRA_libmb_a_DEPENDENCIES) 
-	$(AM_V_at)-rm -f libmb.a
-	$(AM_V_AR)$(libmb_a_AR) libmb.a $(libmb_a_OBJECTS) $(libmb_a_LIBADD)
-	$(AM_V_at)$(RANLIB) libmb.a
-
-mb_network$(EXEEXT): $(mb_network_OBJECTS) $(mb_network_DEPENDENCIES) $(EXTRA_mb_network_DEPENDENCIES) 
-	@rm -f mb_network$(EXEEXT)
-	$(AM_V_GEN)$(mb_network_LINK) $(mb_network_OBJECTS) $(mb_network_LDADD) $(LIBS)
-
-mb_syscall$(EXEEXT): $(mb_syscall_OBJECTS) $(mb_syscall_DEPENDENCIES) $(EXTRA_mb_syscall_DEPENDENCIES) 
-	@rm -f mb_syscall$(EXEEXT)
-	$(AM_V_GEN)$(mb_syscall_LINK) $(mb_syscall_OBJECTS) $(mb_syscall_LDADD) $(LIBS)
+libulv.a: $(libulv_a_OBJECTS) $(libulv_a_DEPENDENCIES) $(EXTRA_libulv_a_DEPENDENCIES) 
+	$(AM_V_at)-rm -f libulv.a
+	$(AM_V_AR)$(libulv_a_AR) libulv.a $(libulv_a_OBJECTS) $(libulv_a_LIBADD)
+	$(AM_V_at)$(RANLIB) libulv.a
 
 mostlyclean-compile:
 	-rm -f *.$(OBJEXT)
@@ -343,11 +314,9 @@ mostlyclean-compile:
 distclean-compile:
 	-rm -f *.tab.c
 
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libmb_net.Po@am__quote@ # am--include-marker
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libmb_stdio.Po@am__quote@ # am--include-marker
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libmb_time.Po@am__quote@ # am--include-marker
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/network_test.Po@am__quote@ # am--include-marker
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/syscall_test.Po@am__quote@ # am--include-marker
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/ulv_syscall.Po@am__quote@ # am--include-marker
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/ulv_syscall_uname.Po@am__quote@ # am--include-marker
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/ulv_syscall_write.Po@am__quote@ # am--include-marker
 
 $(am__depfiles_remade):
 	@$(MKDIR_P) $(@D)
@@ -456,7 +425,7 @@ distdir-am: $(DISTFILES)
 	done
 check-am: all-am
 check: check-am
-all-am: Makefile $(PROGRAMS) $(LIBRARIES)
+all-am: Makefile $(LIBRARIES)
 installdirs:
 install: install-am
 install-exec: install-exec-am
@@ -492,15 +461,12 @@ maintainer-clean-generic:
 	@echo "it deletes files that may require special tools to rebuild."
 clean: clean-am
 
-clean-am: clean-generic clean-noinstLIBRARIES clean-noinstPROGRAMS \
-	mostlyclean-am
+clean-am: clean-generic clean-noinstLIBRARIES mostlyclean-am
 
 distclean: distclean-am
-		-rm -f ./$(DEPDIR)/libmb_net.Po
-	-rm -f ./$(DEPDIR)/libmb_stdio.Po
-	-rm -f ./$(DEPDIR)/libmb_time.Po
-	-rm -f ./$(DEPDIR)/network_test.Po
-	-rm -f ./$(DEPDIR)/syscall_test.Po
+		-rm -f ./$(DEPDIR)/ulv_syscall.Po
+	-rm -f ./$(DEPDIR)/ulv_syscall_uname.Po
+	-rm -f ./$(DEPDIR)/ulv_syscall_write.Po
 	-rm -f Makefile
 distclean-am: clean-am distclean-compile distclean-generic \
 	distclean-tags
@@ -546,11 +512,9 @@ install-ps-am:
 installcheck-am:
 
 maintainer-clean: maintainer-clean-am
-		-rm -f ./$(DEPDIR)/libmb_net.Po
-	-rm -f ./$(DEPDIR)/libmb_stdio.Po
-	-rm -f ./$(DEPDIR)/libmb_time.Po
-	-rm -f ./$(DEPDIR)/network_test.Po
-	-rm -f ./$(DEPDIR)/syscall_test.Po
+		-rm -f ./$(DEPDIR)/ulv_syscall.Po
+	-rm -f ./$(DEPDIR)/ulv_syscall_uname.Po
+	-rm -f ./$(DEPDIR)/ulv_syscall_write.Po
 	-rm -f Makefile
 maintainer-clean-am: distclean-am maintainer-clean-generic
 
@@ -571,18 +535,17 @@ uninstall-am:
 .MAKE: install-am install-strip
 
 .PHONY: CTAGS GTAGS TAGS all all-am am--depfiles check check-am clean \
-	clean-generic clean-noinstLIBRARIES clean-noinstPROGRAMS \
-	cscopelist-am ctags ctags-am distclean distclean-compile \
-	distclean-generic distclean-tags distdir dvi dvi-am html \
-	html-am info info-am install install-am install-data \
-	install-data-am install-dvi install-dvi-am install-exec \
-	install-exec-am install-html install-html-am install-info \
-	install-info-am install-man install-pdf install-pdf-am \
-	install-ps install-ps-am install-strip installcheck \
-	installcheck-am installdirs maintainer-clean \
-	maintainer-clean-generic mostlyclean mostlyclean-compile \
-	mostlyclean-generic pdf pdf-am ps ps-am tags tags-am uninstall \
-	uninstall-am
+	clean-generic clean-noinstLIBRARIES cscopelist-am ctags \
+	ctags-am distclean distclean-compile distclean-generic \
+	distclean-tags distdir dvi dvi-am html html-am info info-am \
+	install install-am install-data install-data-am install-dvi \
+	install-dvi-am install-exec install-exec-am install-html \
+	install-html-am install-info install-info-am install-man \
+	install-pdf install-pdf-am install-ps install-ps-am \
+	install-strip installcheck installcheck-am installdirs \
+	maintainer-clean maintainer-clean-generic mostlyclean \
+	mostlyclean-compile mostlyclean-generic pdf pdf-am ps ps-am \
+	tags tags-am uninstall uninstall-am
 
 .PRECIOUS: Makefile
 

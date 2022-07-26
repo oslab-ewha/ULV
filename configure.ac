@@ -3,7 +3,7 @@
 
 AC_PREREQ([2.69])
 AC_INIT([ulv], [0.1.0], [cezanne@codemayo.com])
-AC_CONFIG_SRCDIR([ulvisor/ulvisor.c])
+AC_CONFIG_SRCDIR([libulv/ulv_syscall.c])
 AC_CONFIG_HEADERS([config.h])
 
 AM_INIT_AUTOMAKE([foreign])
@@ -29,8 +29,7 @@ AC_DEFINE(_GNU_SOURCE, [], [GNU Supported Code])
 # Checks for library functions.
 
 AC_CONFIG_FILES([Makefile
-                 ulvisor/Makefile
-                 ulvisor/libuc/Makefile
+                 libulv/Makefile
 		 micro_benchmarks/Makefile
 		 ])
 
