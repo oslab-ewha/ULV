@@ -1,3 +1,10 @@
+__attribute__((weak))
+long
+ulv_syscall(long no, long *args)
+{
+	return -1;
+}
+
 #define _BSD_SOURCE
 #include <unistd.h>
 #include "syscall.h"

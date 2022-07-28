@@ -5,14 +5,15 @@ noinst_LIBRARIES = libmb.a
 noinst_PROGRAMS = mb_syscall mb_network
 
 CFLAGS = -g
-common_LINK = musl-gcc -static -nolibc -o $@
+whole_libulv = -Wl,--whole-archive ../libulv/libulv.a -Wl,--no-whole-archive
+common_LINK = musl-gcc -static -nolibc -o $@ $(whole_libulv)
 
 mb_syscall_SOURCES = syscall_test.c
-mb_syscall_LDADD = libmb.a ../libulv/libulv.a ../musl/lib/libc.a ../libulv/libulv.a
+mb_syscall_LDADD = libmb.a ../lwip-build/liblwip.a ../musl/lib/libc.a
 mb_syscall_LINK = $(common_LINK)
 
 mb_network_SOURCES = network_test.c
-mb_network_LDADD = libmb.a ../libulv/libulv.a ../musl/lib/libc.a ../libulv/libulv.a
+mb_network_LDADD = libmb.a ../lwip-build/liblwip.a ../musl/lib/libc.a
 mb_network_LINK = $(common_LINK)
 
 libmb_a_SOURCES = libmb_stdio.c libmb_time.c libmb_net.c

@@ -107,7 +107,8 @@ libulv_a_AR = $(AR) $(ARFLAGS)
 libulv_a_LIBADD =
 am_libulv_a_OBJECTS = ulv_syscall.$(OBJEXT) \
 	ulv_syscall_write.$(OBJEXT) ulv_syscall_uname.$(OBJEXT) \
-	ulv_syscall_mmap.$(OBJEXT) \
+	ulv_syscall_exit.$(OBJEXT) ulv_syscall_ioctl.$(OBJEXT) \
+	ulv_syscall_socket.$(OBJEXT) ulv_syscall_mmap.$(OBJEXT) \
 	ulv_syscall_set_tid_address.$(OBJEXT)
 libulv_a_OBJECTS = $(am_libulv_a_OBJECTS)
 AM_V_P = $(am__v_P_@AM_V@)
@@ -126,8 +127,11 @@ DEFAULT_INCLUDES = -I.@am__isrc@ -I$(top_builddir)
 depcomp = $(SHELL) $(top_srcdir)/depcomp
 am__maybe_remake_depfiles = depfiles
 am__depfiles_remade = ./$(DEPDIR)/ulv_syscall.Po \
+	./$(DEPDIR)/ulv_syscall_exit.Po \
+	./$(DEPDIR)/ulv_syscall_ioctl.Po \
 	./$(DEPDIR)/ulv_syscall_mmap.Po \
 	./$(DEPDIR)/ulv_syscall_set_tid_address.Po \
+	./$(DEPDIR)/ulv_syscall_socket.Po \
 	./$(DEPDIR)/ulv_syscall_uname.Po \
 	./$(DEPDIR)/ulv_syscall_write.Po
 am__mv = mv -f
@@ -270,6 +274,7 @@ noinst_LIBRARIES = libulv.a
 libulv_a_SOURCES = ulv_types.h ulv_assert.h \
 		ulv_syscall.c ulv_syscall.h ulv_syscall_no.h ulv_host_syscall.h \
 		ulv_syscall_write.c ulv_syscall_uname.c \
+		ulv_syscall_exit.c ulv_syscall_ioctl.c ulv_syscall_socket.c \
 		ulv_syscall_mmap.c ulv_syscall_set_tid_address.c
 
 all: all-am
@@ -321,8 +326,11 @@ distclean-compile:
 	-rm -f *.tab.c
 
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/ulv_syscall.Po@am__quote@ # am--include-marker
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/ulv_syscall_exit.Po@am__quote@ # am--include-marker
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/ulv_syscall_ioctl.Po@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/ulv_syscall_mmap.Po@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/ulv_syscall_set_tid_address.Po@am__quote@ # am--include-marker
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/ulv_syscall_socket.Po@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/ulv_syscall_uname.Po@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/ulv_syscall_write.Po@am__quote@ # am--include-marker
 
@@ -473,8 +481,11 @@ clean-am: clean-generic clean-noinstLIBRARIES mostlyclean-am
 
 distclean: distclean-am
 		-rm -f ./$(DEPDIR)/ulv_syscall.Po
+	-rm -f ./$(DEPDIR)/ulv_syscall_exit.Po
+	-rm -f ./$(DEPDIR)/ulv_syscall_ioctl.Po
 	-rm -f ./$(DEPDIR)/ulv_syscall_mmap.Po
 	-rm -f ./$(DEPDIR)/ulv_syscall_set_tid_address.Po
+	-rm -f ./$(DEPDIR)/ulv_syscall_socket.Po
 	-rm -f ./$(DEPDIR)/ulv_syscall_uname.Po
 	-rm -f ./$(DEPDIR)/ulv_syscall_write.Po
 	-rm -f Makefile
@@ -523,8 +534,11 @@ installcheck-am:
 
 maintainer-clean: maintainer-clean-am
 		-rm -f ./$(DEPDIR)/ulv_syscall.Po
+	-rm -f ./$(DEPDIR)/ulv_syscall_exit.Po
+	-rm -f ./$(DEPDIR)/ulv_syscall_ioctl.Po
 	-rm -f ./$(DEPDIR)/ulv_syscall_mmap.Po
 	-rm -f ./$(DEPDIR)/ulv_syscall_set_tid_address.Po
+	-rm -f ./$(DEPDIR)/ulv_syscall_socket.Po
 	-rm -f ./$(DEPDIR)/ulv_syscall_uname.Po
 	-rm -f ./$(DEPDIR)/ulv_syscall_write.Po
 	-rm -f Makefile
