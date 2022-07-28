@@ -19,3 +19,9 @@ ulv_syscall_munmap(void *addr, size_t length)
 {
 	return (int)__syscall2(__NR_munmap, (long)addr, (long)length);
 }
+
+int
+ulv_syscall_mprotect(void *addr, size_t len, int prot)
+{
+	return (int)__syscall3(__NR_mprotect, (long)addr, (long)len, (long)prot);
+}

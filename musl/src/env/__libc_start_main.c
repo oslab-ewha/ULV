@@ -85,10 +85,17 @@ int __libc_start_main(int (*main)(int,char **,char **), int argc, char **argv)
 	return stage2(main, argc, argv);
 }
 
+void __attribute__((__weak__))
+init_ulv(void)
+{
+}
+
 static int libc_start_main_stage2(int (*main)(int,char **,char **), int argc, char **argv)
 {
 	char **envp = argv+argc+1;
 	__libc_start_init();
+
+	init_ulv();
 
 	/* Pass control to the application */
 	exit(main(argc, argv, envp));

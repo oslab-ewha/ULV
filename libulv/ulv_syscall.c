@@ -11,10 +11,14 @@ ulv_syscall(long n, long *args)
 		return ulv_syscall_write(args[0], args[1], args[2]);
 	case __NR_mmap:
 		return ulv_syscall_mmap(args[0], args[1], args[2], args[3], args[4], args[5]);
+	case __NR_mprotect:
+		return ulv_syscall_mprotect(args[0], args[1], args[2]);
 	case __NR_munmap:
 		return ulv_syscall_munmap(args[0], args[1]);
 	case __NR_brk:
 		return ulv_syscall_brk(args[0]);
+	case __NR_rt_sigprocmask:
+		return 0;
 	case __NR_ioctl:
 		return ulv_syscall_ioctl(args[0], args[1], args[2]);
 	case __NR_writev:

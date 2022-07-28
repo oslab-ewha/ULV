@@ -76,6 +76,8 @@ set(lwipcontribportunix_SRCS
     ${LWIP_DIR}/contrib/ports/unix/port/perf.c
 )
 
+set(CMAKE_C_FLAGS_DEBUG "-O0 -ggdb")
+
 set(liblwip_SRCS ${lwipcore_SRCS} ${lwipcore4_SRCS} ${lwipcore6_SRCS}
 	${lwipnetif_SRCS} ${lwipapi_SRCS}
        	${lwipcontribportunix_SRCS})
