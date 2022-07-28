@@ -20,3 +20,7 @@
 /libulv/libulv.a
 /ulvisor/Makefile
 /ulvisor/libuc/Makefile
+/lwip-build/CMakeCache.txt
+/lwip-build/CMakeFiles
+/lwip-build/cmake_install.cmake
+/lwip-build/liblwip.a
