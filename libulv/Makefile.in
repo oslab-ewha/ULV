@@ -105,11 +105,13 @@ am__v_AR_0 = @echo "  AR      " $@;
 am__v_AR_1 = 
 libulv_a_AR = $(AR) $(ARFLAGS)
 libulv_a_LIBADD =
-am_libulv_a_OBJECTS = ulv_init.$(OBJEXT) ulv_syscall.$(OBJEXT) \
+am_libulv_a_OBJECTS = ulv_init.$(OBJEXT) ulv_thread.$(OBJEXT) \
+	ulv_longjmp.$(OBJEXT) ulv_syscall.$(OBJEXT) \
 	ulv_syscall_write.$(OBJEXT) ulv_syscall_uname.$(OBJEXT) \
 	ulv_syscall_exit.$(OBJEXT) ulv_syscall_ioctl.$(OBJEXT) \
 	ulv_syscall_socket.$(OBJEXT) ulv_syscall_mmap.$(OBJEXT) \
-	ulv_syscall_set_tid_address.$(OBJEXT)
+	ulv_syscall_set_tid_address.$(OBJEXT) \
+	ulv_syscall_clone.$(OBJEXT) ulv_syscall_futex.$(OBJEXT)
 libulv_a_OBJECTS = $(am_libulv_a_OBJECTS)
 AM_V_P = $(am__v_P_@AM_V@)
 am__v_P_ = $(am__v_P_@AM_DEFAULT_V@)
@@ -127,14 +129,23 @@ DEFAULT_INCLUDES = -I.@am__isrc@ -I$(top_builddir)
 depcomp = $(SHELL) $(top_srcdir)/depcomp
 am__maybe_remake_depfiles = depfiles
 am__depfiles_remade = ./$(DEPDIR)/ulv_init.Po \
-	./$(DEPDIR)/ulv_syscall.Po ./$(DEPDIR)/ulv_syscall_exit.Po \
+	./$(DEPDIR)/ulv_longjmp.Po ./$(DEPDIR)/ulv_syscall.Po \
+	./$(DEPDIR)/ulv_syscall_clone.Po \
+	./$(DEPDIR)/ulv_syscall_exit.Po \
+	./$(DEPDIR)/ulv_syscall_futex.Po \
 	./$(DEPDIR)/ulv_syscall_ioctl.Po \
 	./$(DEPDIR)/ulv_syscall_mmap.Po \
 	./$(DEPDIR)/ulv_syscall_set_tid_address.Po \
 	./$(DEPDIR)/ulv_syscall_socket.Po \
 	./$(DEPDIR)/ulv_syscall_uname.Po \
-	./$(DEPDIR)/ulv_syscall_write.Po
+	./$(DEPDIR)/ulv_syscall_write.Po ./$(DEPDIR)/ulv_thread.Po
 am__mv = mv -f
+CPPASCOMPILE = $(CCAS) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) \
+	$(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CCASFLAGS) $(CCASFLAGS)
+AM_V_CPPAS = $(am__v_CPPAS_@AM_V@)
+am__v_CPPAS_ = $(am__v_CPPAS_@AM_DEFAULT_V@)
+am__v_CPPAS_0 = @echo "  CPPAS   " $@;
+am__v_CPPAS_1 = 
 COMPILE = $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) \
 	$(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS)
 AM_V_CC = $(am__v_CC_@AM_V@)
@@ -271,16 +282,17 @@ top_srcdir = @top_srcdir@
 CLEANFILES = *~
 DISTCLEANFILES = *~
 noinst_LIBRARIES = libulv.a
-libulv_a_SOURCES = ulv_init.c ulv_types.h ulv_assert.h \
+libulv_a_SOURCES = ulv_init.c ulv_thread.c ulv_thread.h ulv_longjmp.S ulv_types.h ulv_assert.h \
 		ulv_syscall.c ulv_syscall.h ulv_syscall_no.h ulv_host_syscall.h \
 		ulv_syscall_write.c ulv_syscall_uname.c \
 		ulv_syscall_exit.c ulv_syscall_ioctl.c ulv_syscall_socket.c \
-		ulv_syscall_mmap.c ulv_syscall_set_tid_address.c
+		ulv_syscall_mmap.c ulv_syscall_set_tid_address.c \
+		ulv_syscall_clone.c ulv_syscall_futex.c
 
 all: all-am
 
 .SUFFIXES:
-.SUFFIXES: .c .o .obj
+.SUFFIXES: .S .c .o .obj
 $(srcdir)/Makefile.in: @MAINTAINER_MODE_TRUE@ $(srcdir)/Makefile.am  $(am__configure_deps)
 	@for dep in $?; do \
 	  case '$(am__configure_deps)' in \
@@ -326,20 +338,38 @@ distclean-compile:
 	-rm -f *.tab.c
 
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/ulv_init.Po@am__quote@ # am--include-marker
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/ulv_longjmp.Po@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/ulv_syscall.Po@am__quote@ # am--include-marker
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/ulv_syscall_clone.Po@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/ulv_syscall_exit.Po@am__quote@ # am--include-marker
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/ulv_syscall_futex.Po@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/ulv_syscall_ioctl.Po@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/ulv_syscall_mmap.Po@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/ulv_syscall_set_tid_address.Po@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/ulv_syscall_socket.Po@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/ulv_syscall_uname.Po@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/ulv_syscall_write.Po@am__quote@ # am--include-marker
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/ulv_thread.Po@am__quote@ # am--include-marker
 
 $(am__depfiles_remade):
 	@$(MKDIR_P) $(@D)
 	@echo '# dummy' >$@-t && $(am__mv) $@-t $@
 
 am--depfiles: $(am__depfiles_remade)
+
+.S.o:
+@am__fastdepCCAS_TRUE@	$(AM_V_CPPAS)$(CPPASCOMPILE) -MT $@ -MD -MP -MF $(DEPDIR)/$*.Tpo -c -o $@ $<
+@am__fastdepCCAS_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/$*.Tpo $(DEPDIR)/$*.Po
+@AMDEP_TRUE@@am__fastdepCCAS_FALSE@	$(AM_V_CPPAS)source='$<' object='$@' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCCAS_FALSE@	DEPDIR=$(DEPDIR) $(CCASDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCCAS_FALSE@	$(AM_V_CPPAS@am__nodep@)$(CPPASCOMPILE) -c -o $@ $<
+
+.S.obj:
+@am__fastdepCCAS_TRUE@	$(AM_V_CPPAS)$(CPPASCOMPILE) -MT $@ -MD -MP -MF $(DEPDIR)/$*.Tpo -c -o $@ `$(CYGPATH_W) '$<'`
+@am__fastdepCCAS_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/$*.Tpo $(DEPDIR)/$*.Po
+@AMDEP_TRUE@@am__fastdepCCAS_FALSE@	$(AM_V_CPPAS)source='$<' object='$@' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCCAS_FALSE@	DEPDIR=$(DEPDIR) $(CCASDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCCAS_FALSE@	$(AM_V_CPPAS@am__nodep@)$(CPPASCOMPILE) -c -o $@ `$(CYGPATH_W) '$<'`
 
 .c.o:
 @am__fastdepCC_TRUE@	$(AM_V_CC)$(COMPILE) -MT $@ -MD -MP -MF $(DEPDIR)/$*.Tpo -c -o $@ $<
@@ -482,14 +512,18 @@ clean-am: clean-generic clean-noinstLIBRARIES mostlyclean-am
 
 distclean: distclean-am
 		-rm -f ./$(DEPDIR)/ulv_init.Po
+	-rm -f ./$(DEPDIR)/ulv_longjmp.Po
 	-rm -f ./$(DEPDIR)/ulv_syscall.Po
+	-rm -f ./$(DEPDIR)/ulv_syscall_clone.Po
 	-rm -f ./$(DEPDIR)/ulv_syscall_exit.Po
+	-rm -f ./$(DEPDIR)/ulv_syscall_futex.Po
 	-rm -f ./$(DEPDIR)/ulv_syscall_ioctl.Po
 	-rm -f ./$(DEPDIR)/ulv_syscall_mmap.Po
 	-rm -f ./$(DEPDIR)/ulv_syscall_set_tid_address.Po
 	-rm -f ./$(DEPDIR)/ulv_syscall_socket.Po
 	-rm -f ./$(DEPDIR)/ulv_syscall_uname.Po
 	-rm -f ./$(DEPDIR)/ulv_syscall_write.Po
+	-rm -f ./$(DEPDIR)/ulv_thread.Po
 	-rm -f Makefile
 distclean-am: clean-am distclean-compile distclean-generic \
 	distclean-tags
@@ -536,14 +570,18 @@ installcheck-am:
 
 maintainer-clean: maintainer-clean-am
 		-rm -f ./$(DEPDIR)/ulv_init.Po
+	-rm -f ./$(DEPDIR)/ulv_longjmp.Po
 	-rm -f ./$(DEPDIR)/ulv_syscall.Po
+	-rm -f ./$(DEPDIR)/ulv_syscall_clone.Po
 	-rm -f ./$(DEPDIR)/ulv_syscall_exit.Po
+	-rm -f ./$(DEPDIR)/ulv_syscall_futex.Po
 	-rm -f ./$(DEPDIR)/ulv_syscall_ioctl.Po
 	-rm -f ./$(DEPDIR)/ulv_syscall_mmap.Po
 	-rm -f ./$(DEPDIR)/ulv_syscall_set_tid_address.Po
 	-rm -f ./$(DEPDIR)/ulv_syscall_socket.Po
 	-rm -f ./$(DEPDIR)/ulv_syscall_uname.Po
 	-rm -f ./$(DEPDIR)/ulv_syscall_write.Po
+	-rm -f ./$(DEPDIR)/ulv_thread.Po
 	-rm -f Makefile
 maintainer-clean-am: distclean-am maintainer-clean-generic
 

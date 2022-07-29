@@ -19,7 +19,9 @@ DEF_ULV_SYSCALL(ioctl, 3);
 DEF_ULV_SYSCALL(writev, 3);
 DEF_ULV_SYSCALL(socket, 3);
 DEF_ULV_SYSCALL(uname, 1);
+DEF_ULV_SYSCALL(clone, 5);
 DEF_ULV_SYSCALL(exit, 1);
+DEF_ULV_SYSCALL(futex, 6);
 DEF_ULV_SYSCALL(set_tid_address, 1);
 DEF_ULV_SYSCALL(exit_group, 1);
 
