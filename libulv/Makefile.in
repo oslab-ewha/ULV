@@ -105,13 +105,20 @@ am__v_AR_0 = @echo "  AR      " $@;
 am__v_AR_1 = 
 libulv_a_AR = $(AR) $(ARFLAGS)
 libulv_a_LIBADD =
-am_libulv_a_OBJECTS = ulv_init.$(OBJEXT) ulv_thread.$(OBJEXT) \
-	ulv_longjmp.$(OBJEXT) ulv_syscall.$(OBJEXT) \
-	ulv_syscall_write.$(OBJEXT) ulv_syscall_uname.$(OBJEXT) \
-	ulv_syscall_exit.$(OBJEXT) ulv_syscall_ioctl.$(OBJEXT) \
-	ulv_syscall_socket.$(OBJEXT) ulv_syscall_mmap.$(OBJEXT) \
-	ulv_syscall_set_tid_address.$(OBJEXT) \
-	ulv_syscall_clone.$(OBJEXT) ulv_syscall_futex.$(OBJEXT)
+am_libulv_a_OBJECTS = libulv_a-ulv_init.$(OBJEXT) \
+	libulv_a-ulv_thread.$(OBJEXT) ulv_longjmp.$(OBJEXT) \
+	libulv_a-ulv_syscall.$(OBJEXT) \
+	libulv_a-ulv_syscall_open.$(OBJEXT) \
+	libulv_a-ulv_syscall_read.$(OBJEXT) \
+	libulv_a-ulv_syscall_write.$(OBJEXT) \
+	libulv_a-ulv_syscall_uname.$(OBJEXT) \
+	libulv_a-ulv_syscall_exit.$(OBJEXT) \
+	libulv_a-ulv_syscall_ioctl.$(OBJEXT) \
+	libulv_a-ulv_syscall_socket.$(OBJEXT) \
+	libulv_a-ulv_syscall_mmap.$(OBJEXT) \
+	libulv_a-ulv_syscall_set_tid_address.$(OBJEXT) \
+	libulv_a-ulv_syscall_clone.$(OBJEXT) \
+	libulv_a-ulv_syscall_futex.$(OBJEXT)
 libulv_a_OBJECTS = $(am_libulv_a_OBJECTS)
 AM_V_P = $(am__v_P_@AM_V@)
 am__v_P_ = $(am__v_P_@AM_DEFAULT_V@)
@@ -128,17 +135,20 @@ am__v_at_1 =
 DEFAULT_INCLUDES = -I.@am__isrc@ -I$(top_builddir)
 depcomp = $(SHELL) $(top_srcdir)/depcomp
 am__maybe_remake_depfiles = depfiles
-am__depfiles_remade = ./$(DEPDIR)/ulv_init.Po \
-	./$(DEPDIR)/ulv_longjmp.Po ./$(DEPDIR)/ulv_syscall.Po \
-	./$(DEPDIR)/ulv_syscall_clone.Po \
-	./$(DEPDIR)/ulv_syscall_exit.Po \
-	./$(DEPDIR)/ulv_syscall_futex.Po \
-	./$(DEPDIR)/ulv_syscall_ioctl.Po \
-	./$(DEPDIR)/ulv_syscall_mmap.Po \
-	./$(DEPDIR)/ulv_syscall_set_tid_address.Po \
-	./$(DEPDIR)/ulv_syscall_socket.Po \
-	./$(DEPDIR)/ulv_syscall_uname.Po \
-	./$(DEPDIR)/ulv_syscall_write.Po ./$(DEPDIR)/ulv_thread.Po
+am__depfiles_remade = ./$(DEPDIR)/libulv_a-ulv_init.Po \
+	./$(DEPDIR)/libulv_a-ulv_syscall.Po \
+	./$(DEPDIR)/libulv_a-ulv_syscall_clone.Po \
+	./$(DEPDIR)/libulv_a-ulv_syscall_exit.Po \
+	./$(DEPDIR)/libulv_a-ulv_syscall_futex.Po \
+	./$(DEPDIR)/libulv_a-ulv_syscall_ioctl.Po \
+	./$(DEPDIR)/libulv_a-ulv_syscall_mmap.Po \
+	./$(DEPDIR)/libulv_a-ulv_syscall_open.Po \
+	./$(DEPDIR)/libulv_a-ulv_syscall_read.Po \
+	./$(DEPDIR)/libulv_a-ulv_syscall_set_tid_address.Po \
+	./$(DEPDIR)/libulv_a-ulv_syscall_socket.Po \
+	./$(DEPDIR)/libulv_a-ulv_syscall_uname.Po \
+	./$(DEPDIR)/libulv_a-ulv_syscall_write.Po \
+	./$(DEPDIR)/libulv_a-ulv_thread.Po ./$(DEPDIR)/ulv_longjmp.Po
 am__mv = mv -f
 CPPASCOMPILE = $(CCAS) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) \
 	$(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CCASFLAGS) $(CCASFLAGS)
@@ -146,6 +156,10 @@ AM_V_CPPAS = $(am__v_CPPAS_@AM_V@)
 am__v_CPPAS_ = $(am__v_CPPAS_@AM_DEFAULT_V@)
 am__v_CPPAS_0 = @echo "  CPPAS   " $@;
 am__v_CPPAS_1 = 
+AM_V_lt = $(am__v_lt_@AM_V@)
+am__v_lt_ = $(am__v_lt_@AM_DEFAULT_V@)
+am__v_lt_0 = --silent
+am__v_lt_1 = 
 COMPILE = $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) \
 	$(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS)
 AM_V_CC = $(am__v_CC_@AM_V@)
@@ -284,11 +298,12 @@ DISTCLEANFILES = *~
 noinst_LIBRARIES = libulv.a
 libulv_a_SOURCES = ulv_init.c ulv_thread.c ulv_thread.h ulv_longjmp.S ulv_types.h ulv_assert.h \
 		ulv_syscall.c ulv_syscall.h ulv_syscall_no.h ulv_host_syscall.h \
-		ulv_syscall_write.c ulv_syscall_uname.c \
+		ulv_syscall_open.c ulv_syscall_read.c ulv_syscall_write.c ulv_syscall_uname.c \
 		ulv_syscall_exit.c ulv_syscall_ioctl.c ulv_syscall_socket.c \
 		ulv_syscall_mmap.c ulv_syscall_set_tid_address.c \
 		ulv_syscall_clone.c ulv_syscall_futex.c
 
+libulv_a_CFLAGS = -I../lwip/src/include -I../lwip-build -I../lwip/contrib/ports/unix/port/include
 all: all-am
 
 .SUFFIXES:
@@ -337,19 +352,21 @@ mostlyclean-compile:
 distclean-compile:
 	-rm -f *.tab.c
 
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/ulv_init.Po@am__quote@ # am--include-marker
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libulv_a-ulv_init.Po@am__quote@ # am--include-marker
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libulv_a-ulv_syscall.Po@am__quote@ # am--include-marker
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libulv_a-ulv_syscall_clone.Po@am__quote@ # am--include-marker
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libulv_a-ulv_syscall_exit.Po@am__quote@ # am--include-marker
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libulv_a-ulv_syscall_futex.Po@am__quote@ # am--include-marker
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libulv_a-ulv_syscall_ioctl.Po@am__quote@ # am--include-marker
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libulv_a-ulv_syscall_mmap.Po@am__quote@ # am--include-marker
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libulv_a-ulv_syscall_open.Po@am__quote@ # am--include-marker
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libulv_a-ulv_syscall_read.Po@am__quote@ # am--include-marker
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libulv_a-ulv_syscall_set_tid_address.Po@am__quote@ # am--include-marker
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libulv_a-ulv_syscall_socket.Po@am__quote@ # am--include-marker
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libulv_a-ulv_syscall_uname.Po@am__quote@ # am--include-marker
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libulv_a-ulv_syscall_write.Po@am__quote@ # am--include-marker
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libulv_a-ulv_thread.Po@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/ulv_longjmp.Po@am__quote@ # am--include-marker
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/ulv_syscall.Po@am__quote@ # am--include-marker
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/ulv_syscall_clone.Po@am__quote@ # am--include-marker
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/ulv_syscall_exit.Po@am__quote@ # am--include-marker
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/ulv_syscall_futex.Po@am__quote@ # am--include-marker
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/ulv_syscall_ioctl.Po@am__quote@ # am--include-marker
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/ulv_syscall_mmap.Po@am__quote@ # am--include-marker
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/ulv_syscall_set_tid_address.Po@am__quote@ # am--include-marker
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/ulv_syscall_socket.Po@am__quote@ # am--include-marker
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/ulv_syscall_uname.Po@am__quote@ # am--include-marker
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/ulv_syscall_write.Po@am__quote@ # am--include-marker
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/ulv_thread.Po@am__quote@ # am--include-marker
 
 $(am__depfiles_remade):
 	@$(MKDIR_P) $(@D)
@@ -384,6 +401,202 @@ am--depfiles: $(am__depfiles_remade)
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='$<' object='$@' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
 @am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(COMPILE) -c -o $@ `$(CYGPATH_W) '$<'`
+
+libulv_a-ulv_init.o: ulv_init.c
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libulv_a_CFLAGS) $(CFLAGS) -MT libulv_a-ulv_init.o -MD -MP -MF $(DEPDIR)/libulv_a-ulv_init.Tpo -c -o libulv_a-ulv_init.o `test -f 'ulv_init.c' || echo '$(srcdir)/'`ulv_init.c
+@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/libulv_a-ulv_init.Tpo $(DEPDIR)/libulv_a-ulv_init.Po
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='ulv_init.c' object='libulv_a-ulv_init.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libulv_a_CFLAGS) $(CFLAGS) -c -o libulv_a-ulv_init.o `test -f 'ulv_init.c' || echo '$(srcdir)/'`ulv_init.c
+
+libulv_a-ulv_init.obj: ulv_init.c
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libulv_a_CFLAGS) $(CFLAGS) -MT libulv_a-ulv_init.obj -MD -MP -MF $(DEPDIR)/libulv_a-ulv_init.Tpo -c -o libulv_a-ulv_init.obj `if test -f 'ulv_init.c'; then $(CYGPATH_W) 'ulv_init.c'; else $(CYGPATH_W) '$(srcdir)/ulv_init.c'; fi`
+@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/libulv_a-ulv_init.Tpo $(DEPDIR)/libulv_a-ulv_init.Po
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='ulv_init.c' object='libulv_a-ulv_init.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libulv_a_CFLAGS) $(CFLAGS) -c -o libulv_a-ulv_init.obj `if test -f 'ulv_init.c'; then $(CYGPATH_W) 'ulv_init.c'; else $(CYGPATH_W) '$(srcdir)/ulv_init.c'; fi`
+
+libulv_a-ulv_thread.o: ulv_thread.c
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libulv_a_CFLAGS) $(CFLAGS) -MT libulv_a-ulv_thread.o -MD -MP -MF $(DEPDIR)/libulv_a-ulv_thread.Tpo -c -o libulv_a-ulv_thread.o `test -f 'ulv_thread.c' || echo '$(srcdir)/'`ulv_thread.c
+@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/libulv_a-ulv_thread.Tpo $(DEPDIR)/libulv_a-ulv_thread.Po
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='ulv_thread.c' object='libulv_a-ulv_thread.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libulv_a_CFLAGS) $(CFLAGS) -c -o libulv_a-ulv_thread.o `test -f 'ulv_thread.c' || echo '$(srcdir)/'`ulv_thread.c
+
+libulv_a-ulv_thread.obj: ulv_thread.c
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libulv_a_CFLAGS) $(CFLAGS) -MT libulv_a-ulv_thread.obj -MD -MP -MF $(DEPDIR)/libulv_a-ulv_thread.Tpo -c -o libulv_a-ulv_thread.obj `if test -f 'ulv_thread.c'; then $(CYGPATH_W) 'ulv_thread.c'; else $(CYGPATH_W) '$(srcdir)/ulv_thread.c'; fi`
+@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/libulv_a-ulv_thread.Tpo $(DEPDIR)/libulv_a-ulv_thread.Po
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='ulv_thread.c' object='libulv_a-ulv_thread.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libulv_a_CFLAGS) $(CFLAGS) -c -o libulv_a-ulv_thread.obj `if test -f 'ulv_thread.c'; then $(CYGPATH_W) 'ulv_thread.c'; else $(CYGPATH_W) '$(srcdir)/ulv_thread.c'; fi`
+
+libulv_a-ulv_syscall.o: ulv_syscall.c
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libulv_a_CFLAGS) $(CFLAGS) -MT libulv_a-ulv_syscall.o -MD -MP -MF $(DEPDIR)/libulv_a-ulv_syscall.Tpo -c -o libulv_a-ulv_syscall.o `test -f 'ulv_syscall.c' || echo '$(srcdir)/'`ulv_syscall.c
+@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/libulv_a-ulv_syscall.Tpo $(DEPDIR)/libulv_a-ulv_syscall.Po
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='ulv_syscall.c' object='libulv_a-ulv_syscall.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libulv_a_CFLAGS) $(CFLAGS) -c -o libulv_a-ulv_syscall.o `test -f 'ulv_syscall.c' || echo '$(srcdir)/'`ulv_syscall.c
+
+libulv_a-ulv_syscall.obj: ulv_syscall.c
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libulv_a_CFLAGS) $(CFLAGS) -MT libulv_a-ulv_syscall.obj -MD -MP -MF $(DEPDIR)/libulv_a-ulv_syscall.Tpo -c -o libulv_a-ulv_syscall.obj `if test -f 'ulv_syscall.c'; then $(CYGPATH_W) 'ulv_syscall.c'; else $(CYGPATH_W) '$(srcdir)/ulv_syscall.c'; fi`
+@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/libulv_a-ulv_syscall.Tpo $(DEPDIR)/libulv_a-ulv_syscall.Po
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='ulv_syscall.c' object='libulv_a-ulv_syscall.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libulv_a_CFLAGS) $(CFLAGS) -c -o libulv_a-ulv_syscall.obj `if test -f 'ulv_syscall.c'; then $(CYGPATH_W) 'ulv_syscall.c'; else $(CYGPATH_W) '$(srcdir)/ulv_syscall.c'; fi`
+
+libulv_a-ulv_syscall_open.o: ulv_syscall_open.c
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libulv_a_CFLAGS) $(CFLAGS) -MT libulv_a-ulv_syscall_open.o -MD -MP -MF $(DEPDIR)/libulv_a-ulv_syscall_open.Tpo -c -o libulv_a-ulv_syscall_open.o `test -f 'ulv_syscall_open.c' || echo '$(srcdir)/'`ulv_syscall_open.c
+@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/libulv_a-ulv_syscall_open.Tpo $(DEPDIR)/libulv_a-ulv_syscall_open.Po
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='ulv_syscall_open.c' object='libulv_a-ulv_syscall_open.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libulv_a_CFLAGS) $(CFLAGS) -c -o libulv_a-ulv_syscall_open.o `test -f 'ulv_syscall_open.c' || echo '$(srcdir)/'`ulv_syscall_open.c
+
+libulv_a-ulv_syscall_open.obj: ulv_syscall_open.c
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libulv_a_CFLAGS) $(CFLAGS) -MT libulv_a-ulv_syscall_open.obj -MD -MP -MF $(DEPDIR)/libulv_a-ulv_syscall_open.Tpo -c -o libulv_a-ulv_syscall_open.obj `if test -f 'ulv_syscall_open.c'; then $(CYGPATH_W) 'ulv_syscall_open.c'; else $(CYGPATH_W) '$(srcdir)/ulv_syscall_open.c'; fi`
+@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/libulv_a-ulv_syscall_open.Tpo $(DEPDIR)/libulv_a-ulv_syscall_open.Po
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='ulv_syscall_open.c' object='libulv_a-ulv_syscall_open.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libulv_a_CFLAGS) $(CFLAGS) -c -o libulv_a-ulv_syscall_open.obj `if test -f 'ulv_syscall_open.c'; then $(CYGPATH_W) 'ulv_syscall_open.c'; else $(CYGPATH_W) '$(srcdir)/ulv_syscall_open.c'; fi`
+
+libulv_a-ulv_syscall_read.o: ulv_syscall_read.c
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libulv_a_CFLAGS) $(CFLAGS) -MT libulv_a-ulv_syscall_read.o -MD -MP -MF $(DEPDIR)/libulv_a-ulv_syscall_read.Tpo -c -o libulv_a-ulv_syscall_read.o `test -f 'ulv_syscall_read.c' || echo '$(srcdir)/'`ulv_syscall_read.c
+@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/libulv_a-ulv_syscall_read.Tpo $(DEPDIR)/libulv_a-ulv_syscall_read.Po
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='ulv_syscall_read.c' object='libulv_a-ulv_syscall_read.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libulv_a_CFLAGS) $(CFLAGS) -c -o libulv_a-ulv_syscall_read.o `test -f 'ulv_syscall_read.c' || echo '$(srcdir)/'`ulv_syscall_read.c
+
+libulv_a-ulv_syscall_read.obj: ulv_syscall_read.c
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libulv_a_CFLAGS) $(CFLAGS) -MT libulv_a-ulv_syscall_read.obj -MD -MP -MF $(DEPDIR)/libulv_a-ulv_syscall_read.Tpo -c -o libulv_a-ulv_syscall_read.obj `if test -f 'ulv_syscall_read.c'; then $(CYGPATH_W) 'ulv_syscall_read.c'; else $(CYGPATH_W) '$(srcdir)/ulv_syscall_read.c'; fi`
+@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/libulv_a-ulv_syscall_read.Tpo $(DEPDIR)/libulv_a-ulv_syscall_read.Po
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='ulv_syscall_read.c' object='libulv_a-ulv_syscall_read.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libulv_a_CFLAGS) $(CFLAGS) -c -o libulv_a-ulv_syscall_read.obj `if test -f 'ulv_syscall_read.c'; then $(CYGPATH_W) 'ulv_syscall_read.c'; else $(CYGPATH_W) '$(srcdir)/ulv_syscall_read.c'; fi`
+
+libulv_a-ulv_syscall_write.o: ulv_syscall_write.c
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libulv_a_CFLAGS) $(CFLAGS) -MT libulv_a-ulv_syscall_write.o -MD -MP -MF $(DEPDIR)/libulv_a-ulv_syscall_write.Tpo -c -o libulv_a-ulv_syscall_write.o `test -f 'ulv_syscall_write.c' || echo '$(srcdir)/'`ulv_syscall_write.c
+@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/libulv_a-ulv_syscall_write.Tpo $(DEPDIR)/libulv_a-ulv_syscall_write.Po
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='ulv_syscall_write.c' object='libulv_a-ulv_syscall_write.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libulv_a_CFLAGS) $(CFLAGS) -c -o libulv_a-ulv_syscall_write.o `test -f 'ulv_syscall_write.c' || echo '$(srcdir)/'`ulv_syscall_write.c
+
+libulv_a-ulv_syscall_write.obj: ulv_syscall_write.c
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libulv_a_CFLAGS) $(CFLAGS) -MT libulv_a-ulv_syscall_write.obj -MD -MP -MF $(DEPDIR)/libulv_a-ulv_syscall_write.Tpo -c -o libulv_a-ulv_syscall_write.obj `if test -f 'ulv_syscall_write.c'; then $(CYGPATH_W) 'ulv_syscall_write.c'; else $(CYGPATH_W) '$(srcdir)/ulv_syscall_write.c'; fi`
+@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/libulv_a-ulv_syscall_write.Tpo $(DEPDIR)/libulv_a-ulv_syscall_write.Po
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='ulv_syscall_write.c' object='libulv_a-ulv_syscall_write.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libulv_a_CFLAGS) $(CFLAGS) -c -o libulv_a-ulv_syscall_write.obj `if test -f 'ulv_syscall_write.c'; then $(CYGPATH_W) 'ulv_syscall_write.c'; else $(CYGPATH_W) '$(srcdir)/ulv_syscall_write.c'; fi`
+
+libulv_a-ulv_syscall_uname.o: ulv_syscall_uname.c
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libulv_a_CFLAGS) $(CFLAGS) -MT libulv_a-ulv_syscall_uname.o -MD -MP -MF $(DEPDIR)/libulv_a-ulv_syscall_uname.Tpo -c -o libulv_a-ulv_syscall_uname.o `test -f 'ulv_syscall_uname.c' || echo '$(srcdir)/'`ulv_syscall_uname.c
+@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/libulv_a-ulv_syscall_uname.Tpo $(DEPDIR)/libulv_a-ulv_syscall_uname.Po
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='ulv_syscall_uname.c' object='libulv_a-ulv_syscall_uname.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libulv_a_CFLAGS) $(CFLAGS) -c -o libulv_a-ulv_syscall_uname.o `test -f 'ulv_syscall_uname.c' || echo '$(srcdir)/'`ulv_syscall_uname.c
+
+libulv_a-ulv_syscall_uname.obj: ulv_syscall_uname.c
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libulv_a_CFLAGS) $(CFLAGS) -MT libulv_a-ulv_syscall_uname.obj -MD -MP -MF $(DEPDIR)/libulv_a-ulv_syscall_uname.Tpo -c -o libulv_a-ulv_syscall_uname.obj `if test -f 'ulv_syscall_uname.c'; then $(CYGPATH_W) 'ulv_syscall_uname.c'; else $(CYGPATH_W) '$(srcdir)/ulv_syscall_uname.c'; fi`
+@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/libulv_a-ulv_syscall_uname.Tpo $(DEPDIR)/libulv_a-ulv_syscall_uname.Po
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='ulv_syscall_uname.c' object='libulv_a-ulv_syscall_uname.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libulv_a_CFLAGS) $(CFLAGS) -c -o libulv_a-ulv_syscall_uname.obj `if test -f 'ulv_syscall_uname.c'; then $(CYGPATH_W) 'ulv_syscall_uname.c'; else $(CYGPATH_W) '$(srcdir)/ulv_syscall_uname.c'; fi`
+
+libulv_a-ulv_syscall_exit.o: ulv_syscall_exit.c
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libulv_a_CFLAGS) $(CFLAGS) -MT libulv_a-ulv_syscall_exit.o -MD -MP -MF $(DEPDIR)/libulv_a-ulv_syscall_exit.Tpo -c -o libulv_a-ulv_syscall_exit.o `test -f 'ulv_syscall_exit.c' || echo '$(srcdir)/'`ulv_syscall_exit.c
+@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/libulv_a-ulv_syscall_exit.Tpo $(DEPDIR)/libulv_a-ulv_syscall_exit.Po
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='ulv_syscall_exit.c' object='libulv_a-ulv_syscall_exit.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libulv_a_CFLAGS) $(CFLAGS) -c -o libulv_a-ulv_syscall_exit.o `test -f 'ulv_syscall_exit.c' || echo '$(srcdir)/'`ulv_syscall_exit.c
+
+libulv_a-ulv_syscall_exit.obj: ulv_syscall_exit.c
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libulv_a_CFLAGS) $(CFLAGS) -MT libulv_a-ulv_syscall_exit.obj -MD -MP -MF $(DEPDIR)/libulv_a-ulv_syscall_exit.Tpo -c -o libulv_a-ulv_syscall_exit.obj `if test -f 'ulv_syscall_exit.c'; then $(CYGPATH_W) 'ulv_syscall_exit.c'; else $(CYGPATH_W) '$(srcdir)/ulv_syscall_exit.c'; fi`
+@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/libulv_a-ulv_syscall_exit.Tpo $(DEPDIR)/libulv_a-ulv_syscall_exit.Po
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='ulv_syscall_exit.c' object='libulv_a-ulv_syscall_exit.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libulv_a_CFLAGS) $(CFLAGS) -c -o libulv_a-ulv_syscall_exit.obj `if test -f 'ulv_syscall_exit.c'; then $(CYGPATH_W) 'ulv_syscall_exit.c'; else $(CYGPATH_W) '$(srcdir)/ulv_syscall_exit.c'; fi`
+
+libulv_a-ulv_syscall_ioctl.o: ulv_syscall_ioctl.c
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libulv_a_CFLAGS) $(CFLAGS) -MT libulv_a-ulv_syscall_ioctl.o -MD -MP -MF $(DEPDIR)/libulv_a-ulv_syscall_ioctl.Tpo -c -o libulv_a-ulv_syscall_ioctl.o `test -f 'ulv_syscall_ioctl.c' || echo '$(srcdir)/'`ulv_syscall_ioctl.c
+@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/libulv_a-ulv_syscall_ioctl.Tpo $(DEPDIR)/libulv_a-ulv_syscall_ioctl.Po
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='ulv_syscall_ioctl.c' object='libulv_a-ulv_syscall_ioctl.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libulv_a_CFLAGS) $(CFLAGS) -c -o libulv_a-ulv_syscall_ioctl.o `test -f 'ulv_syscall_ioctl.c' || echo '$(srcdir)/'`ulv_syscall_ioctl.c
+
+libulv_a-ulv_syscall_ioctl.obj: ulv_syscall_ioctl.c
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libulv_a_CFLAGS) $(CFLAGS) -MT libulv_a-ulv_syscall_ioctl.obj -MD -MP -MF $(DEPDIR)/libulv_a-ulv_syscall_ioctl.Tpo -c -o libulv_a-ulv_syscall_ioctl.obj `if test -f 'ulv_syscall_ioctl.c'; then $(CYGPATH_W) 'ulv_syscall_ioctl.c'; else $(CYGPATH_W) '$(srcdir)/ulv_syscall_ioctl.c'; fi`
+@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/libulv_a-ulv_syscall_ioctl.Tpo $(DEPDIR)/libulv_a-ulv_syscall_ioctl.Po
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='ulv_syscall_ioctl.c' object='libulv_a-ulv_syscall_ioctl.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libulv_a_CFLAGS) $(CFLAGS) -c -o libulv_a-ulv_syscall_ioctl.obj `if test -f 'ulv_syscall_ioctl.c'; then $(CYGPATH_W) 'ulv_syscall_ioctl.c'; else $(CYGPATH_W) '$(srcdir)/ulv_syscall_ioctl.c'; fi`
+
+libulv_a-ulv_syscall_socket.o: ulv_syscall_socket.c
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libulv_a_CFLAGS) $(CFLAGS) -MT libulv_a-ulv_syscall_socket.o -MD -MP -MF $(DEPDIR)/libulv_a-ulv_syscall_socket.Tpo -c -o libulv_a-ulv_syscall_socket.o `test -f 'ulv_syscall_socket.c' || echo '$(srcdir)/'`ulv_syscall_socket.c
+@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/libulv_a-ulv_syscall_socket.Tpo $(DEPDIR)/libulv_a-ulv_syscall_socket.Po
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='ulv_syscall_socket.c' object='libulv_a-ulv_syscall_socket.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libulv_a_CFLAGS) $(CFLAGS) -c -o libulv_a-ulv_syscall_socket.o `test -f 'ulv_syscall_socket.c' || echo '$(srcdir)/'`ulv_syscall_socket.c
+
+libulv_a-ulv_syscall_socket.obj: ulv_syscall_socket.c
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libulv_a_CFLAGS) $(CFLAGS) -MT libulv_a-ulv_syscall_socket.obj -MD -MP -MF $(DEPDIR)/libulv_a-ulv_syscall_socket.Tpo -c -o libulv_a-ulv_syscall_socket.obj `if test -f 'ulv_syscall_socket.c'; then $(CYGPATH_W) 'ulv_syscall_socket.c'; else $(CYGPATH_W) '$(srcdir)/ulv_syscall_socket.c'; fi`
+@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/libulv_a-ulv_syscall_socket.Tpo $(DEPDIR)/libulv_a-ulv_syscall_socket.Po
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='ulv_syscall_socket.c' object='libulv_a-ulv_syscall_socket.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libulv_a_CFLAGS) $(CFLAGS) -c -o libulv_a-ulv_syscall_socket.obj `if test -f 'ulv_syscall_socket.c'; then $(CYGPATH_W) 'ulv_syscall_socket.c'; else $(CYGPATH_W) '$(srcdir)/ulv_syscall_socket.c'; fi`
+
+libulv_a-ulv_syscall_mmap.o: ulv_syscall_mmap.c
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libulv_a_CFLAGS) $(CFLAGS) -MT libulv_a-ulv_syscall_mmap.o -MD -MP -MF $(DEPDIR)/libulv_a-ulv_syscall_mmap.Tpo -c -o libulv_a-ulv_syscall_mmap.o `test -f 'ulv_syscall_mmap.c' || echo '$(srcdir)/'`ulv_syscall_mmap.c
+@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/libulv_a-ulv_syscall_mmap.Tpo $(DEPDIR)/libulv_a-ulv_syscall_mmap.Po
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='ulv_syscall_mmap.c' object='libulv_a-ulv_syscall_mmap.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libulv_a_CFLAGS) $(CFLAGS) -c -o libulv_a-ulv_syscall_mmap.o `test -f 'ulv_syscall_mmap.c' || echo '$(srcdir)/'`ulv_syscall_mmap.c
+
+libulv_a-ulv_syscall_mmap.obj: ulv_syscall_mmap.c
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libulv_a_CFLAGS) $(CFLAGS) -MT libulv_a-ulv_syscall_mmap.obj -MD -MP -MF $(DEPDIR)/libulv_a-ulv_syscall_mmap.Tpo -c -o libulv_a-ulv_syscall_mmap.obj `if test -f 'ulv_syscall_mmap.c'; then $(CYGPATH_W) 'ulv_syscall_mmap.c'; else $(CYGPATH_W) '$(srcdir)/ulv_syscall_mmap.c'; fi`
+@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/libulv_a-ulv_syscall_mmap.Tpo $(DEPDIR)/libulv_a-ulv_syscall_mmap.Po
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='ulv_syscall_mmap.c' object='libulv_a-ulv_syscall_mmap.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libulv_a_CFLAGS) $(CFLAGS) -c -o libulv_a-ulv_syscall_mmap.obj `if test -f 'ulv_syscall_mmap.c'; then $(CYGPATH_W) 'ulv_syscall_mmap.c'; else $(CYGPATH_W) '$(srcdir)/ulv_syscall_mmap.c'; fi`
+
+libulv_a-ulv_syscall_set_tid_address.o: ulv_syscall_set_tid_address.c
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libulv_a_CFLAGS) $(CFLAGS) -MT libulv_a-ulv_syscall_set_tid_address.o -MD -MP -MF $(DEPDIR)/libulv_a-ulv_syscall_set_tid_address.Tpo -c -o libulv_a-ulv_syscall_set_tid_address.o `test -f 'ulv_syscall_set_tid_address.c' || echo '$(srcdir)/'`ulv_syscall_set_tid_address.c
+@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/libulv_a-ulv_syscall_set_tid_address.Tpo $(DEPDIR)/libulv_a-ulv_syscall_set_tid_address.Po
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='ulv_syscall_set_tid_address.c' object='libulv_a-ulv_syscall_set_tid_address.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libulv_a_CFLAGS) $(CFLAGS) -c -o libulv_a-ulv_syscall_set_tid_address.o `test -f 'ulv_syscall_set_tid_address.c' || echo '$(srcdir)/'`ulv_syscall_set_tid_address.c
+
+libulv_a-ulv_syscall_set_tid_address.obj: ulv_syscall_set_tid_address.c
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libulv_a_CFLAGS) $(CFLAGS) -MT libulv_a-ulv_syscall_set_tid_address.obj -MD -MP -MF $(DEPDIR)/libulv_a-ulv_syscall_set_tid_address.Tpo -c -o libulv_a-ulv_syscall_set_tid_address.obj `if test -f 'ulv_syscall_set_tid_address.c'; then $(CYGPATH_W) 'ulv_syscall_set_tid_address.c'; else $(CYGPATH_W) '$(srcdir)/ulv_syscall_set_tid_address.c'; fi`
+@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/libulv_a-ulv_syscall_set_tid_address.Tpo $(DEPDIR)/libulv_a-ulv_syscall_set_tid_address.Po
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='ulv_syscall_set_tid_address.c' object='libulv_a-ulv_syscall_set_tid_address.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libulv_a_CFLAGS) $(CFLAGS) -c -o libulv_a-ulv_syscall_set_tid_address.obj `if test -f 'ulv_syscall_set_tid_address.c'; then $(CYGPATH_W) 'ulv_syscall_set_tid_address.c'; else $(CYGPATH_W) '$(srcdir)/ulv_syscall_set_tid_address.c'; fi`
+
+libulv_a-ulv_syscall_clone.o: ulv_syscall_clone.c
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libulv_a_CFLAGS) $(CFLAGS) -MT libulv_a-ulv_syscall_clone.o -MD -MP -MF $(DEPDIR)/libulv_a-ulv_syscall_clone.Tpo -c -o libulv_a-ulv_syscall_clone.o `test -f 'ulv_syscall_clone.c' || echo '$(srcdir)/'`ulv_syscall_clone.c
+@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/libulv_a-ulv_syscall_clone.Tpo $(DEPDIR)/libulv_a-ulv_syscall_clone.Po
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='ulv_syscall_clone.c' object='libulv_a-ulv_syscall_clone.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libulv_a_CFLAGS) $(CFLAGS) -c -o libulv_a-ulv_syscall_clone.o `test -f 'ulv_syscall_clone.c' || echo '$(srcdir)/'`ulv_syscall_clone.c
+
+libulv_a-ulv_syscall_clone.obj: ulv_syscall_clone.c
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libulv_a_CFLAGS) $(CFLAGS) -MT libulv_a-ulv_syscall_clone.obj -MD -MP -MF $(DEPDIR)/libulv_a-ulv_syscall_clone.Tpo -c -o libulv_a-ulv_syscall_clone.obj `if test -f 'ulv_syscall_clone.c'; then $(CYGPATH_W) 'ulv_syscall_clone.c'; else $(CYGPATH_W) '$(srcdir)/ulv_syscall_clone.c'; fi`
+@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/libulv_a-ulv_syscall_clone.Tpo $(DEPDIR)/libulv_a-ulv_syscall_clone.Po
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='ulv_syscall_clone.c' object='libulv_a-ulv_syscall_clone.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libulv_a_CFLAGS) $(CFLAGS) -c -o libulv_a-ulv_syscall_clone.obj `if test -f 'ulv_syscall_clone.c'; then $(CYGPATH_W) 'ulv_syscall_clone.c'; else $(CYGPATH_W) '$(srcdir)/ulv_syscall_clone.c'; fi`
+
+libulv_a-ulv_syscall_futex.o: ulv_syscall_futex.c
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libulv_a_CFLAGS) $(CFLAGS) -MT libulv_a-ulv_syscall_futex.o -MD -MP -MF $(DEPDIR)/libulv_a-ulv_syscall_futex.Tpo -c -o libulv_a-ulv_syscall_futex.o `test -f 'ulv_syscall_futex.c' || echo '$(srcdir)/'`ulv_syscall_futex.c
+@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/libulv_a-ulv_syscall_futex.Tpo $(DEPDIR)/libulv_a-ulv_syscall_futex.Po
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='ulv_syscall_futex.c' object='libulv_a-ulv_syscall_futex.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libulv_a_CFLAGS) $(CFLAGS) -c -o libulv_a-ulv_syscall_futex.o `test -f 'ulv_syscall_futex.c' || echo '$(srcdir)/'`ulv_syscall_futex.c
+
+libulv_a-ulv_syscall_futex.obj: ulv_syscall_futex.c
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libulv_a_CFLAGS) $(CFLAGS) -MT libulv_a-ulv_syscall_futex.obj -MD -MP -MF $(DEPDIR)/libulv_a-ulv_syscall_futex.Tpo -c -o libulv_a-ulv_syscall_futex.obj `if test -f 'ulv_syscall_futex.c'; then $(CYGPATH_W) 'ulv_syscall_futex.c'; else $(CYGPATH_W) '$(srcdir)/ulv_syscall_futex.c'; fi`
+@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/libulv_a-ulv_syscall_futex.Tpo $(DEPDIR)/libulv_a-ulv_syscall_futex.Po
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='ulv_syscall_futex.c' object='libulv_a-ulv_syscall_futex.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libulv_a_CFLAGS) $(CFLAGS) -c -o libulv_a-ulv_syscall_futex.obj `if test -f 'ulv_syscall_futex.c'; then $(CYGPATH_W) 'ulv_syscall_futex.c'; else $(CYGPATH_W) '$(srcdir)/ulv_syscall_futex.c'; fi`
 
 ID: $(am__tagged_files)
 	$(am__define_uniq_tagged_files); mkid -fID $$unique
@@ -511,19 +724,21 @@ clean: clean-am
 clean-am: clean-generic clean-noinstLIBRARIES mostlyclean-am
 
 distclean: distclean-am
-		-rm -f ./$(DEPDIR)/ulv_init.Po
+		-rm -f ./$(DEPDIR)/libulv_a-ulv_init.Po
+	-rm -f ./$(DEPDIR)/libulv_a-ulv_syscall.Po
+	-rm -f ./$(DEPDIR)/libulv_a-ulv_syscall_clone.Po
+	-rm -f ./$(DEPDIR)/libulv_a-ulv_syscall_exit.Po
+	-rm -f ./$(DEPDIR)/libulv_a-ulv_syscall_futex.Po
+	-rm -f ./$(DEPDIR)/libulv_a-ulv_syscall_ioctl.Po
+	-rm -f ./$(DEPDIR)/libulv_a-ulv_syscall_mmap.Po
+	-rm -f ./$(DEPDIR)/libulv_a-ulv_syscall_open.Po
+	-rm -f ./$(DEPDIR)/libulv_a-ulv_syscall_read.Po
+	-rm -f ./$(DEPDIR)/libulv_a-ulv_syscall_set_tid_address.Po
+	-rm -f ./$(DEPDIR)/libulv_a-ulv_syscall_socket.Po
+	-rm -f ./$(DEPDIR)/libulv_a-ulv_syscall_uname.Po
+	-rm -f ./$(DEPDIR)/libulv_a-ulv_syscall_write.Po
+	-rm -f ./$(DEPDIR)/libulv_a-ulv_thread.Po
 	-rm -f ./$(DEPDIR)/ulv_longjmp.Po
-	-rm -f ./$(DEPDIR)/ulv_syscall.Po
-	-rm -f ./$(DEPDIR)/ulv_syscall_clone.Po
-	-rm -f ./$(DEPDIR)/ulv_syscall_exit.Po
-	-rm -f ./$(DEPDIR)/ulv_syscall_futex.Po
-	-rm -f ./$(DEPDIR)/ulv_syscall_ioctl.Po
-	-rm -f ./$(DEPDIR)/ulv_syscall_mmap.Po
-	-rm -f ./$(DEPDIR)/ulv_syscall_set_tid_address.Po
-	-rm -f ./$(DEPDIR)/ulv_syscall_socket.Po
-	-rm -f ./$(DEPDIR)/ulv_syscall_uname.Po
-	-rm -f ./$(DEPDIR)/ulv_syscall_write.Po
-	-rm -f ./$(DEPDIR)/ulv_thread.Po
 	-rm -f Makefile
 distclean-am: clean-am distclean-compile distclean-generic \
 	distclean-tags
@@ -569,19 +784,21 @@ install-ps-am:
 installcheck-am:
 
 maintainer-clean: maintainer-clean-am
-		-rm -f ./$(DEPDIR)/ulv_init.Po
+		-rm -f ./$(DEPDIR)/libulv_a-ulv_init.Po
+	-rm -f ./$(DEPDIR)/libulv_a-ulv_syscall.Po
+	-rm -f ./$(DEPDIR)/libulv_a-ulv_syscall_clone.Po
+	-rm -f ./$(DEPDIR)/libulv_a-ulv_syscall_exit.Po
+	-rm -f ./$(DEPDIR)/libulv_a-ulv_syscall_futex.Po
+	-rm -f ./$(DEPDIR)/libulv_a-ulv_syscall_ioctl.Po
+	-rm -f ./$(DEPDIR)/libulv_a-ulv_syscall_mmap.Po
+	-rm -f ./$(DEPDIR)/libulv_a-ulv_syscall_open.Po
+	-rm -f ./$(DEPDIR)/libulv_a-ulv_syscall_read.Po
+	-rm -f ./$(DEPDIR)/libulv_a-ulv_syscall_set_tid_address.Po
+	-rm -f ./$(DEPDIR)/libulv_a-ulv_syscall_socket.Po
+	-rm -f ./$(DEPDIR)/libulv_a-ulv_syscall_uname.Po
+	-rm -f ./$(DEPDIR)/libulv_a-ulv_syscall_write.Po
+	-rm -f ./$(DEPDIR)/libulv_a-ulv_thread.Po
 	-rm -f ./$(DEPDIR)/ulv_longjmp.Po
-	-rm -f ./$(DEPDIR)/ulv_syscall.Po
-	-rm -f ./$(DEPDIR)/ulv_syscall_clone.Po
-	-rm -f ./$(DEPDIR)/ulv_syscall_exit.Po
-	-rm -f ./$(DEPDIR)/ulv_syscall_futex.Po
-	-rm -f ./$(DEPDIR)/ulv_syscall_ioctl.Po
-	-rm -f ./$(DEPDIR)/ulv_syscall_mmap.Po
-	-rm -f ./$(DEPDIR)/ulv_syscall_set_tid_address.Po
-	-rm -f ./$(DEPDIR)/ulv_syscall_socket.Po
-	-rm -f ./$(DEPDIR)/ulv_syscall_uname.Po
-	-rm -f ./$(DEPDIR)/ulv_syscall_write.Po
-	-rm -f ./$(DEPDIR)/ulv_thread.Po
 	-rm -f Makefile
 maintainer-clean-am: distclean-am maintainer-clean-generic
 

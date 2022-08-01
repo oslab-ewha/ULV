@@ -16,7 +16,9 @@ long
 ulv_syscall(long n, long *args)
 {
 	switch (n) {
+		CASE_ULV_SYSCALL(read, 3);
 		CASE_ULV_SYSCALL(write, 3);
+		CASE_ULV_SYSCALL(open, 3);
 		CASE_ULV_SYSCALL(mmap, 6);
 		CASE_ULV_SYSCALL(mprotect, 3);
 		CASE_ULV_SYSCALL(munmap, 2);
@@ -25,7 +27,9 @@ ulv_syscall(long n, long *args)
 		return 0;
 		CASE_ULV_SYSCALL(ioctl, 3);
 		CASE_ULV_SYSCALL(writev, 3);
+		CASE_ULV_SYSCALL(select, 5);
 		CASE_ULV_SYSCALL(socket, 3);
+		CASE_ULV_SYSCALL(connect, 3);
 		CASE_ULV_SYSCALL(uname, 1);
 		CASE_ULV_SYSCALL(clone, 5);
 		CASE_ULV_SYSCALL(exit, 1);

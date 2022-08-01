@@ -56,7 +56,7 @@ main(int argc, char *argv[])
 		return 1;
 	}
 
-	setup_network(argv[1], argv[2]);
+///	setup_network(argv[1], argv[2]);
 
 	ret = socket(AF_INET, SOCK_STREAM, 0);
 	addr.sin_family = AF_INET;

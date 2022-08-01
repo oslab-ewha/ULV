@@ -4,7 +4,9 @@
 
 typedef char	ulv_jmpbuf[64];
 extern int ulv_setjmp(ulv_jmpbuf buf);
+extern int ulv_setjmp_clone(ulv_jmpbuf buf, char *stack);
 extern void ulv_longjmp(ulv_jmpbuf buf, int val);
+char *ulv_copy_stack(char *stack, void *thinfo);
 
 #ifdef DEBUG
 #include <stdio.h>
@@ -59,7 +61,7 @@ find_thinfo(ulv_tid_t tid)
 	struct list_head	*lp;
 
 	list_for_each (lp, &threads) {
-		thinfo_t	*thinfo = list_entry(lp, thinfo_t, list_ready);
+		thinfo_t	*thinfo = list_entry(lp, thinfo_t, list);
 
 		if (thinfo->tid == tid)
 			return thinfo;
@@ -82,32 +84,16 @@ thread_switch(thinfo_t *prev, thinfo_t *next)
 	DBG("never reached!!!");
 }
 
-static void
-setup_thread_stack(thinfo_t *thinfo)
-{
-	thinfo_t	*thinfo_new;
-
-	DBG("new thread scheduled: %p\n", thinfo);
-
-	asm("movq %0, %%rax;"
-	    "movq %1, %%rcx;"
-	    "movq %%rcx, %%rsp;"
-	    "pushq %%rax;"
-	    :: "l"(thinfo), "l"(THSTACK(thinfo)): "rax", "rcx");
-
-	asm("popq %0" : "=l"(thinfo_new));
-
-	cur_thinfo = thinfo_new;
-}
-
 ulv_tid_t
 ulv_thread_clone(char *stack)
 {
 	thinfo_t	*thinfo;
+	char	*stack_copied;
 
 	thinfo = create_thinfo(stack);
-	if (ulv_setjmp(thinfo->jmpbuf)) {
-		setup_thread_stack(thinfo);
+	stack_copied = ulv_copy_stack(stack, thinfo);
+	if (ulv_setjmp_clone(thinfo->jmpbuf, stack_copied)) {
+		asm("popq %0" : "=l"(thinfo));
 		cur_thinfo = thinfo;
 		return 0;
 	}

@@ -75,12 +75,18 @@ set(lwipcontribportunix_SRCS
     ${LWIP_DIR}/contrib/ports/unix/port/sys_arch.c
     ${LWIP_DIR}/contrib/ports/unix/port/perf.c
 )
+set(lwipcontribportunixnetifs_SRCS
+    ${LWIP_DIR}/contrib/ports/unix/port/netif/tapif.c
+    ${LWIP_DIR}/contrib/ports/unix/port/netif/list.c
+    ${LWIP_DIR}/contrib/ports/unix/port/netif/sio.c
+    ${LWIP_DIR}/contrib/ports/unix/port/netif/fifo.c
+)
 
 set(CMAKE_C_FLAGS_DEBUG "-O0 -ggdb")
 
-set(liblwip_SRCS ${lwipcore_SRCS} ${lwipcore4_SRCS} ${lwipcore6_SRCS}
+set(liblwip_SRCS liblwip.c ${lwipcore_SRCS} ${lwipcore4_SRCS} ${lwipcore6_SRCS}
 	${lwipnetif_SRCS} ${lwipapi_SRCS}
-       	${lwipcontribportunix_SRCS})
+       	${lwipcontribportunix_SRCS} ${lwipcontribportunixnetifs_SRCS})
 
 add_library(lwip ${liblwip_SRCS})
 target_include_directories(lwip PRIVATE ${LWIP_INCLUDE_DIRS} .)

@@ -1,7 +1,9 @@
 #ifndef _ULV_SYSCALL_NO_H_
 #define _ULV_SYSCALL_NO_H_
 
+#define __NR_read	0
 #define __NR_write	1
+#define __NR_open	2
 #define __NR_mmap	9
 #define __NR_mprotect	10
 #define __NR_munmap	11
@@ -9,7 +11,9 @@
 #define __NR_rt_sigprocmask	14
 #define __NR_ioctl	16
 #define __NR_writev	20
+#define __NR_select	23
 #define __NR_socket	41
+#define __NR_connect	42
 #define __NR_clone	56
 #define __NR_exit	60
 #define __NR_uname	63

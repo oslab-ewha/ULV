@@ -10,14 +10,18 @@
 
 #define DEF_ULV_SYSCALL(name, N) DEF_ULV_SYSCALL_## N(name)
 
+DEF_ULV_SYSCALL(read, 3);
 DEF_ULV_SYSCALL(write, 3);
+DEF_ULV_SYSCALL(open, 3);
 DEF_ULV_SYSCALL(mmap, 6);
 DEF_ULV_SYSCALL(mprotect, 3);
 DEF_ULV_SYSCALL(munmap, 2);
 DEF_ULV_SYSCALL(brk, 1);
 DEF_ULV_SYSCALL(ioctl, 3);
 DEF_ULV_SYSCALL(writev, 3);
+DEF_ULV_SYSCALL(select, 5);
 DEF_ULV_SYSCALL(socket, 3);
+DEF_ULV_SYSCALL(connect, 3);
 DEF_ULV_SYSCALL(uname, 1);
 DEF_ULV_SYSCALL(clone, 5);
 DEF_ULV_SYSCALL(exit, 1);
