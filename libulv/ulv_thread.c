@@ -23,7 +23,7 @@ char *ulv_copy_stack(char *stack, void *thinfo);
 
 typedef struct {
 	ulv_tid_t	tid;
-	int	blocked:1;
+	unsigned	blocked:1;
 	char	*stack;
 	struct list_head	list;
 	struct list_head	list_ready;

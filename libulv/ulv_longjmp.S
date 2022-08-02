@@ -2,6 +2,7 @@
 .global ulv_setjmp
 .global ulv_setjmp_clone
 .global ulv_copy_stack
+.global ulv_clone_host
 
 .type ulv_longjmp,@function
 .type ulv_setjmp,@function
@@ -67,7 +68,7 @@ ulv_copy_stack:
 	mov %rsp, %rsi
 	add $8, %rsi
 
-	mov %rbp, %r8
+	mov %rbp, %r8		/* save rbp */
 	sub %rsi, %r8
 	add %rdi, %r8
 	mov %r8, -16(%r10)
@@ -113,4 +114,10 @@ again:
 done:	
 	sub %rsp, %rax
 	sub $8, %rax
+	ret
+
+ulv_clone_host:
+	mov $56, %rax
+	mov %rdx, (%rsi)
+	syscall
 	ret

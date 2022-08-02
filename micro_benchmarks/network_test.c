@@ -13,8 +13,7 @@
 static void
 usage(void)
 {
-	printf("Usage: mb_network <my IP> <gateway IP> <connect IP>\n");
-	printf("   my IP: {ipaddr}/{netmask prefix}\n");
+	printf("Usage: mb_network <connect IP>\n");
 	printf("   connect IP: {ipaddr}:{port}\n");
 }
 
@@ -51,16 +50,14 @@ main(int argc, char *argv[])
 	struct sockaddr_in	addr;
 	int	ret;
 
-	if (argc < 4) {
+	if (argc < 2) {
 		usage();
 		return 1;
 	}
 
-///	setup_network(argv[1], argv[2]);
-
 	ret = socket(AF_INET, SOCK_STREAM, 0);
 	addr.sin_family = AF_INET;
-	if (get_connect_addr(argv[3], &addr) < 0)
+	if (get_connect_addr(argv[1], &addr) < 0)
 		return 1;
 
 	ret = connect(ret, (struct sockaddr *)&addr, sizeof(addr));

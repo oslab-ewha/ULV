@@ -5,6 +5,7 @@
 #include "ulv_list.h"
 #include "ulv_malloc.h"
 #include "ulv_thread.h"
+#include "ulv_assert.h"
 
 #define FUTEX_WAIT 0
 #define FUTEX_WAKE 1
@@ -14,6 +15,8 @@
 #define FUTEX_CMD_MASK		~(FUTEX_PRIVATE_FLAG | FUTEX_CLOCK_REALTIME)
 
 #define MAX_WAITERS	10
+
+#define WAITER_DONE(futex, idx)	((futex)->waiters[idx] != ulv_thread_self())
 
 typedef struct _futex {
 	int	*addr;
@@ -37,7 +40,7 @@ find_futex(int *addr)
 	return NULL;
 }
 
-static inline void
+static inline unsigned
 reg_waiter(futex_t *futex)
 {
 	int	i;
@@ -45,9 +48,12 @@ reg_waiter(futex_t *futex)
 	for (i = 0; i < MAX_WAITERS; i++) {
 		if (futex->waiters[i] == 0) {
 			futex->waiters[i] = ulv_thread_self();
-			return;
+			return i;
 		}
 	}
+
+	ULV_PANIC("futex waiter full!!");
+	return 0;
 }
 
 static inline ulv_tid_t
@@ -73,6 +79,7 @@ futex_wait(int *addr, int val)
 {
 	futex_t	*futex;
 	int	f_val = *addr;
+	unsigned	idx;
 
 	if (f_val != val)
 		return -EAGAIN;
@@ -87,10 +94,12 @@ futex_wait(int *addr, int val)
 
 	list_add(&futex->list, &futexes);
 
-	reg_waiter(futex);
+	idx = reg_waiter(futex);
 
-	ulv_thread_set_blocked(ulv_thread_self(), 1);
-	ulv_thread_reschedule();
+	while (!WAITER_DONE(futex, idx)) {
+		ulv_thread_set_blocked(ulv_thread_self(), 1);
+		ulv_thread_reschedule();
+	}
 
 	return 0;
 }
@@ -119,7 +128,7 @@ futex_wake(int *addr, int nwaiters)
 }
 
 int
-ulv_syscall_futex(int *uaddr, int futex_op, int val, const struct timespec *timeout, int *uaddr2, int val3)
+ulv_syscall_futex(int *uaddr, int futex_op, int val, long timeout, int *uaddr2, int val3)
 {
 	if (unlikely(uaddr == NULL))
 		return -EINVAL;
