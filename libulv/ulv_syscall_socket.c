@@ -1,12 +1,20 @@
-#include "lwip/sockets.h"
 #include "ulv_syscall_no.h"
 #include "ulv_host_syscall.h"
 
 extern int
 epoller_select_events(int nfds, long readfds, long writefds, long exceptfds, long timeout);
 
-extern int
-lwip_socket(int domain, int type, int protocol);
+__attribute__((__weak__)) int
+lwip_socket(int domain, int type, int protocol)
+{
+	return -1;
+}
+
+__attribute__((__weak__)) int
+lwip_connect(long fd, long name, long len)
+{
+	return -1;
+}
 
 int
 ulv_syscall_socket(int domain, int type, int protocol)
@@ -15,7 +23,7 @@ ulv_syscall_socket(int domain, int type, int protocol)
 }
 
 int
-ulv_syscall_connect(int fd, struct sockaddr *name, socklen_t len)
+ulv_syscall_connect(long fd, long name, long len)
 {
 	return lwip_connect(fd, name, len);
 }

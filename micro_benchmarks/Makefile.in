@@ -87,7 +87,8 @@ POST_INSTALL = :
 NORMAL_UNINSTALL = :
 PRE_UNINSTALL = :
 POST_UNINSTALL = :
-noinst_PROGRAMS = mb_syscall$(EXEEXT) mb_network$(EXEEXT)
+noinst_PROGRAMS = mb_thread$(EXEEXT) mb_syscall$(EXEEXT) \
+	mb_network$(EXEEXT)
 subdir = micro_benchmarks
 ACLOCAL_M4 = $(top_srcdir)/aclocal.m4
 am__aclocal_m4_deps = $(top_srcdir)/configure.ac
@@ -117,8 +118,11 @@ mb_network_DEPENDENCIES = libmb.a ../lwip-build/liblwip.a \
 	../musl/lib/libc.a
 am_mb_syscall_OBJECTS = syscall_test.$(OBJEXT)
 mb_syscall_OBJECTS = $(am_mb_syscall_OBJECTS)
-mb_syscall_DEPENDENCIES = libmb.a ../lwip-build/liblwip.a \
+mb_syscall_DEPENDENCIES = libmb.a ../libulv/libulv_dummy.a \
 	../musl/lib/libc.a
+am_mb_thread_OBJECTS = thread_test.$(OBJEXT)
+mb_thread_OBJECTS = $(am_mb_thread_OBJECTS)
+mb_thread_DEPENDENCIES = ../libulv/libulv_dummy.a ../musl/lib/libc.a
 AM_V_P = $(am__v_P_@AM_V@)
 am__v_P_ = $(am__v_P_@AM_DEFAULT_V@)
 am__v_P_0 = false
@@ -136,7 +140,8 @@ depcomp = $(SHELL) $(top_srcdir)/depcomp
 am__maybe_remake_depfiles = depfiles
 am__depfiles_remade = ./$(DEPDIR)/libmb_net.Po \
 	./$(DEPDIR)/libmb_stdio.Po ./$(DEPDIR)/libmb_time.Po \
-	./$(DEPDIR)/network_test.Po ./$(DEPDIR)/syscall_test.Po
+	./$(DEPDIR)/network_test.Po ./$(DEPDIR)/syscall_test.Po \
+	./$(DEPDIR)/thread_test.Po
 am__mv = mv -f
 COMPILE = $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) \
 	$(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS)
@@ -151,9 +156,9 @@ am__v_CCLD_ = $(am__v_CCLD_@AM_DEFAULT_V@)
 am__v_CCLD_0 = @echo "  CCLD    " $@;
 am__v_CCLD_1 = 
 SOURCES = $(libmb_a_SOURCES) $(mb_network_SOURCES) \
-	$(mb_syscall_SOURCES)
+	$(mb_syscall_SOURCES) $(mb_thread_SOURCES)
 DIST_SOURCES = $(libmb_a_SOURCES) $(mb_network_SOURCES) \
-	$(mb_syscall_SOURCES)
+	$(mb_syscall_SOURCES) $(mb_thread_SOURCES)
 am__can_run_installinfo = \
   case $$AM_UPDATE_INFO_DIR in \
     n|no|NO) false;; \
@@ -278,8 +283,11 @@ DISTCLEANFILES = *~
 noinst_LIBRARIES = libmb.a
 whole_libulv = -Wl,--whole-archive ../libulv/libulv.a -Wl,--no-whole-archive
 common_LINK = musl-gcc -static -nolibc -o $@ $(whole_libulv)
+mb_thread_SOURCES = thread_test.c
+mb_thread_LDADD = ../libulv/libulv_dummy.a ../musl/lib/libc.a
+mb_thread_LINK = $(common_LINK)
 mb_syscall_SOURCES = syscall_test.c
-mb_syscall_LDADD = libmb.a ../lwip-build/liblwip.a ../musl/lib/libc.a
+mb_syscall_LDADD = libmb.a ../libulv/libulv_dummy.a ../musl/lib/libc.a
 mb_syscall_LINK = $(common_LINK)
 mb_network_SOURCES = network_test.c
 mb_network_LDADD = libmb.a ../lwip-build/liblwip.a ../musl/lib/libc.a
@@ -338,6 +346,10 @@ mb_syscall$(EXEEXT): $(mb_syscall_OBJECTS) $(mb_syscall_DEPENDENCIES) $(EXTRA_mb
 	@rm -f mb_syscall$(EXEEXT)
 	$(AM_V_GEN)$(mb_syscall_LINK) $(mb_syscall_OBJECTS) $(mb_syscall_LDADD) $(LIBS)
 
+mb_thread$(EXEEXT): $(mb_thread_OBJECTS) $(mb_thread_DEPENDENCIES) $(EXTRA_mb_thread_DEPENDENCIES) 
+	@rm -f mb_thread$(EXEEXT)
+	$(AM_V_GEN)$(mb_thread_LINK) $(mb_thread_OBJECTS) $(mb_thread_LDADD) $(LIBS)
+
 mostlyclean-compile:
 	-rm -f *.$(OBJEXT)
 
@@ -349,6 +361,7 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libmb_time.Po@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/network_test.Po@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/syscall_test.Po@am__quote@ # am--include-marker
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/thread_test.Po@am__quote@ # am--include-marker
 
 $(am__depfiles_remade):
 	@$(MKDIR_P) $(@D)
@@ -502,6 +515,7 @@ distclean: distclean-am
 	-rm -f ./$(DEPDIR)/libmb_time.Po
 	-rm -f ./$(DEPDIR)/network_test.Po
 	-rm -f ./$(DEPDIR)/syscall_test.Po
+	-rm -f ./$(DEPDIR)/thread_test.Po
 	-rm -f Makefile
 distclean-am: clean-am distclean-compile distclean-generic \
 	distclean-tags
@@ -552,6 +566,7 @@ maintainer-clean: maintainer-clean-am
 	-rm -f ./$(DEPDIR)/libmb_time.Po
 	-rm -f ./$(DEPDIR)/network_test.Po
 	-rm -f ./$(DEPDIR)/syscall_test.Po
+	-rm -f ./$(DEPDIR)/thread_test.Po
 	-rm -f Makefile
 maintainer-clean-am: distclean-am maintainer-clean-generic
 

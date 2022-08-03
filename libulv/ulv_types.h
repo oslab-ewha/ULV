@@ -1,6 +1,11 @@
 #ifndef _ULV_TYPES_H_
 #define _ULV_TYPES_H_
 
+#define TRUE	1
+#define FALSE	0
+
+typedef unsigned char	bool_t;
+
 typedef unsigned int	uint32_t;
 typedef unsigned long	uint64_t;
 

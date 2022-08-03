@@ -1,7 +1,7 @@
 CLEANFILES = *~
 DISTCLEANFILES = *~
 
-noinst_LIBRARIES = libulv.a
+noinst_LIBRARIES = libulv.a libulv_dummy.a
 
 libulv_a_SOURCES = ulv_init.c ulv_thread.c ulv_thread.h ulv_longjmp.S ulv_types.h ulv_assert.h \
 		ulv_epoller.c ulv_worker.c ulv_worker.h ulv_atomic.h \
@@ -12,3 +12,5 @@ libulv_a_SOURCES = ulv_init.c ulv_thread.c ulv_thread.h ulv_longjmp.S ulv_types.
 		ulv_syscall_clone.c ulv_syscall_futex.c
 
 libulv_a_CFLAGS = -I../lwip/src/include -I../lwip-build -I../lwip/contrib/ports/unix/port/include
+
+libulv_dummy_a_SOURCES = ulv_dummy.c

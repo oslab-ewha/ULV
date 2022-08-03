@@ -133,9 +133,6 @@ ulv_syscall_futex(int *uaddr, int futex_op, int val, long timeout, int *uaddr2, 
 	if (unlikely(uaddr == NULL))
 		return -EINVAL;
 
-	if (futex_op & FUTEX_PRIVATE_FLAG)
-		return -ENOSYS;
-
 	switch (futex_op & FUTEX_CMD_MASK) {
 	case FUTEX_WAIT:
 		return futex_wait(uaddr, val);

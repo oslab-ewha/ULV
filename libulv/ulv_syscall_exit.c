@@ -1,10 +1,14 @@
 #include "ulv_syscall_no.h"
 #include "ulv_host_syscall.h"
+#include "ulv_thread.h"
 
 int
 ulv_syscall_exit(int status)
 {
-	return __syscall1(__NR_exit, status);
+	if (ulv_is_last_thread())
+		return __syscall1(__NR_exit, status);
+	ulv_thread_exit();
+	return 0;
 }
 
 int

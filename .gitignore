@@ -10,6 +10,7 @@
 /cscope.out
 /micro_benchmarks/mb_syscall
 /micro_benchmarks/mb_network
+/micro_benchmarks/mb_thread
 /micro_benchmarks/libmb.a
 /micro_benchmarks/Makefile
 /macro_benchmarks/*.spt
@@ -18,6 +19,7 @@
 /Makefile
 /libulv/Makefile
 /libulv/libulv.a
+/libulv/libulv_dummy.a
 /ulvisor/Makefile
 /ulvisor/libuc/Makefile
 /lwip-build/CMakeCache.txt

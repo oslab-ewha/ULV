@@ -2,14 +2,18 @@ CLEANFILES = *~
 DISTCLEANFILES = *~
 
 noinst_LIBRARIES = libmb.a
-noinst_PROGRAMS = mb_syscall mb_network
+noinst_PROGRAMS = mb_thread mb_syscall mb_network
 
 CFLAGS = -g
 whole_libulv = -Wl,--whole-archive ../libulv/libulv.a -Wl,--no-whole-archive
 common_LINK = musl-gcc -static -nolibc -o $@ $(whole_libulv)
 
+mb_thread_SOURCES = thread_test.c
+mb_thread_LDADD = ../libulv/libulv_dummy.a ../musl/lib/libc.a
+mb_thread_LINK = $(common_LINK)
+
 mb_syscall_SOURCES = syscall_test.c
-mb_syscall_LDADD = libmb.a ../lwip-build/liblwip.a ../musl/lib/libc.a
+mb_syscall_LDADD = libmb.a ../libulv/libulv_dummy.a ../musl/lib/libc.a
 mb_syscall_LINK = $(common_LINK)
 
 mb_network_SOURCES = network_test.c

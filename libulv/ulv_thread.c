@@ -1,6 +1,8 @@
 #include "ulv_thread.h"
 #include "ulv_malloc.h"
 #include "ulv_list.h"
+#include "ulv_atomic.h"
+#include "ulv_assert.h"
 
 typedef char	ulv_jmpbuf[64];
 extern int ulv_setjmp(ulv_jmpbuf buf);
@@ -34,6 +36,10 @@ static thinfo_t	*cur_thinfo;
 
 static ulv_tid_t	tid_alloc;
 
+static unsigned	n_threads;
+
+static int	locked_ready;
+
 static LIST_HEAD(threads);
 static LIST_HEAD(threads_ready);
 
@@ -42,6 +48,7 @@ create_thinfo(char *stack)
 {
 	thinfo_t	*thinfo;
 
+	n_threads++;
 	tid_alloc++;
 	if (tid_alloc > TID_MAX)
 		tid_alloc = 1;
@@ -53,6 +60,15 @@ create_thinfo(char *stack)
 	list_add(&thinfo->list, &threads);
 	list_add(&thinfo->list_ready, &threads_ready);
 	return thinfo;
+}
+
+static void
+free_thinfo(thinfo_t *thinfo)
+{
+	list_del_init(&thinfo->list);
+	ULV_ASSERT(n_threads > 0);
+	n_threads--;
+	ulv_free(thinfo);
 }
 
 static thinfo_t *
@@ -110,21 +126,56 @@ ulv_thread_set_blocked(ulv_tid_t tid, int blocked)
 	if (thinfo->blocked == blocked)
 		return;
 
+	ulv_spin_lock(&locked_ready);
+
 	if (!thinfo->blocked)
 		list_del_init(&thinfo->list_ready);
 	else
 		list_add(&thinfo->list_ready, &threads_ready);
+
+	ulv_spin_unlock(&locked_ready);
+
 	thinfo->blocked = blocked;
 }
 
-void
-ulv_thread_exit(ulv_tid_t tid)
+static thinfo_t *
+get_ready_thread(void)
 {
-	thinfo_t	*thinfo = find_thinfo(tid);
+	/* NOTE: Later, consider multi-thread */
+	if (list_empty(&threads_ready))
+		return NULL;
 
-	DBG("EXIT: %p\n", thinfo);
+	return list_entry(threads_ready.next, thinfo_t, list_ready);
+}
 
-	ulv_free(thinfo);
+static thinfo_t *
+get_ready_thread_safe(void)
+{
+	thinfo_t	*thinfo;
+
+	ulv_spin_lock(&locked_ready);
+	while ((thinfo = get_ready_thread()) == NULL) {
+		ulv_spin_unlock(&locked_ready);
+		/* do what ? */
+		ulv_spin_lock(&locked_ready);
+	}
+	ulv_spin_unlock(&locked_ready);
+
+	return thinfo;
+}
+
+void
+ulv_thread_exit(void)
+{
+	thinfo_t	*thinfo_ready;
+
+	DBG("EXIT: %p\n", cur_thinfo);
+
+	list_del_init(&cur_thinfo->list_ready);
+	free_thinfo(cur_thinfo);
+
+	cur_thinfo = thinfo_ready = get_ready_thread_safe();
+	ulv_longjmp(thinfo_ready->jmpbuf, 1);
 }
 
 ulv_tid_t
@@ -136,15 +187,18 @@ ulv_thread_self(void)
 void
 ulv_thread_reschedule(void)
 {
-	struct list_head	*lp;
+	thinfo_t	*thinfo_ready;
 
-	/* NOTE: Later, consider multi-thread */
-	list_for_each (lp, &threads_ready) {
-		thinfo_t	*thinfo = list_entry(lp, thinfo_t, list_ready);
+	thinfo_ready = get_ready_thread_safe();
+	thread_switch (cur_thinfo, thinfo_ready);
+}
 
-		thread_switch(cur_thinfo, thinfo);
-		return;
-	}
+bool_t
+ulv_is_last_thread(void)
+{
+	if (n_threads == 1)
+		return TRUE;
+	return FALSE;
 }
 
 void

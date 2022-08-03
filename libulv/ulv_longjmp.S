@@ -56,7 +56,7 @@ ulv_setjmp_clone:
         ret
 
 ulv_copy_stack:
-	mov $6, %rcx
+	mov $4, %rcx
 	call get_stack_depth
 
 	sub %rax, %rdi
@@ -75,8 +75,6 @@ ulv_copy_stack:
 
 	cld
 
-	call copy_stack_frame
-	call copy_stack_frame
 	call copy_stack_frame
 	call copy_stack_frame
 	call copy_stack_frame
