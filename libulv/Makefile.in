@@ -107,8 +107,8 @@ libulv_a_AR = $(AR) $(ARFLAGS)
 libulv_a_LIBADD =
 am_libulv_a_OBJECTS = libulv_a-ulv_init.$(OBJEXT) \
 	libulv_a-ulv_thread.$(OBJEXT) ulv_longjmp.$(OBJEXT) \
-	libulv_a-ulv_epoller.$(OBJEXT) libulv_a-ulv_worker.$(OBJEXT) \
-	libulv_a-ulv_syscall.$(OBJEXT) \
+	ulv_clone.$(OBJEXT) libulv_a-ulv_epoller.$(OBJEXT) \
+	libulv_a-ulv_worker.$(OBJEXT) libulv_a-ulv_syscall.$(OBJEXT) \
 	libulv_a-ulv_syscall_open.$(OBJEXT) \
 	libulv_a-ulv_syscall_read.$(OBJEXT) \
 	libulv_a-ulv_syscall_write.$(OBJEXT) \
@@ -155,8 +155,8 @@ am__depfiles_remade = ./$(DEPDIR)/libulv_a-ulv_epoller.Po \
 	./$(DEPDIR)/libulv_a-ulv_syscall_uname.Po \
 	./$(DEPDIR)/libulv_a-ulv_syscall_write.Po \
 	./$(DEPDIR)/libulv_a-ulv_thread.Po \
-	./$(DEPDIR)/libulv_a-ulv_worker.Po ./$(DEPDIR)/ulv_dummy.Po \
-	./$(DEPDIR)/ulv_longjmp.Po
+	./$(DEPDIR)/libulv_a-ulv_worker.Po ./$(DEPDIR)/ulv_clone.Po \
+	./$(DEPDIR)/ulv_dummy.Po ./$(DEPDIR)/ulv_longjmp.Po
 am__mv = mv -f
 CPPASCOMPILE = $(CCAS) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) \
 	$(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CCASFLAGS) $(CCASFLAGS)
@@ -304,7 +304,7 @@ top_srcdir = @top_srcdir@
 CLEANFILES = *~
 DISTCLEANFILES = *~
 noinst_LIBRARIES = libulv.a libulv_dummy.a
-libulv_a_SOURCES = ulv_init.c ulv_thread.c ulv_thread.h ulv_longjmp.S ulv_types.h ulv_assert.h \
+libulv_a_SOURCES = ulv_init.c ulv_thread.c ulv_thread.h ulv_longjmp.S ulv_clone.S ulv_types.h ulv_assert.h \
 		ulv_epoller.c ulv_worker.c ulv_worker.h ulv_atomic.h \
 		ulv_syscall.c ulv_syscall.h ulv_syscall_no.h ulv_host_syscall.h ulv_syscall_flags.h \
 		ulv_syscall_open.c ulv_syscall_read.c ulv_syscall_write.c ulv_syscall_uname.c \
@@ -383,6 +383,7 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libulv_a-ulv_syscall_write.Po@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libulv_a-ulv_thread.Po@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libulv_a-ulv_worker.Po@am__quote@ # am--include-marker
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/ulv_clone.Po@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/ulv_dummy.Po@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/ulv_longjmp.Po@am__quote@ # am--include-marker
 
@@ -786,6 +787,7 @@ distclean: distclean-am
 	-rm -f ./$(DEPDIR)/libulv_a-ulv_syscall_write.Po
 	-rm -f ./$(DEPDIR)/libulv_a-ulv_thread.Po
 	-rm -f ./$(DEPDIR)/libulv_a-ulv_worker.Po
+	-rm -f ./$(DEPDIR)/ulv_clone.Po
 	-rm -f ./$(DEPDIR)/ulv_dummy.Po
 	-rm -f ./$(DEPDIR)/ulv_longjmp.Po
 	-rm -f Makefile
@@ -849,6 +851,7 @@ maintainer-clean: maintainer-clean-am
 	-rm -f ./$(DEPDIR)/libulv_a-ulv_syscall_write.Po
 	-rm -f ./$(DEPDIR)/libulv_a-ulv_thread.Po
 	-rm -f ./$(DEPDIR)/libulv_a-ulv_worker.Po
+	-rm -f ./$(DEPDIR)/ulv_clone.Po
 	-rm -f ./$(DEPDIR)/ulv_dummy.Po
 	-rm -f ./$(DEPDIR)/ulv_longjmp.Po
 	-rm -f Makefile
