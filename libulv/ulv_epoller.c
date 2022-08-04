@@ -31,6 +31,8 @@ typedef struct epoll_event {
 	void	*data;
 } __attribute__((packed)) epoll_event_t;
 
+static bool_t	epoller_done;
+
 struct epoller_req;
 
 typedef struct {
@@ -58,16 +60,22 @@ static LIST_HEAD(reqs_new);
 static LIST_HEAD(reqs_done);
 
 static void
-add_epoller_req(epoller_req_t *preq)
+wakeup_epoller(void)
 {
 	char	dummy = '\0';
 
+	__syscall3(__NR_write, pipefds[1], (long)&dummy, 1);
+}
+
+static void
+add_epoller_req(epoller_req_t *preq)
+{
 	ulv_spin_lock(&locked);
 	list_add_tail(&preq->list, &reqs_new);
 	preq->tid = ulv_thread_self();
 	ulv_spin_unlock(&locked);
 
-	__syscall3(__NR_write, pipefds[1], (long)&dummy, 1);
+	wakeup_epoller();
 }
 
 static void
@@ -172,7 +180,7 @@ done_epolled_req(void)
 static void
 epoller_func(void)
 {
-	while (1) {
+	while (!epoller_done) {
 		epoll_event_t	event;
 		int	ret;
 
@@ -233,3 +241,13 @@ epoller_select_events(int nfds, fd_set *rdset, fd_set *wrset, fd_set *exset, str
 
 	return req.nfds;
 }
+
+void
+cleanup_epoller(void)
+{
+	if (!worker_epoller)
+		return;
+	epoller_done = TRUE;
+	wakeup_epoller();
+}
+

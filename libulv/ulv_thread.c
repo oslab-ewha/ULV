@@ -32,7 +32,8 @@ typedef struct {
 	ulv_jmpbuf	jmpbuf;
 } thinfo_t;
 
-static thinfo_t	*cur_thinfo;
+static thinfo_t	*thinfo_cur;
+static thinfo_t	*thinfo_main;
 
 static ulv_tid_t	tid_alloc;
 
@@ -93,7 +94,7 @@ thread_switch(thinfo_t *prev, thinfo_t *next)
 
 	if (ulv_setjmp(prev->jmpbuf)) {
 		DBG("thread scheduled again: %d\n", prev->tid);
-		cur_thinfo = prev;
+		thinfo_cur = prev;
 		return;
 	}
 	ulv_longjmp(next->jmpbuf, 1);
@@ -110,7 +111,7 @@ ulv_thread_clone(char *stack, void *tls)
 	stack_copied = ulv_copy_stack(stack, thinfo);
 	if (ulv_setjmp_clone(thinfo->jmpbuf, stack_copied, tls)) {
 		asm("popq %0" : "=l"(thinfo));
-		cur_thinfo = thinfo;
+		thinfo_cur = thinfo;
 		return 0;
 	}
 	return thinfo->tid;
@@ -169,19 +170,19 @@ ulv_thread_exit(void)
 {
 	thinfo_t	*thinfo_ready;
 
-	DBG("EXIT: %p\n", cur_thinfo);
+	DBG("EXIT: %p\n", thinfo_cur);
 
-	list_del_init(&cur_thinfo->list_ready);
-	free_thinfo(cur_thinfo);
+	list_del_init(&thinfo_cur->list_ready);
+	free_thinfo(thinfo_cur);
 
-	cur_thinfo = thinfo_ready = get_ready_thread_safe();
+	thinfo_cur = thinfo_ready = get_ready_thread_safe();
 	ulv_longjmp(thinfo_ready->jmpbuf, 1);
 }
 
 ulv_tid_t
 ulv_thread_self(void)
 {
-	return cur_thinfo->tid;
+	return thinfo_cur->tid;
 }
 
 void
@@ -190,7 +191,7 @@ ulv_thread_reschedule(void)
 	thinfo_t	*thinfo_ready;
 
 	thinfo_ready = get_ready_thread_safe();
-	thread_switch (cur_thinfo, thinfo_ready);
+	thread_switch (thinfo_cur, thinfo_ready);
 }
 
 bool_t
@@ -201,11 +202,19 @@ ulv_is_last_thread(void)
 	return FALSE;
 }
 
+bool_t
+ulv_is_main_thread(void)
+{
+	if (thinfo_main == thinfo_cur)
+		return TRUE;
+	return FALSE;
+}
+
 void
 ulv_thread_init(void)
 {
 	thinfo_t	*thinfo;
 
 	thinfo = create_thinfo(NULL);
-	cur_thinfo = thinfo;
+	thinfo_main = thinfo_cur = thinfo;
 }

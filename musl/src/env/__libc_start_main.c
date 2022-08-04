@@ -86,18 +86,30 @@ int __libc_start_main(int (*main)(int,char **,char **), int argc, char **argv)
 }
 
 void __attribute__((__weak__))
-init_ulv(void)
+ulv_init(void)
+{
+}
+
+void __attribute__((__weak__))
+ulv_fini(void)
 {
 }
 
 static int libc_start_main_stage2(int (*main)(int,char **,char **), int argc, char **argv)
 {
 	char **envp = argv+argc+1;
+	int	ret;
+
 	__libc_start_init();
 
-	init_ulv();
+	ulv_init();
 
 	/* Pass control to the application */
-	exit(main(argc, argv, envp));
+	ret = main(argc, argv, envp);
+
+	ulv_fini();
+
+	exit(ret);
+
 	return 0;
 }

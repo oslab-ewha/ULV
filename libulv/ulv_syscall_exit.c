@@ -5,7 +5,7 @@
 int
 ulv_syscall_exit(int status)
 {
-	if (ulv_is_last_thread())
+	if (ulv_is_last_thread() || ulv_is_main_thread())
 		return __syscall1(__NR_exit, status);
 	ulv_thread_exit();
 	return 0;
