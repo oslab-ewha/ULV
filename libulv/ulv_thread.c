@@ -4,9 +4,9 @@
 #include "ulv_atomic.h"
 #include "ulv_assert.h"
 
-typedef char	ulv_jmpbuf[64];
+typedef char	ulv_jmpbuf[72];
 extern int ulv_setjmp(ulv_jmpbuf buf);
-extern int ulv_setjmp_clone(ulv_jmpbuf buf, char *stack);
+extern int ulv_setjmp_clone(ulv_jmpbuf buf, char *stack, void *tls);
 extern void ulv_longjmp(ulv_jmpbuf buf, int val);
 char *ulv_copy_stack(char *stack, void *thinfo);
 
@@ -101,14 +101,14 @@ thread_switch(thinfo_t *prev, thinfo_t *next)
 }
 
 ulv_tid_t
-ulv_thread_clone(char *stack)
+ulv_thread_clone(char *stack, void *tls)
 {
 	thinfo_t	*thinfo;
 	char	*stack_copied;
 
 	thinfo = create_thinfo(stack);
 	stack_copied = ulv_copy_stack(stack, thinfo);
-	if (ulv_setjmp_clone(thinfo->jmpbuf, stack_copied)) {
+	if (ulv_setjmp_clone(thinfo->jmpbuf, stack_copied, tls)) {
 		asm("popq %0" : "=l"(thinfo));
 		cur_thinfo = thinfo;
 		return 0;

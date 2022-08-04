@@ -8,5 +8,5 @@ ulv_syscall_clone(unsigned long flags, void *stack, int *ptid, int *ctid, void *
 	if (!(flags & CLONE_VM))
 		ULV_PANIC("clone: CLONE_VM flag required");
 
-	return ulv_thread_clone(stack);
+	return ulv_thread_clone(stack, tls);
 }

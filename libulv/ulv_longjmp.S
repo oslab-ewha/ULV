@@ -19,6 +19,8 @@ ulv_longjmp:
         mov 48(%rdi),%rdx       /* this ends up being the stack pointer */
         mov %rdx,%rsp
         mov 56(%rdi),%rdx       /* this is the instruction pointer */
+	mov 64(%rdi),%r11
+	wrfsbase %r11
         jmp *%rdx               /* goto saved address without altering rsp */
 
 ulv_setjmp:
@@ -32,5 +34,7 @@ ulv_setjmp:
         mov %rdx,48(%rdi)
         mov (%rsp),%rdx         /* save return addr ptr for new rip */
         mov %rdx,56(%rdi)
+	rdfsbase %r11
+        mov %r11,64(%rdi)
         xor %rax,%rax           /* always return 0 */
         ret

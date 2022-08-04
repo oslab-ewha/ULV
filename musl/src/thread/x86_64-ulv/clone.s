@@ -11,9 +11,9 @@ __clone:
 	sub $40, %rsp		/* for ulv_syscall args */
 	mov %rdx,-40(%rbp)
 	mov %r8,-24(%rbp)
-	mov %r9,-16(%rbp)
+	mov %r9,-8(%rbp)
 	mov 48(%rsp),%rdx
-	mov %rdx,-8(%rbp)
+	mov %rdx,-16(%rbp)
 
 	and $-16,%rsi
 	mov %rsi,-32(%rbp)

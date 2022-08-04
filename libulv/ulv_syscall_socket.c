@@ -4,17 +4,8 @@
 extern int
 epoller_select_events(int nfds, long readfds, long writefds, long exceptfds, long timeout);
 
-__attribute__((__weak__)) int
-lwip_socket(int domain, int type, int protocol)
-{
-	return -1;
-}
-
-__attribute__((__weak__)) int
-lwip_connect(long fd, long name, long len)
-{
-	return -1;
-}
+long lwip_socket(int domain, int type, int protocol);
+long lwip_connect(long fd, long name, long len);
 
 int
 ulv_syscall_socket(int domain, int type, int protocol)

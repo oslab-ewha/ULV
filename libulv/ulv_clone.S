@@ -16,6 +16,7 @@ ulv_setjmp_clone:
         mov %r14,32(%rdi)
         mov %r15,40(%rdi)
 	mov %rsi,48(%rdi)
+	mov %rdx,64(%rdi)
         mov (%rsp),%rdx         /* save return addr ptr for new rip */
         mov %rdx,56(%rdi)
         xor %rax,%rax           /* always return 0 */

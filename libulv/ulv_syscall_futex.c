@@ -24,6 +24,8 @@ typedef struct _futex {
 	struct list_head	list;
 } futex_t;
 
+void *memset(void *s, int c, size_t n);
+
 static LIST_HEAD(futexes);
 
 static inline futex_t *
@@ -87,6 +89,7 @@ futex_wait(int *addr, int val)
 	futex = find_futex(addr);
 	if (futex == NULL) {
 		futex = (futex_t *)ulv_malloc(sizeof(futex_t));
+		memset(futex->waiters, 0, sizeof(ulv_tid_t) * MAX_WAITERS);
 		futex->addr = addr;
 	}
 	else
