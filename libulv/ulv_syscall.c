@@ -30,6 +30,10 @@ ulv_syscall(long n, long *args)
 		CASE_ULV_SYSCALL(select, 5);
 		CASE_ULV_SYSCALL(socket, 3);
 		CASE_ULV_SYSCALL(connect, 3);
+		CASE_ULV_SYSCALL(sendto, 6);
+		CASE_ULV_SYSCALL(recvfrom, 6);
+		CASE_ULV_SYSCALL(bind, 3);
+		CASE_ULV_SYSCALL(listen, 2);
 		CASE_ULV_SYSCALL(uname, 1);
 		CASE_ULV_SYSCALL(clone, 5);
 		CASE_ULV_SYSCALL(exit, 1);

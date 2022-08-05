@@ -16,6 +16,10 @@
 #define __NR_select	23
 #define __NR_socket	41
 #define __NR_connect	42
+#define __NR_sendto	44
+#define __NR_recvfrom	45
+#define __NR_bind	49
+#define __NR_listen	50
 #define __NR_clone	56
 #define __NR_exit	60
 #define __NR_uname	63
