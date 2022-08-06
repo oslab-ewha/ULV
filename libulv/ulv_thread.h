@@ -5,7 +5,6 @@
 
 typedef unsigned long	ulv_tid_t;
 
-ulv_tid_t ulv_thread_clone(char *stack, void *tls);
 void ulv_thread_exit(void);
 ulv_tid_t ulv_thread_self(void);
 void ulv_thread_set_blocked(ulv_tid_t tid, int blocked);

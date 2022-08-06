@@ -1,10 +1,9 @@
+#include "ulv_types.h"
 #include "ulv_worker.h"
 #include "ulv_syscall_no.h"
 #include "ulv_syscall_flags.h"
 #include "ulv_host_syscall.h"
 #include "ulv_assert.h"
-
-typedef int	pid_t;
 
 #define STACK_SIZE	16384
 

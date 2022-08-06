@@ -19,4 +19,6 @@ typedef long		ssize_t;
 
 #define NULL	((void *)0)
 
+typedef int	pid_t;
+
 #endif

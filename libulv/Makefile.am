@@ -9,7 +9,7 @@ libulv_a_SOURCES = ulv_init.c ulv_thread.c ulv_thread.h ulv_longjmp.S ulv_clone.
 		ulv_syscall_open.c ulv_syscall_read.c ulv_syscall_write.c ulv_syscall_uname.c \
 		ulv_syscall_exit.c ulv_syscall_ioctl.c ulv_syscall_socket.c \
 		ulv_syscall_mmap.c ulv_syscall_set_tid_address.c \
-		ulv_syscall_clone.c ulv_syscall_futex.c
+		ulv_syscall_futex.c
 
 libulv_a_CFLAGS = -I../lwip/src/include -I../lwip-build -I../lwip/contrib/ports/unix/port/include
 

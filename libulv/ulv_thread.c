@@ -1,3 +1,4 @@
+#include "ulv_types.h"
 #include "ulv_thread.h"
 #include "ulv_malloc.h"
 #include "ulv_list.h"
@@ -6,9 +7,8 @@
 
 typedef char	ulv_jmpbuf[72];
 extern int ulv_setjmp(ulv_jmpbuf buf);
-extern int ulv_setjmp_clone(ulv_jmpbuf buf, char *stack, void *tls);
+extern int ulv_setjmp_clone(ulv_jmpbuf buf, char *stack, void *tls, void *thinfo, void *fn, void *arg);
 extern void ulv_longjmp(ulv_jmpbuf buf, int val);
-char *ulv_copy_stack(char *stack, void *thinfo);
 
 #ifdef DEBUG
 #include <stdio.h>
@@ -44,7 +44,7 @@ static int	locked_ready;
 static LIST_HEAD(threads);
 static LIST_HEAD(threads_ready);
 
-static thinfo_t *
+thinfo_t *
 create_thinfo(char *stack)
 {
 	thinfo_t	*thinfo;
@@ -101,18 +101,19 @@ thread_switch(thinfo_t *prev, thinfo_t *next)
 	DBG("never reached!!!");
 }
 
-ulv_tid_t
-ulv_thread_clone(char *stack, void *tls)
+int
+__clone(int (*fn)(void *), void *stack, int flags, void *arg, pid_t *parent_tid, void *tls, pid_t *child_tid)
 {
 	thinfo_t	*thinfo;
-	char	*stack_copied;
 
 	thinfo = create_thinfo(stack);
-	stack_copied = ulv_copy_stack(stack, thinfo);
-	if (ulv_setjmp_clone(thinfo->jmpbuf, stack_copied, tls)) {
-		asm("popq %0" : "=l"(thinfo));
+
+	if (ulv_setjmp_clone(thinfo->jmpbuf, stack, tls, thinfo, fn, arg)) {
+		asm("popq %0\n\tpopq %1\n\tpopq %2" : "=l"(thinfo), "=l"(arg), "=l"(fn));
 		thinfo_cur = thinfo;
-		return 0;
+
+		fn(arg);
+		ULV_PANIC("never reach");
 	}
 	return thinfo->tid;
 }
@@ -191,7 +192,7 @@ ulv_thread_reschedule(void)
 	thinfo_t	*thinfo_ready;
 
 	thinfo_ready = get_ready_thread_safe();
-	thread_switch (thinfo_cur, thinfo_ready);
+	thread_switch(thinfo_cur, thinfo_ready);
 }
 
 bool_t
