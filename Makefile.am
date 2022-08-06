@@ -12,4 +12,4 @@ lwip-build/liblwip.a: lwip-build/CMakeFiles
 	cd lwip-build && make
 
 lwip-build/CMakeFiles: lwip-build/CMakeLists.txt
-	cd lwip-build && cmake
+	cd lwip-build && cmake .

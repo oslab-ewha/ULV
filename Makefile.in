@@ -781,7 +781,7 @@ lwip-build/liblwip.a: lwip-build/CMakeFiles
 	cd lwip-build && make
 
 lwip-build/CMakeFiles: lwip-build/CMakeLists.txt
-	cd lwip-build && cmake
+	cd lwip-build && cmake .
 
 # Tell versions [3.59,3.63) of GNU make to not export all variables.
 # Otherwise a system limit (for SysV at least) may be exceeded.

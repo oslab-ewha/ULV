@@ -4,6 +4,7 @@
 #include "ulv_syscall_no.h"
 #include "ulv_syscall_flags.h"
 #include "ulv_host_syscall.h"
+#include "ulv_fd_table.h"
 #include "ulv_thread.h"
 #include "ulv_malloc.h"
 #include "ulv_atomic.h"
@@ -98,8 +99,12 @@ accept_req(epoller_req_t *preq)
 			event.events |= EPOLLOUT;
 		if (preq->exset && FD_ISSET(i, preq->exset))
 			event.events |= EPOLLERR;
-		if (event.events != 0)
-			__syscall4(__NR_epoll_ctl, (long)epfd, (long)EPOLL_CTL_ADD, (long)i, (long)&event);
+		if (event.events != 0) {
+			int	fd_real = i;
+
+			if (ulv_convert_fd_real(&fd_real, FDTYPE_HOST))
+				__syscall4(__NR_epoll_ctl, (long)epfd, (long)EPOLL_CTL_ADD, (long)fd_real, (long)&event);
+		}
 	}
 }
 
@@ -250,4 +255,3 @@ cleanup_epoller(void)
 	epoller_done = TRUE;
 	wakeup_epoller();
 }
-
