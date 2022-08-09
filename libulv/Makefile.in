@@ -107,9 +107,9 @@ libulv_a_AR = $(AR) $(ARFLAGS)
 libulv_a_LIBADD =
 am_libulv_a_OBJECTS = libulv_a-ulv_init.$(OBJEXT) \
 	libulv_a-ulv_thread.$(OBJEXT) ulv_longjmp.$(OBJEXT) \
-	ulv_clone.$(OBJEXT) libulv_a-ulv_epoller.$(OBJEXT) \
-	libulv_a-ulv_worker.$(OBJEXT) libulv_a-ulv_fd_table.$(OBJEXT) \
-	libulv_a-ulv_syscall.$(OBJEXT) \
+	ulv_clone.$(OBJEXT) libulv_a-ulv_dyntab.$(OBJEXT) \
+	libulv_a-ulv_epoller.$(OBJEXT) libulv_a-ulv_worker.$(OBJEXT) \
+	libulv_a-ulv_fd_table.$(OBJEXT) libulv_a-ulv_syscall.$(OBJEXT) \
 	libulv_a-ulv_syscall_open.$(OBJEXT) \
 	libulv_a-ulv_syscall_read.$(OBJEXT) \
 	libulv_a-ulv_syscall_write.$(OBJEXT) \
@@ -140,7 +140,8 @@ am__v_at_1 =
 DEFAULT_INCLUDES = -I.@am__isrc@ -I$(top_builddir)
 depcomp = $(SHELL) $(top_srcdir)/depcomp
 am__maybe_remake_depfiles = depfiles
-am__depfiles_remade = ./$(DEPDIR)/libulv_a-ulv_epoller.Po \
+am__depfiles_remade = ./$(DEPDIR)/libulv_a-ulv_dyntab.Po \
+	./$(DEPDIR)/libulv_a-ulv_epoller.Po \
 	./$(DEPDIR)/libulv_a-ulv_fd_table.Po \
 	./$(DEPDIR)/libulv_a-ulv_init.Po \
 	./$(DEPDIR)/libulv_a-ulv_syscall.Po \
@@ -305,6 +306,7 @@ CLEANFILES = *~
 DISTCLEANFILES = *~
 noinst_LIBRARIES = libulv.a libulv_dummy.a
 libulv_a_SOURCES = ulv_init.c ulv_thread.c ulv_thread.h ulv_longjmp.S ulv_clone.S ulv_types.h ulv_assert.h \
+		ulv_dyntab.c ulv_dyntab.h \
 		ulv_epoller.c ulv_worker.c ulv_worker.h ulv_atomic.h ulv_fd_table.c ulv_fd_table.h \
 		ulv_syscall.c ulv_syscall.h ulv_syscall_no.h ulv_host_syscall.h ulv_syscall_flags.h \
 		ulv_syscall_open.c ulv_syscall_read.c ulv_syscall_write.c ulv_syscall_uname.c \
@@ -367,6 +369,7 @@ mostlyclean-compile:
 distclean-compile:
 	-rm -f *.tab.c
 
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libulv_a-ulv_dyntab.Po@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libulv_a-ulv_epoller.Po@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libulv_a-ulv_fd_table.Po@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libulv_a-ulv_init.Po@am__quote@ # am--include-marker
@@ -448,6 +451,20 @@ libulv_a-ulv_thread.obj: ulv_thread.c
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='ulv_thread.c' object='libulv_a-ulv_thread.obj' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
 @am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libulv_a_CFLAGS) $(CFLAGS) -c -o libulv_a-ulv_thread.obj `if test -f 'ulv_thread.c'; then $(CYGPATH_W) 'ulv_thread.c'; else $(CYGPATH_W) '$(srcdir)/ulv_thread.c'; fi`
+
+libulv_a-ulv_dyntab.o: ulv_dyntab.c
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libulv_a_CFLAGS) $(CFLAGS) -MT libulv_a-ulv_dyntab.o -MD -MP -MF $(DEPDIR)/libulv_a-ulv_dyntab.Tpo -c -o libulv_a-ulv_dyntab.o `test -f 'ulv_dyntab.c' || echo '$(srcdir)/'`ulv_dyntab.c
+@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/libulv_a-ulv_dyntab.Tpo $(DEPDIR)/libulv_a-ulv_dyntab.Po
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='ulv_dyntab.c' object='libulv_a-ulv_dyntab.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libulv_a_CFLAGS) $(CFLAGS) -c -o libulv_a-ulv_dyntab.o `test -f 'ulv_dyntab.c' || echo '$(srcdir)/'`ulv_dyntab.c
+
+libulv_a-ulv_dyntab.obj: ulv_dyntab.c
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libulv_a_CFLAGS) $(CFLAGS) -MT libulv_a-ulv_dyntab.obj -MD -MP -MF $(DEPDIR)/libulv_a-ulv_dyntab.Tpo -c -o libulv_a-ulv_dyntab.obj `if test -f 'ulv_dyntab.c'; then $(CYGPATH_W) 'ulv_dyntab.c'; else $(CYGPATH_W) '$(srcdir)/ulv_dyntab.c'; fi`
+@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/libulv_a-ulv_dyntab.Tpo $(DEPDIR)/libulv_a-ulv_dyntab.Po
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='ulv_dyntab.c' object='libulv_a-ulv_dyntab.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libulv_a_CFLAGS) $(CFLAGS) -c -o libulv_a-ulv_dyntab.obj `if test -f 'ulv_dyntab.c'; then $(CYGPATH_W) 'ulv_dyntab.c'; else $(CYGPATH_W) '$(srcdir)/ulv_dyntab.c'; fi`
 
 libulv_a-ulv_epoller.o: ulv_epoller.c
 @am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libulv_a_CFLAGS) $(CFLAGS) -MT libulv_a-ulv_epoller.o -MD -MP -MF $(DEPDIR)/libulv_a-ulv_epoller.Tpo -c -o libulv_a-ulv_epoller.o `test -f 'ulv_epoller.c' || echo '$(srcdir)/'`ulv_epoller.c
@@ -771,7 +788,8 @@ clean: clean-am
 clean-am: clean-generic clean-noinstLIBRARIES mostlyclean-am
 
 distclean: distclean-am
-		-rm -f ./$(DEPDIR)/libulv_a-ulv_epoller.Po
+		-rm -f ./$(DEPDIR)/libulv_a-ulv_dyntab.Po
+	-rm -f ./$(DEPDIR)/libulv_a-ulv_epoller.Po
 	-rm -f ./$(DEPDIR)/libulv_a-ulv_fd_table.Po
 	-rm -f ./$(DEPDIR)/libulv_a-ulv_init.Po
 	-rm -f ./$(DEPDIR)/libulv_a-ulv_syscall.Po
@@ -835,7 +853,8 @@ install-ps-am:
 installcheck-am:
 
 maintainer-clean: maintainer-clean-am
-		-rm -f ./$(DEPDIR)/libulv_a-ulv_epoller.Po
+		-rm -f ./$(DEPDIR)/libulv_a-ulv_dyntab.Po
+	-rm -f ./$(DEPDIR)/libulv_a-ulv_epoller.Po
 	-rm -f ./$(DEPDIR)/libulv_a-ulv_fd_table.Po
 	-rm -f ./$(DEPDIR)/libulv_a-ulv_init.Po
 	-rm -f ./$(DEPDIR)/libulv_a-ulv_syscall.Po

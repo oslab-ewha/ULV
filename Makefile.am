@@ -1,4 +1,4 @@
-SUBDIRS = libulv micro_benchmarks
+SUBDIRS = libulv micro_benchmarks tests
 
 prep: musl/lib/libc.a lwip-build/liblwip.a
 
