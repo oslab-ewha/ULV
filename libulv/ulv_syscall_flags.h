@@ -6,6 +6,7 @@
 
 #define MAP_FAILED	((void *)-1)
 
+#define MAP_SHARED	0x01
 #define MAP_PRIVATE	0x02
 #define MAP_ANONYMOUS	0x20
 #define MAP_STACK	0x20000
@@ -25,5 +26,10 @@
 #define EPOLL_CTL_ADD	1
 #define EPOLL_CTL_DEL	2
 #define EPOLL_CTL_MOD	3
+
+#define O_RDWR		02
+#define O_CREAT		0100
+
+#define MS_SYNC		4
 
 #endif

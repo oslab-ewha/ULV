@@ -17,6 +17,8 @@
 /macro_benchmarks/manifest.c
 /macro_benchmarks/manifest-wget.c
 /Makefile
+/libulfs/Makefile
+/libulfs/libulfs.a
 /libulv/Makefile
 /libulv/libulv.a
 /libulv/libulv_dummy.a
@@ -29,3 +31,5 @@
 /lwip-build/Makefile
 /tests/Makefile
 /tests/test_dyntab
+/tools/ulfs/Makefile
+/tools/ulfs/ulfs

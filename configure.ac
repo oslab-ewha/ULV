@@ -30,7 +30,9 @@ AC_DEFINE(_GNU_SOURCE, [], [GNU Supported Code])
 
 AC_CONFIG_FILES([Makefile
                  libulv/Makefile
+                 libulfs/Makefile
 		 micro_benchmarks/Makefile
+		 tools/ulfs/Makefile
 		 tests/Makefile
 		 ])
 

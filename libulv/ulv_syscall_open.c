@@ -1,11 +1,10 @@
 #include "ulv_types.h"
 #include "ulv_syscall_no.h"
 #include "ulv_host_syscall.h"
+#include "ulv_syscall_flags.h"
 #include "ulv_fd_table.h"
 
 extern int strcmp(const char *s1, const char *s2);
-
-#define O_RDWR	02
 
 int
 ulv_open_devtap(void)

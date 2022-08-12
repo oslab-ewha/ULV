@@ -4553,7 +4553,7 @@ $as_echo "#define _GNU_SOURCE /**/" >>confdefs.h
 
 # Checks for library functions.
 
-ac_config_files="$ac_config_files Makefile libulv/Makefile micro_benchmarks/Makefile tests/Makefile"
+ac_config_files="$ac_config_files Makefile libulv/Makefile libulfs/Makefile micro_benchmarks/Makefile tools/ulfs/Makefile tests/Makefile"
 
 
 cat >confcache <<\_ACEOF
@@ -5293,7 +5293,9 @@ do
     "depfiles") CONFIG_COMMANDS="$CONFIG_COMMANDS depfiles" ;;
     "Makefile") CONFIG_FILES="$CONFIG_FILES Makefile" ;;
     "libulv/Makefile") CONFIG_FILES="$CONFIG_FILES libulv/Makefile" ;;
+    "libulfs/Makefile") CONFIG_FILES="$CONFIG_FILES libulfs/Makefile" ;;
     "micro_benchmarks/Makefile") CONFIG_FILES="$CONFIG_FILES micro_benchmarks/Makefile" ;;
+    "tools/ulfs/Makefile") CONFIG_FILES="$CONFIG_FILES tools/ulfs/Makefile" ;;
     "tests/Makefile") CONFIG_FILES="$CONFIG_FILES tests/Makefile" ;;
 
   *) as_fn_error $? "invalid argument: \`$ac_config_target'" "$LINENO" 5;;
