@@ -26,19 +26,46 @@ typedef struct {
 	bid_t	bids[N_BIDS_PER_BB];
 } bidblock_t;
 
-/* file entry */
+typedef enum {
+	INODE_TYPE_NONE = 0,
+	INODE_TYPE_FILE,
+	INODE_TYPE_DIR,
+} inode_type_t;
+
+/* inode */
 typedef struct {
-	uint16_t	path_off;	/* 0 means empty or link to next */
-	bid_t	bid_path;		/* path name block or next file block */
+	inode_type_t	type;
 	uint64_t	size;
 	bid_t	bids_data[2];		/* data block */
-} fe_t;
+} inode_t;
+
+#define N_INODES_PER_IB	((BSIZE - sizeof(bid_t) + sizeof(uint16_t) * 2) / sizeof(bid_t))
 
 typedef struct {
-	bid_t	bid_next;
-	unsigned	used;
-	char	data[1];
-} path_block_t;
+	bid_t	next;
+	uint16_t	n_used;
+	uint16_t	dummy;
+	inode_t	inodes[N_INODES_PER_IB];
+} inode_block_t;
+
+#define ULFS_NAME_MAX	26
+
+#define N_DIRENT_PER_DB	(BSIZE / sizeof(dirent_t))
+
+typedef struct {
+	char	name[ULFS_NAME_MAX];
+	bid_t	bid_ib;
+	uint16_t	idx_ib;
+} dirent_t;
+
+typedef struct {
+	inode_t	*inode;
+	dirent_t	*head;
+	dirent_t	*ent, *ent_last;
+	bidblock_t	*bb;
+	uint16_t	idx_bb;
+	uint64_t	size_remain;
+} dirlist_t;
 
 void *ulfs_block_get(bid_t bid);
 void ulfs_block_sync(bid_t bid);
@@ -47,7 +74,15 @@ bid_t ulfs_block_alloc(void);
 
 void ulfs_block_init(void);
 
-fe_t *ulfs_alloc_fe(const char *path);
-bid_t ulfs_alloc_data_block(fe_t *fe, bid_t bid);
+inode_t *ulfs_alloc_inode(inode_type_t type, bid_t *pbid_ib, uint16_t *pidx_ib);
+inode_t *ulfs_get_inode(bid_t bid_ib, uint16_t idx_ib);
+bid_t ulfs_alloc_data_block(inode_t *inode, bid_t bid);
 
+inode_t *ulfs_lookup_path(const char *path);
+
+int ulfs_dir_open(dirlist_t *dlist, const char *path);
+dirent_t *ulfs_dir_get(dirlist_t *dlist);
+
+inode_t *ulfs_dir_add_inode(inode_t *inode_dir, const char *name, inode_type_t type);
+			  
 #endif

@@ -44,9 +44,34 @@ do_mk_sb(void)
 }
 
 static void
+do_mk_root(void)
+{
+	inode_t	*inode;
+	bid_t	bid_data, bid_ib;
+	uint16_t	idx_ib;
+	dirent_t	*ent;
+
+	inode = ulfs_alloc_inode(INODE_TYPE_DIR, &bid_ib, &idx_ib);
+	bid_data = ulfs_alloc_data_block(inode, 0);
+	ent = (dirent_t *)ulfs_block_get(bid_data);
+
+	strcpy(ent->name, ".");
+	ent->bid_ib = bid_ib;
+	ent->idx_ib = idx_ib;
+
+	ent++;
+	strcpy(ent->name, "..");
+	ent->bid_ib = bid_ib;
+	ent->idx_ib = idx_ib;
+
+	inode->size = sizeof(dirent_t) * 2;
+}
+
+static void
 do_mkfs(void)
 {
 	do_mk_sb();
+	do_mk_root();
 }
 
 int

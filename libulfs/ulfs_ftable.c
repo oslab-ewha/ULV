@@ -1,52 +1,30 @@
 #include "ulfs_p.h"
 
-#define N_FES_PER_BLOCK	(BSIZE / sizeof(fe_t))
-#define AVAIL_PER_PATH_BLOCK(pb)	(BSIZE - 8 - (pb)->used)
+#define INODE_OFFSET(ib, inode)	((char *)(inode) - (char *)(ib)->inodes)
+#define IDX_IN_IB(ib, inode)	(INODE_OFFSET(ib, inode) / sizeof(inode_t))
 
-#define GET_LINK_FE(fe)	((fe_t *)(fe) + N_FES_PER_BLOCK - 1)
-#define IS_FE_EMPTY(fe)	((fe)->path_off == 0 && (fe)->bid_path == 0)
-
-static fe_t *
-get_next_fe(fe_t *fe)
+static inline bid_t
+get_next_inode_block_bid(inode_block_t *ib)
 {
-	fe_t	*fe_link;
-
-	fe_link = GET_LINK_FE(fe);
-	if (fe_link->bid_path == 0) {
-		fe_link->bid_path = ulfs_block_alloc();
-	}
-	return (fe_t *)ulfs_block_get(fe_link->bid_path);
+	if (ib->next == 0)
+		ib->next = ulfs_block_alloc();
+	return ib->next;
 }
 
-static inline fe_t *
-get_empty_fe(fe_t *fe)
+static inline inode_t *
+get_empty_inode(inode_block_t *ib)
 {
+	inode_t	*inode;
 	int	i;
 
-	for (i = 0; i < N_FES_PER_BLOCK - 1; i++, fe++) {
-		if (IS_FE_EMPTY(fe))
-			return fe;
+	for (i = 0, inode = ib->inodes; i < N_INODES_PER_IB; i++, inode++) {
+		if (inode->type == INODE_TYPE_NONE)
+			return inode;
 	}
 	return NULL;
 }
 
-static fe_t *
-alloc_fe(void)
-{
-	fe_t	*fe_first;
-	fe_t	*fe;
-
-	fe_first = (fe_t *)ulfs_block_get(2);
-	while (1) {
-		fe = get_empty_fe(fe_first);
-		if (fe != NULL)
-			break;
-		fe_first = get_next_fe(fe_first);
-	}
-
-	return fe;
-}
-
+#if 0 ////TODO
 static void
 copy_path(const char *path, char *path_in_pb)
 {
@@ -90,14 +68,40 @@ get_path_bid_off(const char *path, uint16_t *poff)
 		bid_pb = pb->bid_next;
 	}
 }
+#endif
 
-fe_t *
-ulfs_alloc_fe(const char *path)
+inode_t *
+ulfs_alloc_inode(inode_type_t type, bid_t *pbid_ib, uint16_t *pidx_ib)
 {
-	fe_t	*fe;
+	bid_t	bid_ib = 2;
 
-	fe = alloc_fe();
-	fe->bid_path = get_path_bid_off(path, &fe->path_off);
+	while (1) {
+		inode_block_t	*ib;
 
-	return fe;
+		ib = (inode_block_t *)ulfs_block_get(bid_ib);
+		if (ib->n_used < N_INODES_PER_IB) {
+			inode_t	*inode;
+
+			inode = get_empty_inode(ib);
+			ib->n_used++;
+			inode->type = type;
+
+			*pbid_ib = bid_ib;
+			*pidx_ib = IDX_IN_IB(ib, inode);
+			return inode;
+		}
+		bid_ib = get_next_inode_block_bid(ib);
+	}
+
+	/* never reach */
+	return NULL;
+}
+
+inode_t *
+ulfs_get_inode(bid_t bid_ib, uint16_t idx_ib)
+{
+	inode_block_t	*ib;
+
+	ib = (inode_block_t *)ulfs_block_get(bid_ib);
+	return ib->inodes + idx_ib;
 }

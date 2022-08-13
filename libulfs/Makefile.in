@@ -107,7 +107,8 @@ libulfs_a_AR = $(AR) $(ARFLAGS)
 libulfs_a_LIBADD =
 am_libulfs_a_OBJECTS = libulfs_a-ulfs.$(OBJEXT) \
 	libulfs_a-ulfs_block.$(OBJEXT) libulfs_a-ulfs_sb.$(OBJEXT) \
-	libulfs_a-ulfs_ftable.$(OBJEXT) libulfs_a-ulfs_data.$(OBJEXT)
+	libulfs_a-ulfs_ftable.$(OBJEXT) libulfs_a-ulfs_data.$(OBJEXT) \
+	libulfs_a-ulfs_dir.$(OBJEXT)
 libulfs_a_OBJECTS = $(am_libulfs_a_OBJECTS)
 AM_V_P = $(am__v_P_@AM_V@)
 am__v_P_ = $(am__v_P_@AM_DEFAULT_V@)
@@ -127,6 +128,7 @@ am__maybe_remake_depfiles = depfiles
 am__depfiles_remade = ./$(DEPDIR)/libulfs_a-ulfs.Po \
 	./$(DEPDIR)/libulfs_a-ulfs_block.Po \
 	./$(DEPDIR)/libulfs_a-ulfs_data.Po \
+	./$(DEPDIR)/libulfs_a-ulfs_dir.Po \
 	./$(DEPDIR)/libulfs_a-ulfs_ftable.Po \
 	./$(DEPDIR)/libulfs_a-ulfs_sb.Po
 am__mv = mv -f
@@ -270,7 +272,7 @@ top_srcdir = @top_srcdir@
 CLEANFILES = *~
 DISTCLEANFILES = *~
 noinst_LIBRARIES = libulfs.a
-libulfs_a_SOURCES = ulfs.c ulfs.h ulfs_p.h ulfs_block.c ulfs_sb.c ulfs_ftable.c ulfs_data.c
+libulfs_a_SOURCES = ulfs.c ulfs.h ulfs_p.h ulfs_block.c ulfs_sb.c ulfs_ftable.c ulfs_data.c ulfs_dir.c
 libulfs_a_CFLAGS = -I../libulv
 all: all-am
 
@@ -323,6 +325,7 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libulfs_a-ulfs.Po@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libulfs_a-ulfs_block.Po@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libulfs_a-ulfs_data.Po@am__quote@ # am--include-marker
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libulfs_a-ulfs_dir.Po@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libulfs_a-ulfs_ftable.Po@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libulfs_a-ulfs_sb.Po@am__quote@ # am--include-marker
 
@@ -415,6 +418,20 @@ libulfs_a-ulfs_data.obj: ulfs_data.c
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='ulfs_data.c' object='libulfs_a-ulfs_data.obj' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
 @am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libulfs_a_CFLAGS) $(CFLAGS) -c -o libulfs_a-ulfs_data.obj `if test -f 'ulfs_data.c'; then $(CYGPATH_W) 'ulfs_data.c'; else $(CYGPATH_W) '$(srcdir)/ulfs_data.c'; fi`
+
+libulfs_a-ulfs_dir.o: ulfs_dir.c
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libulfs_a_CFLAGS) $(CFLAGS) -MT libulfs_a-ulfs_dir.o -MD -MP -MF $(DEPDIR)/libulfs_a-ulfs_dir.Tpo -c -o libulfs_a-ulfs_dir.o `test -f 'ulfs_dir.c' || echo '$(srcdir)/'`ulfs_dir.c
+@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/libulfs_a-ulfs_dir.Tpo $(DEPDIR)/libulfs_a-ulfs_dir.Po
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='ulfs_dir.c' object='libulfs_a-ulfs_dir.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libulfs_a_CFLAGS) $(CFLAGS) -c -o libulfs_a-ulfs_dir.o `test -f 'ulfs_dir.c' || echo '$(srcdir)/'`ulfs_dir.c
+
+libulfs_a-ulfs_dir.obj: ulfs_dir.c
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libulfs_a_CFLAGS) $(CFLAGS) -MT libulfs_a-ulfs_dir.obj -MD -MP -MF $(DEPDIR)/libulfs_a-ulfs_dir.Tpo -c -o libulfs_a-ulfs_dir.obj `if test -f 'ulfs_dir.c'; then $(CYGPATH_W) 'ulfs_dir.c'; else $(CYGPATH_W) '$(srcdir)/ulfs_dir.c'; fi`
+@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/libulfs_a-ulfs_dir.Tpo $(DEPDIR)/libulfs_a-ulfs_dir.Po
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='ulfs_dir.c' object='libulfs_a-ulfs_dir.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libulfs_a_CFLAGS) $(CFLAGS) -c -o libulfs_a-ulfs_dir.obj `if test -f 'ulfs_dir.c'; then $(CYGPATH_W) 'ulfs_dir.c'; else $(CYGPATH_W) '$(srcdir)/ulfs_dir.c'; fi`
 
 ID: $(am__tagged_files)
 	$(am__define_uniq_tagged_files); mkid -fID $$unique
@@ -545,6 +562,7 @@ distclean: distclean-am
 		-rm -f ./$(DEPDIR)/libulfs_a-ulfs.Po
 	-rm -f ./$(DEPDIR)/libulfs_a-ulfs_block.Po
 	-rm -f ./$(DEPDIR)/libulfs_a-ulfs_data.Po
+	-rm -f ./$(DEPDIR)/libulfs_a-ulfs_dir.Po
 	-rm -f ./$(DEPDIR)/libulfs_a-ulfs_ftable.Po
 	-rm -f ./$(DEPDIR)/libulfs_a-ulfs_sb.Po
 	-rm -f Makefile
@@ -595,6 +613,7 @@ maintainer-clean: maintainer-clean-am
 		-rm -f ./$(DEPDIR)/libulfs_a-ulfs.Po
 	-rm -f ./$(DEPDIR)/libulfs_a-ulfs_block.Po
 	-rm -f ./$(DEPDIR)/libulfs_a-ulfs_data.Po
+	-rm -f ./$(DEPDIR)/libulfs_a-ulfs_dir.Po
 	-rm -f ./$(DEPDIR)/libulfs_a-ulfs_ftable.Po
 	-rm -f ./$(DEPDIR)/libulfs_a-ulfs_sb.Po
 	-rm -f Makefile

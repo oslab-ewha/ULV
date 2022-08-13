@@ -99,7 +99,7 @@ CONFIG_CLEAN_FILES =
 CONFIG_CLEAN_VPATH_FILES =
 PROGRAMS = $(noinst_PROGRAMS)
 am_ulfs_OBJECTS = ulfs_tool_main.$(OBJEXT) ulfs_tool_mkfs.$(OBJEXT) \
-	ulfs_tool_copy.$(OBJEXT)
+	ulfs_tool_ls.$(OBJEXT) ulfs_tool_copy.$(OBJEXT)
 ulfs_OBJECTS = $(am_ulfs_OBJECTS)
 ulfs_DEPENDENCIES = ../../libulfs/libulfs.a
 AM_V_P = $(am__v_P_@AM_V@)
@@ -118,7 +118,8 @@ DEFAULT_INCLUDES = -I.@am__isrc@ -I$(top_builddir)
 depcomp = $(SHELL) $(top_srcdir)/depcomp
 am__maybe_remake_depfiles = depfiles
 am__depfiles_remade = ./$(DEPDIR)/ulfs_tool_copy.Po \
-	./$(DEPDIR)/ulfs_tool_main.Po ./$(DEPDIR)/ulfs_tool_mkfs.Po
+	./$(DEPDIR)/ulfs_tool_ls.Po ./$(DEPDIR)/ulfs_tool_main.Po \
+	./$(DEPDIR)/ulfs_tool_mkfs.Po
 am__mv = mv -f
 COMPILE = $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) \
 	$(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS)
@@ -256,7 +257,7 @@ top_srcdir = @top_srcdir@
 CLEANFILES = *~
 DISTCLEANFILES = *~
 AM_CPPFLAGS = -I../../libulv -I../../libulfs
-ulfs_SOURCES = ulfs_tool_main.c ulfs_tool_mkfs.c ulfs_tool_copy.c
+ulfs_SOURCES = ulfs_tool_main.c ulfs_tool_mkfs.c ulfs_tool_ls.c ulfs_tool_copy.c
 ulfs_LDADD = ../../libulfs/libulfs.a
 all: all-am
 
@@ -306,6 +307,7 @@ distclean-compile:
 	-rm -f *.tab.c
 
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/ulfs_tool_copy.Po@am__quote@ # am--include-marker
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/ulfs_tool_ls.Po@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/ulfs_tool_main.Po@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/ulfs_tool_mkfs.Po@am__quote@ # am--include-marker
 
@@ -456,6 +458,7 @@ clean-am: clean-generic clean-noinstPROGRAMS mostlyclean-am
 
 distclean: distclean-am
 		-rm -f ./$(DEPDIR)/ulfs_tool_copy.Po
+	-rm -f ./$(DEPDIR)/ulfs_tool_ls.Po
 	-rm -f ./$(DEPDIR)/ulfs_tool_main.Po
 	-rm -f ./$(DEPDIR)/ulfs_tool_mkfs.Po
 	-rm -f Makefile
@@ -504,6 +507,7 @@ installcheck-am:
 
 maintainer-clean: maintainer-clean-am
 		-rm -f ./$(DEPDIR)/ulfs_tool_copy.Po
+	-rm -f ./$(DEPDIR)/ulfs_tool_ls.Po
 	-rm -f ./$(DEPDIR)/ulfs_tool_main.Po
 	-rm -f ./$(DEPDIR)/ulfs_tool_mkfs.Po
 	-rm -f Makefile

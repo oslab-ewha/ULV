@@ -6,7 +6,7 @@
 
 #define BID_TO_BLOCK(bid)	((char *)mapped + (bid) * BSIZE)
 #define N_BIDS_PER_MB	((BSIZE - 4) * 8)
-#define N_DEF_BIDS	4
+#define N_DEF_BIDS	3
 
 static void	*mapped;
 

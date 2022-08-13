@@ -3,6 +3,7 @@
 #include <stdarg.h>
 
 int ulfs_tool_mkfs(int argc, char *argv[]);
+int ulfs_tool_ls(int argc, char *argv[]);
 int ulfs_tool_copyto(int argc, char *argv[]);
 
 static void
@@ -12,6 +13,7 @@ usage(void)
 "ulfs <command> [<command options>]\n"
 " command:\n"
 "   mkfs <path> <size>\n"
+"   ls [<path>]\n"
 "   copyto <host path> [<ulfs path>]\n"
 		);
 }
@@ -39,6 +41,9 @@ main(int argc, char *argv[])
 	
 	if (strcmp(argv[1], "mkfs") == 0) {
 		return ulfs_tool_mkfs(argc - 2, argv + 2);
+	}
+	else if (strcmp(argv[1], "ls") == 0) {
+		return ulfs_tool_ls(argc - 2, argv + 2);
 	}
 	else if (strcmp(argv[1], "copyto") == 0) {
 		return ulfs_tool_copyto(argc - 2, argv + 2);
