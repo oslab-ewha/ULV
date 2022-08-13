@@ -24,52 +24,6 @@ get_empty_inode(inode_block_t *ib)
 	return NULL;
 }
 
-#if 0 ////TODO
-static void
-copy_path(const char *path, char *path_in_pb)
-{
-	const char	*p;
-	char	*q;
-
-	for (p = path, q = path_in_pb; *p; p++, q++)
-		*q = *p;
-	*q = '\0';
-}
-
-static uint16_t
-get_pathlen(const char *path)
-{
-	const char	*p;
-
-	for (p = path; *p; p++);
-	return (uint16_t)(p - path + 1);
-}
-
-static bid_t
-get_path_bid_off(const char *path, uint16_t *poff)
-{
-	uint16_t	pathlen;
-	bid_t	bid_pb = 3;
-
-	pathlen = get_pathlen(path);
-
-	while (1) {
-		path_block_t	*pb;
-
-		pb = (path_block_t *)ulfs_block_get(bid_pb);
-		if (AVAIL_PER_PATH_BLOCK(pb) >= pathlen) {
-			*poff = 8 + pb->used;
-			copy_path(path, pb->data + pb->used);
-			pb->used += pathlen;
-			return bid_pb;
-		}
-		if (pb->bid_next == 0)
-			pb->bid_next = ulfs_block_alloc();
-		bid_pb = pb->bid_next;
-	}
-}
-#endif
-
 inode_t *
 ulfs_alloc_inode(inode_type_t type, bid_t *pbid_ib, uint16_t *pidx_ib)
 {
