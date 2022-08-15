@@ -10,6 +10,8 @@ typedef unsigned short	uint16_t;
 typedef unsigned int	uint32_t;
 typedef unsigned long	uint64_t;
 
+#ifndef ULFS_USE_GLIBC
+
 typedef unsigned long	off_t;
 
 typedef unsigned long	size_t;
@@ -21,5 +23,7 @@ typedef long		ssize_t;
 #define NULL	((void *)0)
 
 typedef int	pid_t;
+
+#endif
 
 #endif

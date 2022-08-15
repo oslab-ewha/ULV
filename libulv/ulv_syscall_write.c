@@ -2,6 +2,7 @@
 #include "ulv_syscall_no.h"
 #include "ulv_host_syscall.h"
 #include "ulv_fd_table.h"
+#include "ulfs.h"
 
 struct iovec {
 	void	*iov_base;
@@ -11,9 +12,16 @@ struct iovec {
 ssize_t
 ulv_syscall_write(int fd, const void *buf, size_t count)
 {
-	if (!ulv_convert_fd_real(&fd, FDTYPE_HOST))
+	int	fd_real;
+	fdtype_t	type;
+
+	fd_real = ulv_lookup_fd_real(fd, &type);
+	if (fd_real < 0)
 		return -1;
-	return __syscall3(__NR_write, (long)fd, (long)buf, (long)count);
+	if (type == FDTYPE_ULFS)
+		return ulfs_write(fd_real, buf, count);
+	else
+		return __syscall3(__NR_write, (long)fd, (long)buf, (long)count);
 }
 
 ssize_t

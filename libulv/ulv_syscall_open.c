@@ -3,6 +3,7 @@
 #include "ulv_host_syscall.h"
 #include "ulv_syscall_flags.h"
 #include "ulv_fd_table.h"
+#include "ulfs.h"
 
 extern int strcmp(const char *s1, const char *s2);
 
@@ -21,5 +22,23 @@ ulv_open_devtap(void)
 int
 ulv_syscall_open(const char *pathname, int flags, int mode)
 {
-	return -1;
+	int	fd;
+
+	fd = ulfs_open(pathname, flags, mode);
+	if (fd < 0)
+		return -1;
+	return ulv_assign_fd(FDTYPE_ULFS, fd);
+}
+
+void
+ulv_syscall_close(int fd)
+{
+	fdtype_t	type;
+	int	fd_real;
+
+	fd_real = ulv_lookup_fd_real(fd, &type);
+	if (fd_real < 0)
+		return;
+	if (type == FDTYPE_ULFS)
+		return ulfs_close(fd_real);
 }

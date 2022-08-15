@@ -18,11 +18,10 @@ do_copy_data(inode_t *inode, int fd)
 	unsigned	i;
 
 	for (i = 0; size_copy > 0; i++) {
-		bid_t	bid = ulfs_alloc_data_block(inode, (bid_t)i);
 		char	*data;
 		ssize_t	nread;
 
-		data = ulfs_block_get(bid);
+		data = ulfs_get_data_block(inode, (lbid_t)i);
 		if (size_copy >= BSIZE) {
 			nread = read(fd, data, BSIZE);
 			size_copy -= BSIZE;
@@ -39,7 +38,7 @@ do_copy_data(inode_t *inode, int fd)
 static int
 do_copyto(int fd, const char *_path)
 {
-	char	*path, *path_dir;
+	path_t	path;
 	inode_t	*inode, *inode_dir;
 	struct stat	statb;
 
@@ -48,13 +47,15 @@ do_copyto(int fd, const char *_path)
 		return 3;
 	}
 
-	path = strdup(_path);
-	path_dir = dirname(path);
-	if (strcmp(path_dir, ".") == 0) {
-		inode_dir = ulfs_lookup_path("/");
+	ulfs_path_init(&path, _path);
+	ulfs_path_dirname(&path);
+	if (ulfs_path_is_empty(&path)) {
+		path_t	path_root;
+		ulfs_path_init(&path_root, "/");
+		inode_dir = ulfs_lookup_path(&path_root);
 	}
 	else {
-		inode_dir = ulfs_lookup_path(path_dir);
+		inode_dir = ulfs_lookup_path(&path);
 	}
 
 	if (inode_dir == NULL) {
@@ -66,7 +67,9 @@ do_copyto(int fd, const char *_path)
 		return 4;
 	}
 
-	inode = ulfs_dir_add_inode(inode_dir, basename(path), INODE_TYPE_FILE);
+	ulfs_path_init(&path, _path);
+	ulfs_path_basename(&path);
+	inode = ulfs_dir_add_inode(inode_dir, &path, INODE_TYPE_FILE);
 	if (inode == NULL) {
 		error("duplicate entry or unknown error");
 		return 4;

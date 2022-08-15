@@ -12,6 +12,6 @@ libulv_a_SOURCES = ulv_init.c ulv_thread.c ulv_thread.h ulv_longjmp.S ulv_clone.
 		ulv_syscall_mmap.c ulv_syscall_set_tid_address.c \
 		ulv_syscall_futex.c
 
-libulv_a_CFLAGS = -I../lwip/src/include -I../lwip-build -I../lwip/contrib/ports/unix/port/include
+libulv_a_CFLAGS = -I../lwip/src/include -I../lwip-build -I../libulfs -I../lwip/contrib/ports/unix/port/include
 
 libulv_dummy_a_SOURCES = ulv_dummy.c

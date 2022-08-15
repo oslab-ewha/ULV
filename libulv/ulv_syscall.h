@@ -13,6 +13,7 @@
 DEF_ULV_SYSCALL(read, 3);
 DEF_ULV_SYSCALL(write, 3);
 DEF_ULV_SYSCALL(open, 3);
+DEF_ULV_SYSCALL(close, 1);
 DEF_ULV_SYSCALL(mmap, 6);
 DEF_ULV_SYSCALL(mprotect, 3);
 DEF_ULV_SYSCALL(munmap, 2);

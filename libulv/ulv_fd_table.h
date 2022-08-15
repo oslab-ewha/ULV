@@ -5,6 +5,7 @@
 
 typedef enum {
 	FDTYPE_HOST = 1,
+	FDTYPE_ULFS,
 	FDTYPE_LWIP,
 } fdtype_t;
 

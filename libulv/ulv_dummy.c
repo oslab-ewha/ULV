@@ -1,4 +1,29 @@
 __attribute__((__weak__)) void
+ulfs_init(void)
+{
+}
+
+__attribute__((__weak__)) void
+ulfs_open(void)
+{
+}
+
+__attribute__((__weak__)) void
+ulfs_close(void)
+{
+}
+
+__attribute__((__weak__)) void
+ulfs_read(void)
+{
+}
+
+__attribute__((__weak__)) void
+ulfs_write(void)
+{
+}
+
+__attribute__((__weak__)) void
 ulv_net_init(void)
 {
 }

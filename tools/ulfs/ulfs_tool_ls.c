@@ -2,7 +2,6 @@
 #include <stdio.h>
 
 #define ULFS_USE_GLIBC
-#include <inttypes.h>
 #include "ulfs_p.h"
 
 #include "ulfs_tool.h"
@@ -10,13 +9,15 @@
 static char	typechars[] = { 'f', 'd' };
 
 static int
-do_ls(const char *path)
+do_ls(const char *_path)
 {
+	path_t		path;
 	dirlist_t	dir;
 	dirent_t	*ent;
 
-	if (ulfs_dir_open(&dir, path) < 0) {
-		error("%s: not exist or not directory", path);
+	ulfs_path_init(&path, _path);
+	if (ulfs_dir_open(&dir, &path) < 0) {
+		error("%s: not exist or not directory", _path);
 		return 2;
 	}
 
