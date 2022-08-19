@@ -15,5 +15,5 @@ ulv_syscall_read(int fd, void *buf, size_t count)
 		return -1;
 	if (type == FDTYPE_ULFS)
 		return ulfs_read(fd_real, buf, count);
-	return __syscall3(__NR_read, (long)fd, (long)buf, (long)count);
+	return __syscall3(__NR_read, (long)fd_real, (long)buf, (long)count);
 }

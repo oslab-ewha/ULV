@@ -21,7 +21,7 @@ ulv_syscall_write(int fd, const void *buf, size_t count)
 	if (type == FDTYPE_ULFS)
 		return ulfs_write(fd_real, buf, count);
 	else
-		return __syscall3(__NR_write, (long)fd, (long)buf, (long)count);
+		return __syscall3(__NR_write, (long)fd_real, (long)buf, (long)count);
 }
 
 ssize_t

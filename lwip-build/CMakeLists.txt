@@ -82,7 +82,7 @@ set(lwipcontribportunixnetifs_SRCS
     ${LWIP_DIR}/contrib/ports/unix/port/netif/fifo.c
 )
 
-set(CMAKE_C_FLAGS_DEBUG "-O0 -ggdb")
+set(CMAKE_C_FLAGS_RELEASE "-U_FORTIFY_SOURCE -D_FORTIFY_SOURCE=0")
 
 set(liblwip_SRCS liblwip.c ${lwipcore_SRCS} ${lwipcore4_SRCS} ${lwipcore6_SRCS}
 	${lwipnetif_SRCS} ${lwipapi_SRCS}

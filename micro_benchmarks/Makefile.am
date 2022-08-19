@@ -25,3 +25,5 @@ mb_network_LDADD = libmb.a ../lwip-build/liblwip.a ../libulv/libulv_dummy.a ../m
 mb_network_LINK = $(common_LINK)
 
 libmb_a_SOURCES = libmb_stdio.c libmb_time.c libmb_net.c
+
+$(noinst_PROGRAMS): ../libulv/libulv.a
