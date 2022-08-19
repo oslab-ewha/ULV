@@ -86,9 +86,7 @@ accept_req(epoller_req_t *preq)
 	epolled_fdinfo_t	*fdinfo;
 	int	i;
 
-	preq->fdinfos = (epolled_fdinfo_t *)ulv_malloc(sizeof(epolled_fdinfo_t) * preq->nfds);
-
-	for (i = 0, fdinfo = preq->fdinfos; i < preq->nfds; i++, fdinfo++) {
+	for (i = 0, fdinfo = preq->fdinfos; i <= preq->nfds; i++, fdinfo++) {
 		fdinfo->fd = i;
 		fdinfo->preq = preq;
 		event.events = 0;
@@ -174,7 +172,6 @@ done_epolled_req(void)
 	list_for_each_n (lp, &reqs_done, next) {
 		epoller_req_t	*preq = list_entry(lp, epoller_req_t, list);
 
-		ulv_free(preq->fdinfos);
 		list_del_init(&preq->list);
 
 		ulv_thread_set_blocked(preq->tid, 0);
@@ -237,6 +234,8 @@ epoller_select_events(int nfds, fd_set *rdset, fd_set *wrset, fd_set *exset, str
 	req.wrset = wrset;
 	req.exset = exset;
 	req.timeout = timeout;
+	/* ulv_malloc/free should be done by this thread to avoid multi-threaded libc malloc. */
+	req.fdinfos = (epolled_fdinfo_t *)ulv_malloc(sizeof(epolled_fdinfo_t) * (nfds + 1));
 
 	add_epoller_req(&req);
 
@@ -244,6 +243,7 @@ epoller_select_events(int nfds, fd_set *rdset, fd_set *wrset, fd_set *exset, str
 	while (!req.done)
 		ulv_thread_reschedule();
 
+	ulv_free(req.fdinfos);
 	return req.nfds;
 }
 
