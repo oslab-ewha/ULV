@@ -8,8 +8,8 @@ musl/lib/libc.a: musl/config.mak
 musl/config.mak:
 	cd musl && ./configure --disable-shared --target=x86_64-ulv
 
-lwip-build/liblwip.a: lwip-build/CMakeFiles
+lwip-build/liblwip.a: lwip-build/CMakeFiles/lwip.dir
 	cd lwip-build && make
 
-lwip-build/CMakeFiles: lwip-build/CMakeLists.txt
+lwip-build/CMakeFiles/lwip.dir: lwip-build/CMakeLists.txt
 	cd lwip-build && cmake .

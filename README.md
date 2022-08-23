@@ -14,19 +14,23 @@
 - musl-tools
  
 ### Build ULV
+- `$ git submodule init && git submodule update`
+  - copy submodule lwip
+- `$ ./configure`
+  - auto configure
 - `$ make prep`
   - builds lwip and musl
 - `$ make`
   - builds libulv, libulfs and micro benchmarks
 
 ## Running (micro benchmark)
-- `$ microbenchmarks/mb_thread`
+- `$ micro_benchmarks/mb_thread`
   - pthread test under ULV
 
-- `$ microbenchmarks/mb_syscall`
+- `$ micro_benchmarks/mb_syscall`
   - simple system call test
 
-- `$ microbenchmarks/mb_network <connect IP:port> [<bind IP>]`
+- `$ micro_benchmarks/mb_network <connect IP:port> [<bind IP>]`
   - bind IP is an optional argument which is a local binding IP.
   - connect IP and port should be specified like as `192.168.12.100:30000`.
   - before test, a tap device should be setup as follows.
@@ -42,7 +46,7 @@
     - NETMASK=255.255.255.0
   - echo server using ncat
     - `ncat -l 20000 -k -c 'xargs -n1 echo'`
-- `$ microbenchmarks/mb_file <file path>`
+- `$ micro_benchmarks/mb_file <file path>`
   - environment variable required. ULV_BLOCK=<path>
   - unikernel file system can be generated as follows:
     - `tools/ulfs/ulfs mkfs /tmp/testfile.img 10m`
