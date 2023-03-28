@@ -39,5 +39,5 @@ ulfs_tool_ls(int argc, char *argv[])
 	if (argc < 1)
 		return do_ls("/");
 	
-	return do_ls(argv[1]);
+	return do_ls(argv[0]);
 }
