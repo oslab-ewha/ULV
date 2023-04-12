@@ -27,6 +27,7 @@
 #define __NR_clone	56
 #define __NR_exit	60
 #define __NR_uname	63
+#define __NR_mkdir	83
 #define __NR_futex	202
 #define __NR_set_tid_address	218
 #define __NR_exit_group	231

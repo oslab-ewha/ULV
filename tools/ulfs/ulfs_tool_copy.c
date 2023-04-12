@@ -69,7 +69,7 @@ do_copyto(int fd, const char *_path)
 
 	ulfs_path_init(&path, _path);
 	ulfs_path_basename(&path);
-	inode = ulfs_dir_add_inode(inode_dir, &path, INODE_TYPE_FILE);
+	inode = ulfs_dir_add_inode(inode_dir, &path, INODE_TYPE_FILE, FALSE);
 	if (inode == NULL) {
 		error("duplicate entry or unknown error");
 		return 4;

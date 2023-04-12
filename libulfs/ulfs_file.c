@@ -22,7 +22,7 @@ ulfs_open(const char *pathname, int flags, int mode)
 	ulfs_path_basename(&path);
 
 	if (flags & O_CREAT) {
-		inode = ulfs_dir_add_inode(inode_dir, &path, INODE_TYPE_FILE);
+		inode = ulfs_dir_add_inode(inode_dir, &path, INODE_TYPE_FILE, TRUE);
 	} else {
 		inode = ulfs_lookup_name(inode_dir, &path);
 		if (inode == NULL)

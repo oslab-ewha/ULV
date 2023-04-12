@@ -20,6 +20,7 @@ ulv_syscall(long n, long *args)
 		CASE_ULV_SYSCALL(write, 3);
 		CASE_ULV_SYSCALL(open, 3);
 		CASE_ULV_SYSCALL(close, 1);
+		CASE_ULV_SYSCALL(mkdir, 2);
 		CASE_ULV_SYSCALL(mmap, 6);
 		CASE_ULV_SYSCALL(mprotect, 3);
 		CASE_ULV_SYSCALL(munmap, 2);

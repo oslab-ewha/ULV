@@ -2,6 +2,7 @@
 #define _ULFS_P_H_
 
 #include "ulv_types.h"
+#include "errno.h"
 
 #define BSIZE		4096
 #define ULFS_SB_MAGIC	0x11089160
@@ -100,7 +101,7 @@ inode_t *ulfs_lookup_path(path_t *ppath);
 int ulfs_dir_open(dirlist_t *dlist, path_t *ppath);
 dirent_t *ulfs_dir_get(dirlist_t *dlist);
 
-inode_t *ulfs_dir_add_inode(inode_t *inode_dir, path_t *ppath, inode_type_t type);
+inode_t *ulfs_dir_add_inode(inode_t *inode_dir, path_t *ppath, inode_type_t type, bool_t exist_ok);
 
 ulfd_t *ulfs_get_ulfd(int fd);
 

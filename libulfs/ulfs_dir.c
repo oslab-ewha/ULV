@@ -167,15 +167,18 @@ set_entry_name(dirent_t *ent, path_t *ppath)
 }
 
 inode_t *
-ulfs_dir_add_inode(inode_t *inode_dir, path_t *ppath, inode_type_t type)
+ulfs_dir_add_inode(inode_t *inode_dir, path_t *ppath, inode_type_t type, bool_t exist_ok)
 {
 	dirent_t	*ent;
 	bid_t		bid_ib;
 	uint16_t	idx_ib;
 	inode_t		*inode;
 
-	if (ulfs_lookup_name(inode_dir, ppath) != NULL)
+	if ((inode = ulfs_lookup_name(inode_dir, ppath)) != NULL) {
+		if (exist_ok)
+			return inode;
 		return NULL;
+	}
 
 	ent = find_empty_entry(inode_dir);
 	inode = ulfs_alloc_inode(type, &bid_ib, &idx_ib);
