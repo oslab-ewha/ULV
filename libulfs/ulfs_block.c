@@ -2,11 +2,15 @@
 #include "ulv_host_syscall.h"
 #include "ulv_syscall_flags.h"
 #include "ulv_assert.h"
+#include "ulv_libc.h"
+
 #include "ulfs_p.h"
 
 #define BID_TO_BLOCK(bid)	((char *)mapped + (bid) * BSIZE)
-#define N_BIDS_PER_MB	((BSIZE - 4) * 8)
-#define N_DEF_BIDS	3
+#define N_BIDS_PER_MAPB	((BSIZE - 4) * 8)
+
+#define BID_MAPB_NEXT(bid_mapb)	 ((bid_mapb) + N_BIDS_PER_MAPB + 1)
+#define BID_MAPB_FROM_BID(bid)	 ((((bid) - BID_MAPB_START) / (N_BIDS_PER_MAPB + 1)) * (N_BIDS_PER_MAPB + 1) + 1)
 
 static void	*mapped;
 
@@ -39,7 +43,7 @@ alloc_bit_index(char *bitmap)
 	for (i = 0; i < BSIZE - sizeof(unsigned); i++) {
 		if (bitmap[i] != 0xff) {
 			int	j;
-			char	mask = 0x80;
+			unsigned char	mask = 0x80;
 			for (j = 0; j < 8; j++) {
 				if (!(bitmap[i] & mask)) {
 					bitmap[i] |= mask;
@@ -49,42 +53,61 @@ alloc_bit_index(char *bitmap)
 			}
 		}
 	}
-	return N_BIDS_PER_MB;
+	return N_BIDS_PER_MAPB;
 }
 
 static void
-alloc_new_block(mapblock_t *mapb, bid_t bid)
+free_bit_index(char *bitmap, int ord)
 {
-	mapblock_t	*mapb_new;
+	bitmap[ord / 8] &= ~(((unsigned char)0x80) >> (ord % 8));
+}
 
-	mapb->next = bid + N_BIDS_PER_MB;
-	mapb_new = (mapblock_t *)ulfs_block_get(mapb->next);
-	mapb_new->bitmap[0] |= 0x80;
+static void
+setup_new_mapb(mapblock_t *mapb_new, bid_t bid_mapb)
+{
+	mapblock_t	*mapb_next;
+
+	mapb_next = (mapblock_t *)ulfs_block_get(BID_MAPB_NEXT(bid_mapb));
+	mapb_next->n_frees = ULFS_ENDOFMAPB;
+	mapb_new->n_frees = N_BIDS_PER_MAPB;
+	memset(mapb_new->bitmap, 0, sizeof(mapb_new->bitmap));
 }
 
 bid_t
 ulfs_block_alloc(void)
 {
 	mapblock_t	*mapb;
-	bid_t	bid_mapb = 1;
-	bid_t	bid = N_DEF_BIDS;
+	bid_t	bid_mapb = BID_MAPB_START;
 
 	while (1) {
 		mapb = (mapblock_t *)ulfs_block_get(bid_mapb);
-		if (mapb->next == 0) {
+		if (mapb->n_frees == ULFS_ENDOFMAPB)
+			setup_new_mapb(mapb, bid_mapb);
+		if (mapb->n_frees > 0) {
 			unsigned	bit_idx;
 
 			bit_idx = alloc_bit_index(mapb->bitmap);
-			if (bit_idx != N_BIDS_PER_MB)
-				return bid + bit_idx;
-			alloc_new_block(mapb, bid);
+			ULV_ASSERT(bit_idx != N_BIDS_PER_MAPB);
+			mapb->n_frees--;
+			return bid_mapb + 1 + bit_idx;
 		}
-		bid += N_BIDS_PER_MB;
-		bid_mapb = mapb->next;
+		bid_mapb = BID_MAPB_NEXT(bid_mapb);
 	}
 
 	/* never reach */
 	return 0;
+}
+
+void
+ulfs_block_free(bid_t bid)
+{
+	mapblock_t	*mapb;
+	bid_t	bid_mapb = BID_MAPB_FROM_BID(bid);
+
+	mapb = (mapblock_t *)ulfs_block_get(bid_mapb);
+	ULV_ASSERT(mapb->n_frees != ULFS_ENDOFMAPB);
+	mapb->n_frees++;
+	free_bit_index(mapb->bitmap, bid - bid_mapb - 1);
 }
 
 void

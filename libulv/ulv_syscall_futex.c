@@ -6,6 +6,7 @@
 #include "ulv_malloc.h"
 #include "ulv_thread.h"
 #include "ulv_assert.h"
+#include "ulv_libc.h"
 
 #define FUTEX_WAIT 0
 #define FUTEX_WAKE 1
@@ -23,8 +24,6 @@ typedef struct _futex {
 	ulv_tid_t	waiters[MAX_WAITERS];
 	struct list_head	list;
 } futex_t;
-
-void *memset(void *s, int c, size_t n);
 
 static LIST_HEAD(futexes);
 

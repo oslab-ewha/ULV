@@ -52,10 +52,10 @@ do_copyto(int fd, const char *_path)
 	if (ulfs_path_is_empty(&path)) {
 		path_t	path_root;
 		ulfs_path_init(&path_root, "/");
-		inode_dir = ulfs_lookup_path(&path_root);
+		inode_dir = ulfs_lookup_path(&path_root, NULL);
 	}
 	else {
-		inode_dir = ulfs_lookup_path(&path);
+		inode_dir = ulfs_lookup_path(&path, NULL);
 	}
 
 	if (inode_dir == NULL) {
@@ -69,7 +69,7 @@ do_copyto(int fd, const char *_path)
 
 	ulfs_path_init(&path, _path);
 	ulfs_path_basename(&path);
-	inode = ulfs_dir_add_inode(inode_dir, &path, INODE_TYPE_FILE, FALSE);
+	inode = ulfs_dir_add_inode(inode_dir, &path, INODE_TYPE_FILE, NULL, FALSE);
 	if (inode == NULL) {
 		error("duplicate entry or unknown error");
 		return 4;

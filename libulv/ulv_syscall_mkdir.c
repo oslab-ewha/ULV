@@ -7,6 +7,11 @@
 int
 ulv_syscall_mkdir(const char *pathname, int mode)
 {
-	ulfs_mkdir(pathname);
-	return 0;
+	return ulfs_mkdir(pathname);
+}
+
+int
+ulv_syscall_rmdir(const char *pathname)
+{
+	return ulfs_rmdir(pathname);
 }

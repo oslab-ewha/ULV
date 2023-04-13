@@ -43,6 +43,29 @@ do_mk_sb(void)
 }
 
 static void
+do_init_mapb(void)
+{
+	mapblock_t	*mapb;
+
+	mapb = (mapblock_t *)ulfs_block_get(BID_MAPB_START);
+	mapb->n_frees = ULFS_ENDOFMAPB;
+	memset(mapb->bitmap, 0, sizeof(mapb->bitmap));
+	ulfs_block_sync(BID_MAPB_START);
+}
+
+static void
+do_init_indb(void)
+{
+	inode_block_t	*indb;
+
+	/* This bid of first inode block willl be BID_IND_START */
+	indb = (inode_block_t *)ulfs_block_get(ulfs_block_alloc());
+	indb->next = 0;
+	indb->n_used = 0;
+	ulfs_block_sync(BID_INDB_START);
+}
+
+static void
 do_mk_root(void)
 {
 	inode_t	*inode;
@@ -69,6 +92,8 @@ static void
 do_mkfs(void)
 {
 	do_mk_sb();
+	do_init_mapb();
+	do_init_indb();
 	do_mk_root();
 }
 

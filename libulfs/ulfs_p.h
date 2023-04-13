@@ -1,13 +1,27 @@
 #ifndef _ULFS_P_H_
 #define _ULFS_P_H_
 
+/* ulfs private header */
+
 #include "ulv_types.h"
 #include "errno.h"
 
 #define BSIZE		4096
 #define ULFS_SB_MAGIC	0x11089160
+#define ULFS_ENDOFMAPB	((unsigned)((int)(-1)))
 
+/* map block starts at bid 1 */
+#define BID_MAPB_START	1
+
+/* inode block starts at bid 2 */
+#define BID_INDB_START	2
+
+/* root data block starts at bid 3 */
+#define BID_ROOTB_START	3
+
+/* block id */
 typedef unsigned	bid_t;
+/* logical block id for linear file */
 typedef unsigned	lbid_t;
 
 typedef struct {
@@ -15,11 +29,11 @@ typedef struct {
 } sb_t;
 
 typedef struct {
-	bid_t	next;
+	unsigned	n_frees;
 	char	bitmap[BSIZE - sizeof(bid_t)];
 } mapblock_t;
 
-#define N_BIDS_PER_BB	((BSIZE - sizeof(bid_t)) / sizeof(bid_t))
+#define N_BIDS_PER_BB	((BSIZE - sizeof(int)) / sizeof(bid_t))
 
 typedef struct {
 	bid_t	next;
@@ -84,24 +98,32 @@ void *ulfs_block_get(bid_t bid);
 void ulfs_block_sync(bid_t bid);
 
 bid_t ulfs_block_alloc(void);
+void ulfs_block_free(bid_t bid);
 
 void ulfs_block_init(void);
 
 inode_t *ulfs_alloc_inode(inode_type_t type, bid_t *pbid_ib, uint16_t *pidx_ib);
+void ulfs_free_inode(inode_t *inode);
+
 inode_t *ulfs_get_inode(bid_t bid_ib, uint16_t idx_ib);
 inode_t *ulfs_get_inode_root(void);
 inode_t *ulfs_get_inode_cwd(void);
 bid_t ulfs_alloc_data_block(inode_t *inode, lbid_t lbid, bidblock_t **pbb, uint16_t *pidx_bb);
 bid_t ulfs_alloc_data_block_next(inode_t *inode, bidblock_t **pbb, uint16_t *pidx_bb);
 void *ulfs_get_data_block(inode_t *inode, lbid_t lbid);
+void ulfs_free_data_blocks(inode_t *inode);
 
-inode_t *ulfs_lookup_name(inode_t *inode_dir, path_t *ppath);
-inode_t *ulfs_lookup_path(path_t *ppath);
+inode_t *ulfs_lookup_name(inode_t *inode_dir, path_t *ppath, dirent_t **pent);
+inode_t *ulfs_lookup_path(path_t *ppath, dirent_t **pent);
 
 int ulfs_dir_open(dirlist_t *dlist, path_t *ppath);
 dirent_t *ulfs_dir_get(dirlist_t *dlist);
 
-inode_t *ulfs_dir_add_inode(inode_t *inode_dir, path_t *ppath, inode_type_t type, bool_t exist_ok);
+inode_t *ulfs_dir_add_inode(inode_t *inode_dir, path_t *ppath, inode_type_t type, dirent_t **pent, bool_t exist_ok);
+bool_t ulfs_dir_del_inode(inode_t *inode_dir, path_t *ppath);
+
+dirent_t *ulfs_dir_get_ent_root(void);
+dirent_t *ulfs_dir_get_ent_cwd(void);
 
 ulfd_t *ulfs_get_ulfd(int fd);
 

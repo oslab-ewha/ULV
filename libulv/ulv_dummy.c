@@ -29,6 +29,11 @@ ulfs_mkdir(void)
 }
 
 __attribute__((__weak__)) void
+ulfs_rmdir(void)
+{
+}
+
+__attribute__((__weak__)) void
 ulv_net_init(void)
 {
 }

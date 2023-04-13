@@ -30,7 +30,7 @@ get_empty_inode(inode_block_t *ib)
 inode_t *
 ulfs_alloc_inode(inode_type_t type, bid_t *pbid_ib, uint16_t *pidx_ib)
 {
-	bid_t	bid_ib = 2;
+	bid_t	bid_ib = BID_INDB_START;
 
 	while (1) {
 		inode_block_t	*ib;
@@ -54,6 +54,12 @@ ulfs_alloc_inode(inode_type_t type, bid_t *pbid_ib, uint16_t *pidx_ib)
 	return NULL;
 }
 
+void
+ulfs_free_inode(inode_t *inode)
+{
+	inode->type = INODE_TYPE_NONE;
+}
+
 inode_t *
 ulfs_get_inode(bid_t bid_ib, uint16_t idx_ib)
 {
@@ -69,7 +75,7 @@ ulfs_get_inode_root(void)
 	if (inode_root == NULL) {
 		inode_block_t	*ib;
 
-		ib = ulfs_block_get(2);
+		ib = ulfs_block_get(BID_INDB_START);
 		inode_root = ib->inodes;
 	}
 	return inode_root;

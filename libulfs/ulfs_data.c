@@ -74,3 +74,27 @@ ulfs_get_data_block(inode_t *inode, lbid_t lbid)
 	bid = ulfs_alloc_data_block(inode, lbid, &bb, &idx_bb);
 	return ulfs_block_get(bid);
 }
+
+void
+ulfs_free_data_blocks(inode_t *inode)
+{
+	bid_t	bid_bb;
+
+	if (inode->bids_data[0] != 0) {
+		ulfs_block_free(inode->bids_data[0]);
+		inode->bids_data[0] = 0;
+	}
+
+	bid_bb = inode->bids_data[1];
+	while (bid_bb != 0) {
+		bidblock_t	*bb = ulfs_block_get(bid_bb);
+		int	i;
+
+		for (i = 0; i < N_BIDS_PER_BB; i++) {
+			if (bb->bids[i] != 0)
+				ulfs_block_free(bb->bids[i]);
+		}
+		ulfs_block_free(bid_bb);
+		bid_bb = bb->next;
+	}
+}
