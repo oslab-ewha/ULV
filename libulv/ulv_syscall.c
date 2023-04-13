@@ -43,7 +43,7 @@ ulv_syscall(long n, long *args)
 		CASE_ULV_SYSCALL(set_tid_address, 1);
 		CASE_ULV_SYSCALL(exit_group, 1);
 	default:
-		ULV_ABORT();
+		ULV_PANIC("undefined system call: %ld", n);
 		break;
 	}
 

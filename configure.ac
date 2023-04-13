@@ -6,7 +6,7 @@ AC_INIT([ulv], [0.1.0], [cezanne@codemayo.com])
 AC_CONFIG_SRCDIR([libulv/ulv_syscall.c])
 AC_CONFIG_HEADERS([config.h])
 
-AM_INIT_AUTOMAKE([foreign])
+AM_INIT_AUTOMAKE([foreign subdir-objects])
 
 AM_SILENT_RULES([yes])
 
