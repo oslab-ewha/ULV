@@ -1,7 +1,7 @@
 #define __SYSCALL_LL_E(x) (x)
 #define __SYSCALL_LL_O(x) (x)
 
-long ulv_syscall(long n, long *args);
+long __attribute__((__weak__)) ulv_syscall(long n, long *args);
 
 static __inline long __syscall0(long n)
 {

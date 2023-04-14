@@ -19,11 +19,3 @@ long syscall(long n, ...)
 	va_end(ap);
 	return __syscall_ret(__syscall(n,a,b,c,d,e,f));
 }
-
-__attribute__((__weak__))
-long
-ulv_syscall(long no, long *args)
-{
-	return -1;
-}
-

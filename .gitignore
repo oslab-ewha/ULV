@@ -23,7 +23,7 @@
 /libulfs/libulfs.a
 /libulv/Makefile
 /libulv/libulv.a
-/libulv/libulv_dummy.a
+/libulv/libulv_lwip.a
 /ulvisor/Makefile
 /ulvisor/libuc/Makefile
 /lwip-build/CMakeCache.txt
