@@ -6,6 +6,11 @@
 
 #define ERR_ULFS_NOTEXIST	-1
 
+#if defined(ULFS_USE_GLIBC) && defined(_BUILD_WEAK)
+#undef _BUILD_WEAK
+#define _BUILD_WEAK
+#endif
+
 int _BUILD_WEAK ulfs_open(const char *path, int flags, int mode);
 void _BUILD_WEAK ulfs_close(int fd);
 ssize_t _BUILD_WEAK ulfs_read(int fd, void *buf, size_t count);
