@@ -87,8 +87,7 @@ POST_INSTALL = :
 NORMAL_UNINSTALL = :
 PRE_UNINSTALL = :
 POST_UNINSTALL = :
-noinst_PROGRAMS = mb_thread$(EXEEXT) mb_file$(EXEEXT) \
-	mb_syscall$(EXEEXT) mb_network$(EXEEXT)
+noinst_PROGRAMS = $(am__EXEEXT_1)
 subdir = micro_benchmarks
 ACLOCAL_M4 = $(top_srcdir)/aclocal.m4
 am__aclocal_m4_deps = $(top_srcdir)/configure.ac
@@ -99,6 +98,8 @@ mkinstalldirs = $(install_sh) -d
 CONFIG_HEADER = $(top_builddir)/config.h
 CONFIG_CLEAN_FILES =
 CONFIG_CLEAN_VPATH_FILES =
+am__EXEEXT_1 = mb_thread$(EXEEXT) mb_file$(EXEEXT) mb_syscall$(EXEEXT) \
+	mb_network$(EXEEXT)
 PROGRAMS = $(noinst_PROGRAMS)
 LIBRARIES = $(noinst_LIBRARIES)
 AR = ar
@@ -282,6 +283,7 @@ top_builddir = @top_builddir@
 top_srcdir = @top_srcdir@
 CLEANFILES = *~
 DISTCLEANFILES = *~
+MICRO_BENCHMARKS = mb_thread mb_file mb_syscall mb_network
 noinst_LIBRARIES = libmb.a
 libulv = -Wl,--whole-archive ../libulv/libulv.a -Wl,--no-whole-archive
 libulfs = -Wl,--whole-archive ../libulfs/libulfs.a ../libulv/libulv.a -Wl,--no-whole-archive
@@ -619,7 +621,7 @@ uninstall-am:
 .PRECIOUS: Makefile
 
 
-$(noinst_PROGRAMS): ../libulv/libulv.a
+$(MICRO_BENCHMARKS): ../libulv/libulv.a ../libulfs/libulfs.a
 
 # Tell versions [3.59,3.63) of GNU make to not export all variables.
 # Otherwise a system limit (for SysV at least) may be exceeded.

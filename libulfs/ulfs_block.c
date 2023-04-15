@@ -119,7 +119,7 @@ ulfs_block_init(void)
 
 	blkpath = getenv("ULV_BLOCK");
 	if (blkpath == NULL)
-		return;
+		ULV_PANIC("ULFS backend host file is missing. Please set ULV_BLOCK!");
 
 	fd = __syscall2(__NR_open, (long)blkpath, (long)O_RDWR);
 	if (fd < 0)

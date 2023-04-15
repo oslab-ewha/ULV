@@ -1,8 +1,9 @@
 CLEANFILES = *~
 DISTCLEANFILES = *~
 
+MICRO_BENCHMARKS = mb_thread mb_file mb_syscall mb_network
 noinst_LIBRARIES = libmb.a
-noinst_PROGRAMS = mb_thread mb_file mb_syscall mb_network
+noinst_PROGRAMS = $(MICRO_BENCHMARKS)
 
 CFLAGS = -g
 libulv = -Wl,--whole-archive ../libulv/libulv.a -Wl,--no-whole-archive
@@ -28,4 +29,4 @@ mb_network_LINK = $(common_LINK) $(liblwip)
 
 libmb_a_SOURCES = libmb_stdio.c libmb_time.c libmb_net.c
 
-$(noinst_PROGRAMS): ../libulv/libulv.a
+$(MICRO_BENCHMARKS): ../libulv/libulv.a ../libulfs/libulfs.a
