@@ -13,6 +13,7 @@ ssize_t _BUILD_WEAK ulfs_write(int fd, const void *buf, size_t count);
 
 int _BUILD_WEAK ulfs_mkdir(const char *path);
 int _BUILD_WEAK ulfs_rmdir(const char *path);
+int _BUILD_WEAK ulfs_unlink(const char *path);
 
 void _BUILD_WEAK ulfs_init(void);
 

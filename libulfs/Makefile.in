@@ -110,7 +110,7 @@ am_libulfs_a_OBJECTS = libulfs_a-ulfs.$(OBJEXT) \
 	libulfs_a-ulfs_inode.$(OBJEXT) libulfs_a-ulfs_data.$(OBJEXT) \
 	libulfs_a-ulfs_dir.$(OBJEXT) libulfs_a-ulfs_path.$(OBJEXT) \
 	libulfs_a-ulfs_file.$(OBJEXT) libulfs_a-ulfs_rw.$(OBJEXT) \
-	libulfs_a-ulfs_mkdir.$(OBJEXT)
+	libulfs_a-ulfs_mkdir.$(OBJEXT) libulfs_a-ulfs_unlink.$(OBJEXT)
 libulfs_a_OBJECTS = $(am_libulfs_a_OBJECTS)
 AM_V_P = $(am__v_P_@AM_V@)
 am__v_P_ = $(am__v_P_@AM_DEFAULT_V@)
@@ -136,7 +136,8 @@ am__depfiles_remade = ./$(DEPDIR)/libulfs_a-ulfs.Po \
 	./$(DEPDIR)/libulfs_a-ulfs_mkdir.Po \
 	./$(DEPDIR)/libulfs_a-ulfs_path.Po \
 	./$(DEPDIR)/libulfs_a-ulfs_rw.Po \
-	./$(DEPDIR)/libulfs_a-ulfs_sb.Po
+	./$(DEPDIR)/libulfs_a-ulfs_sb.Po \
+	./$(DEPDIR)/libulfs_a-ulfs_unlink.Po
 am__mv = mv -f
 AM_V_lt = $(am__v_lt_@AM_V@)
 am__v_lt_ = $(am__v_lt_@AM_DEFAULT_V@)
@@ -279,7 +280,7 @@ CLEANFILES = *~
 DISTCLEANFILES = *~
 noinst_LIBRARIES = libulfs.a
 libulfs_a_SOURCES = ulfs.c ulfs.h ulfs_p.h ulfs_block.c ulfs_sb.c ulfs_inode.c ulfs_data.c ulfs_dir.c \
-		ulfs_path.c ulfs_file.c ulfs_rw.c ulfs_mkdir.c
+		ulfs_path.c ulfs_file.c ulfs_rw.c ulfs_mkdir.c ulfs_unlink.c
 
 libulfs_a_CFLAGS = -I../libulv
 all: all-am
@@ -340,6 +341,7 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libulfs_a-ulfs_path.Po@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libulfs_a-ulfs_rw.Po@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libulfs_a-ulfs_sb.Po@am__quote@ # am--include-marker
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libulfs_a-ulfs_unlink.Po@am__quote@ # am--include-marker
 
 $(am__depfiles_remade):
 	@$(MKDIR_P) $(@D)
@@ -503,6 +505,20 @@ libulfs_a-ulfs_mkdir.obj: ulfs_mkdir.c
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
 @am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libulfs_a_CFLAGS) $(CFLAGS) -c -o libulfs_a-ulfs_mkdir.obj `if test -f 'ulfs_mkdir.c'; then $(CYGPATH_W) 'ulfs_mkdir.c'; else $(CYGPATH_W) '$(srcdir)/ulfs_mkdir.c'; fi`
 
+libulfs_a-ulfs_unlink.o: ulfs_unlink.c
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libulfs_a_CFLAGS) $(CFLAGS) -MT libulfs_a-ulfs_unlink.o -MD -MP -MF $(DEPDIR)/libulfs_a-ulfs_unlink.Tpo -c -o libulfs_a-ulfs_unlink.o `test -f 'ulfs_unlink.c' || echo '$(srcdir)/'`ulfs_unlink.c
+@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/libulfs_a-ulfs_unlink.Tpo $(DEPDIR)/libulfs_a-ulfs_unlink.Po
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='ulfs_unlink.c' object='libulfs_a-ulfs_unlink.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libulfs_a_CFLAGS) $(CFLAGS) -c -o libulfs_a-ulfs_unlink.o `test -f 'ulfs_unlink.c' || echo '$(srcdir)/'`ulfs_unlink.c
+
+libulfs_a-ulfs_unlink.obj: ulfs_unlink.c
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libulfs_a_CFLAGS) $(CFLAGS) -MT libulfs_a-ulfs_unlink.obj -MD -MP -MF $(DEPDIR)/libulfs_a-ulfs_unlink.Tpo -c -o libulfs_a-ulfs_unlink.obj `if test -f 'ulfs_unlink.c'; then $(CYGPATH_W) 'ulfs_unlink.c'; else $(CYGPATH_W) '$(srcdir)/ulfs_unlink.c'; fi`
+@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/libulfs_a-ulfs_unlink.Tpo $(DEPDIR)/libulfs_a-ulfs_unlink.Po
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='ulfs_unlink.c' object='libulfs_a-ulfs_unlink.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libulfs_a_CFLAGS) $(CFLAGS) -c -o libulfs_a-ulfs_unlink.obj `if test -f 'ulfs_unlink.c'; then $(CYGPATH_W) 'ulfs_unlink.c'; else $(CYGPATH_W) '$(srcdir)/ulfs_unlink.c'; fi`
+
 ID: $(am__tagged_files)
 	$(am__define_uniq_tagged_files); mkid -fID $$unique
 tags: tags-am
@@ -639,6 +655,7 @@ distclean: distclean-am
 	-rm -f ./$(DEPDIR)/libulfs_a-ulfs_path.Po
 	-rm -f ./$(DEPDIR)/libulfs_a-ulfs_rw.Po
 	-rm -f ./$(DEPDIR)/libulfs_a-ulfs_sb.Po
+	-rm -f ./$(DEPDIR)/libulfs_a-ulfs_unlink.Po
 	-rm -f Makefile
 distclean-am: clean-am distclean-compile distclean-generic \
 	distclean-tags
@@ -694,6 +711,7 @@ maintainer-clean: maintainer-clean-am
 	-rm -f ./$(DEPDIR)/libulfs_a-ulfs_path.Po
 	-rm -f ./$(DEPDIR)/libulfs_a-ulfs_rw.Po
 	-rm -f ./$(DEPDIR)/libulfs_a-ulfs_sb.Po
+	-rm -f ./$(DEPDIR)/libulfs_a-ulfs_unlink.Po
 	-rm -f Makefile
 maintainer-clean-am: distclean-am maintainer-clean-generic
 

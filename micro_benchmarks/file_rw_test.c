@@ -93,5 +93,7 @@ main(int argc, char *argv[])
 
 	printf("elapsed: %d\n", get_tickcount());
 
+	unlink(argv[1]);
+
 	return 0;
 }
