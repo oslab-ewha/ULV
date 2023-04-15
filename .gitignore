@@ -10,7 +10,7 @@
 /cscope.files
 /cscope.out
 /micro_benchmarks/mb_syscall
-/micro_benchmarks/mb_file
+/micro_benchmarks/mb_file_rw
 /micro_benchmarks/mb_network
 /micro_benchmarks/mb_thread
 /micro_benchmarks/libmb.a

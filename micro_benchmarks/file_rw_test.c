@@ -10,11 +10,14 @@
 static void
 usage(void)
 {
-	printf("mb_file <file path>\n");
+	printf(
+"mb_rw_file <file path> [<count>]\n"
+"  default count: 1024\n"
+		);
 }
 
 static void
-write_file(int fd)
+write_file(int fd, int count)
 {
 	char	buf[1024];
 	int	i;
@@ -22,7 +25,7 @@ write_file(int fd)
 	for (i = 0; i < 1024; i++) {
 		buf[i] = (char)i;
 	}
-	for (i = 0; i < 1024; i++) {
+	for (i = 0; i < count; i++) {
 		int	ret;
 
 		ret = write(fd, buf, 1024);
@@ -34,12 +37,12 @@ write_file(int fd)
 }
 
 static void
-read_file(int fd)
+read_file(int fd, int count)
 {
 	char	buf[1024];
 	int	i;
 
-	for (i = 0; i < 1024; i++) {
+	for (i = 0; i < count; i++) {
 		int	ret;
 
 		ret = read(fd, buf, 1024);
@@ -60,12 +63,14 @@ int
 main(int argc, char *argv[])
 {
 	int	nread;
-	int	fd;
+	int	fd, count;
 
-	if (argc < 2) {
+	if (argc < 3) {
 		usage();
 		return 1;
 	}
+
+	count = atoi(argv[2]);
 
 	init_tickcount();
 
@@ -75,7 +80,7 @@ main(int argc, char *argv[])
 		return 1;
 	}
 
-	write_file(fd);
+	write_file(fd, count);
 	close(fd);
 
 	fd = open(argv[1], O_RDONLY);
@@ -83,7 +88,7 @@ main(int argc, char *argv[])
 		printf("failed to open\n");
 		return 1;
 	}
-	read_file(fd);
+	read_file(fd, count);
 	close(fd);
 
 	printf("elapsed: %d\n", get_tickcount());
