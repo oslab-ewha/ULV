@@ -13,9 +13,8 @@ ulfs_read(int fd, void *buf, size_t count)
 
 	ulfd = ulfs_get_ulfd(fd);
 	if (ulfd == NULL)
-		return -1;
-	if (ulfd->data == NULL)
-		ulfd->data = ulfs_block_get(ulfs_alloc_data_block(ulfd->inode, ulfd->off / BSIZE, &ulfd->bb, &ulfd->idx_bb));
+		return -EBADF;
+
 	remain = ulfd->inode->size - ulfd->off;
 	while (count > 0 && remain > 0) {
 		uint16_t	remain_db;
@@ -46,11 +45,9 @@ ulfs_write(int fd, const void *buf, size_t count)
 	ulfd_t	*ulfd;
 	ssize_t	nwrite = 0;
 
-	ulfd = ulfs_get_ulfd(fd);
+	ulfd = ulfs_get_ulfd_data(fd);
 	if (ulfd == NULL)
-		return -1;
-	if (ulfd->data == NULL)
-		ulfd->data = ulfs_block_get(ulfs_alloc_data_block(ulfd->inode, ulfd->off / BSIZE, &ulfd->bb, &ulfd->idx_bb));
+		return -EBADF;
 
 	while (count > 0) {
 		uint16_t	remain_db;

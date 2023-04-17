@@ -16,7 +16,7 @@ static void
 usage(void)
 {
 	printf(
-"mb_rw_file <file path> [<count>] [<block size>]\n"
+"mb_file_rw <file path> [<count>] [<block size>]\n"
 "  default count: 1024\n"
 "  default block size: 1024, max: 16384\n"
 		);

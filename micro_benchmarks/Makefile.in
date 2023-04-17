@@ -99,7 +99,7 @@ CONFIG_HEADER = $(top_builddir)/config.h
 CONFIG_CLEAN_FILES =
 CONFIG_CLEAN_VPATH_FILES =
 am__EXEEXT_1 = mb_thread$(EXEEXT) mb_file_rw$(EXEEXT) \
-	mb_syscall$(EXEEXT) mb_network$(EXEEXT)
+	mb_file_dir$(EXEEXT) mb_syscall$(EXEEXT) mb_network$(EXEEXT)
 PROGRAMS = $(noinst_PROGRAMS)
 LIBRARIES = $(noinst_LIBRARIES)
 AR = ar
@@ -113,6 +113,9 @@ libmb_a_LIBADD =
 am_libmb_a_OBJECTS = libmb_stdio.$(OBJEXT) libmb_time.$(OBJEXT) \
 	libmb_net.$(OBJEXT)
 libmb_a_OBJECTS = $(am_libmb_a_OBJECTS)
+am_mb_file_dir_OBJECTS = file_dir_test.$(OBJEXT)
+mb_file_dir_OBJECTS = $(am_mb_file_dir_OBJECTS)
+mb_file_dir_DEPENDENCIES = libmb.a ../musl/lib/libc.a
 am_mb_file_rw_OBJECTS = file_rw_test.$(OBJEXT)
 mb_file_rw_OBJECTS = $(am_mb_file_rw_OBJECTS)
 mb_file_rw_DEPENDENCIES = libmb.a ../musl/lib/libc.a
@@ -140,10 +143,11 @@ am__v_at_1 =
 DEFAULT_INCLUDES = -I.@am__isrc@ -I$(top_builddir)
 depcomp = $(SHELL) $(top_srcdir)/depcomp
 am__maybe_remake_depfiles = depfiles
-am__depfiles_remade = ./$(DEPDIR)/file_rw_test.Po \
-	./$(DEPDIR)/libmb_net.Po ./$(DEPDIR)/libmb_stdio.Po \
-	./$(DEPDIR)/libmb_time.Po ./$(DEPDIR)/network_test.Po \
-	./$(DEPDIR)/syscall_test.Po ./$(DEPDIR)/thread_test.Po
+am__depfiles_remade = ./$(DEPDIR)/file_dir_test.Po \
+	./$(DEPDIR)/file_rw_test.Po ./$(DEPDIR)/libmb_net.Po \
+	./$(DEPDIR)/libmb_stdio.Po ./$(DEPDIR)/libmb_time.Po \
+	./$(DEPDIR)/network_test.Po ./$(DEPDIR)/syscall_test.Po \
+	./$(DEPDIR)/thread_test.Po
 am__mv = mv -f
 COMPILE = $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) \
 	$(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS)
@@ -157,12 +161,12 @@ AM_V_CCLD = $(am__v_CCLD_@AM_V@)
 am__v_CCLD_ = $(am__v_CCLD_@AM_DEFAULT_V@)
 am__v_CCLD_0 = @echo "  CCLD    " $@;
 am__v_CCLD_1 = 
-SOURCES = $(libmb_a_SOURCES) $(mb_file_rw_SOURCES) \
-	$(mb_network_SOURCES) $(mb_syscall_SOURCES) \
-	$(mb_thread_SOURCES)
-DIST_SOURCES = $(libmb_a_SOURCES) $(mb_file_rw_SOURCES) \
-	$(mb_network_SOURCES) $(mb_syscall_SOURCES) \
-	$(mb_thread_SOURCES)
+SOURCES = $(libmb_a_SOURCES) $(mb_file_dir_SOURCES) \
+	$(mb_file_rw_SOURCES) $(mb_network_SOURCES) \
+	$(mb_syscall_SOURCES) $(mb_thread_SOURCES)
+DIST_SOURCES = $(libmb_a_SOURCES) $(mb_file_dir_SOURCES) \
+	$(mb_file_rw_SOURCES) $(mb_network_SOURCES) \
+	$(mb_syscall_SOURCES) $(mb_thread_SOURCES)
 am__can_run_installinfo = \
   case $$AM_UPDATE_INFO_DIR in \
     n|no|NO) false;; \
@@ -284,7 +288,7 @@ top_builddir = @top_builddir@
 top_srcdir = @top_srcdir@
 CLEANFILES = *~
 DISTCLEANFILES = *~
-MICRO_BENCHMARKS = mb_thread mb_file_rw mb_syscall mb_network
+MICRO_BENCHMARKS = mb_thread mb_file_rw mb_file_dir mb_syscall mb_network
 noinst_LIBRARIES = libmb.a
 libulv = -Wl,--whole-archive ../libulv/libulv.a -Wl,--no-whole-archive
 libulfs = -Wl,--whole-archive ../libulfs/libulfs.a ../libulv/libulv.a -Wl,--no-whole-archive
@@ -296,6 +300,9 @@ mb_thread_LINK = $(common_LINK) $(libulv)
 mb_file_rw_SOURCES = file_rw_test.c
 mb_file_rw_LDADD = libmb.a ../musl/lib/libc.a
 mb_file_rw_LINK = $(common_LINK) $(libulfs)
+mb_file_dir_SOURCES = file_dir_test.c
+mb_file_dir_LDADD = libmb.a ../musl/lib/libc.a
+mb_file_dir_LINK = $(common_LINK) $(libulfs)
 mb_syscall_SOURCES = syscall_test.c
 mb_syscall_LDADD = libmb.a ../musl/lib/libc.a
 mb_syscall_LINK = $(common_LINK) $(libulv)
@@ -348,6 +355,10 @@ libmb.a: $(libmb_a_OBJECTS) $(libmb_a_DEPENDENCIES) $(EXTRA_libmb_a_DEPENDENCIES
 	$(AM_V_AR)$(libmb_a_AR) libmb.a $(libmb_a_OBJECTS) $(libmb_a_LIBADD)
 	$(AM_V_at)$(RANLIB) libmb.a
 
+mb_file_dir$(EXEEXT): $(mb_file_dir_OBJECTS) $(mb_file_dir_DEPENDENCIES) $(EXTRA_mb_file_dir_DEPENDENCIES) 
+	@rm -f mb_file_dir$(EXEEXT)
+	$(AM_V_GEN)$(mb_file_dir_LINK) $(mb_file_dir_OBJECTS) $(mb_file_dir_LDADD) $(LIBS)
+
 mb_file_rw$(EXEEXT): $(mb_file_rw_OBJECTS) $(mb_file_rw_DEPENDENCIES) $(EXTRA_mb_file_rw_DEPENDENCIES) 
 	@rm -f mb_file_rw$(EXEEXT)
 	$(AM_V_GEN)$(mb_file_rw_LINK) $(mb_file_rw_OBJECTS) $(mb_file_rw_LDADD) $(LIBS)
@@ -370,6 +381,7 @@ mostlyclean-compile:
 distclean-compile:
 	-rm -f *.tab.c
 
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/file_dir_test.Po@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/file_rw_test.Po@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libmb_net.Po@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libmb_stdio.Po@am__quote@ # am--include-marker
@@ -527,7 +539,8 @@ clean-am: clean-generic clean-noinstLIBRARIES clean-noinstPROGRAMS \
 	mostlyclean-am
 
 distclean: distclean-am
-		-rm -f ./$(DEPDIR)/file_rw_test.Po
+		-rm -f ./$(DEPDIR)/file_dir_test.Po
+	-rm -f ./$(DEPDIR)/file_rw_test.Po
 	-rm -f ./$(DEPDIR)/libmb_net.Po
 	-rm -f ./$(DEPDIR)/libmb_stdio.Po
 	-rm -f ./$(DEPDIR)/libmb_time.Po
@@ -579,7 +592,8 @@ install-ps-am:
 installcheck-am:
 
 maintainer-clean: maintainer-clean-am
-		-rm -f ./$(DEPDIR)/file_rw_test.Po
+		-rm -f ./$(DEPDIR)/file_dir_test.Po
+	-rm -f ./$(DEPDIR)/file_rw_test.Po
 	-rm -f ./$(DEPDIR)/libmb_net.Po
 	-rm -f ./$(DEPDIR)/libmb_stdio.Po
 	-rm -f ./$(DEPDIR)/libmb_time.Po

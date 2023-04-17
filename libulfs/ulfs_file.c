@@ -18,15 +18,20 @@ ulfs_open(const char *pathname, int flags, int mode)
 	ulfs_path_dirname(&path);
 	inode_dir = ulfs_lookup_path(&path, NULL);
 
-	ulfs_path_init(&path, pathname);
-	ulfs_path_basename(&path);
+	if (ulfs_path_is_root(&path)) {
+		inode = inode_dir;
+	}
+	else {
+		ulfs_path_init(&path, pathname);
+		ulfs_path_basename(&path);
 
-	if (flags & O_CREAT) {
-		inode = ulfs_dir_add_inode(inode_dir, &path, INODE_TYPE_FILE, NULL, TRUE);
-	} else {
-		inode = ulfs_lookup_name(inode_dir, &path, NULL);
-		if (inode == NULL)
-			return -1;
+		if (flags & O_CREAT) {
+			inode = ulfs_dir_add_inode(inode_dir, &path, INODE_TYPE_FILE, NULL, TRUE);
+		} else {
+			inode = ulfs_lookup_name(inode_dir, &path, NULL);
+			if (inode == NULL)
+				return -1;
+		}
 	}
 
 	ulfd = (ulfd_t *)ulv_dyntab_assign(&ulfds);
@@ -54,6 +59,20 @@ ulfd_t *
 ulfs_get_ulfd(int fd)
 {
 	return (ulfd_t *)ulv_dyntab_get(&ulfds, fd);
+}
+
+ulfd_t *
+ulfs_get_ulfd_data(int fd)
+{
+	ulfd_t	*ulfd;
+
+	ulfd = (ulfd_t *)ulv_dyntab_get(&ulfds, fd);
+	if (ulfd == NULL)
+		return NULL;
+	if (ulfd->data == NULL) {
+		ulfd->data = ulfs_block_get(ulfs_alloc_data_block(ulfd->inode, ulfd->off / BSIZE, &ulfd->bb, &ulfd->idx_bb));
+	}
+	return ulfd;
 }
 
 void

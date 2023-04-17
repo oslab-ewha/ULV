@@ -9,6 +9,9 @@ ulfs_dir_get(dirlist_t *dlist)
 {
 	dirent_t	*ent;
 
+	if (dlist->size_remain == 0)
+		return NULL;
+
 again:
 	ent = dlist->ent;
 	if (ent == NULL)

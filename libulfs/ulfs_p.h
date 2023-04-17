@@ -42,8 +42,8 @@ typedef struct {
 
 typedef enum {
 	INODE_TYPE_NONE = 0,
-	INODE_TYPE_FILE,
-	INODE_TYPE_DIR,
+	INODE_TYPE_DIR = 4,
+	INODE_TYPE_FILE = 8
 } inode_type_t;
 
 /* inode */
@@ -126,6 +126,7 @@ dirent_t *ulfs_dir_get_ent_root(void);
 dirent_t *ulfs_dir_get_ent_cwd(void);
 
 ulfd_t *ulfs_get_ulfd(int fd);
+ulfd_t *ulfs_get_ulfd_data(int fd);
 
 void ulfs_path_init(path_t *ppath, const char *path);
 void ulfs_path_dirname(path_t *ppath);
