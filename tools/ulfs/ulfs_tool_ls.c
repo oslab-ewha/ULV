@@ -24,7 +24,7 @@ do_ls(const char *_path)
 	while ((ent = ulfs_dir_get(&dir))) {
 		inode_t	*inode;
 
-		inode = ulfs_get_inode(ent->bid_ib, ent->idx_ib);
+		inode = ulfs_get_inode(ent->bid_ib, ent->idx_ib, NULL);
 		printf("%c %s %lu\n", typechars[inode->type - 1], ent->name, inode->size);
 	}
 

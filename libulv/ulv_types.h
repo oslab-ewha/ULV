@@ -21,6 +21,8 @@ typedef long		ssize_t;
 #define likely(x)	__builtin_expect(!!(x), 1)
 #define unlikely(x)	__builtin_expect(!!(x), 0)
 
+#define offsetof(type, m)	((size_t)(&((type *)0)->m))
+
 #define NULL	((void *)0)
 
 typedef int	pid_t;

@@ -43,6 +43,7 @@ ulfs_getdents(int fd, ulfs_dirent_t *dirp, unsigned int count)
 	while (1) {
 		dirent_t	*dirent;
 		inode_t		*inode;
+		uint32_t	ino;
 		int	namelen, reclen;
 
 		dirent = ulfs_dir_get(&dirlist);
@@ -52,10 +53,10 @@ ulfs_getdents(int fd, ulfs_dirent_t *dirp, unsigned int count)
 		reclen = namelen + sizeof(ulfs_dirent_t);
 		if (count < nfilled + reclen)
 			break;
-		dirp->d_ino = 1; //TODO
 		dirp->d_off = off;
 		dirp->d_reclen = reclen;
-		inode = ulfs_get_inode(dirent->bid_ib, dirent->idx_ib);
+		inode = ulfs_get_inode(dirent->bid_ib, dirent->idx_ib, &ino);
+		dirp->d_ino = (uint64_t)ino;
 		dirp->d_type = inode->type;
 
 		dirp = (ulfs_dirent_t *)(((uint8_t *)dirp) + reclen);

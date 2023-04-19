@@ -9,8 +9,16 @@ static inode_t	*inode_cwd;
 static inline bid_t
 get_next_inode_block_bid(inode_block_t *ib)
 {
-	if (ib->next == 0)
+	if (ib->next == 0) {
+		inode_block_t	*ib_new;
+
 		ib->next = ulfs_block_alloc();
+		/* init inode block */
+		ib_new = ulfs_block_get(ib->next);
+		ib_new->next = 0;
+		ib_new->ino_start = ib->ino_start + N_INODES_PER_IB;
+		ib_new->n_used = 0;
+	}
 	return ib->next;
 }
 
@@ -61,11 +69,13 @@ ulfs_free_inode(inode_t *inode)
 }
 
 inode_t *
-ulfs_get_inode(bid_t bid_ib, uint16_t idx_ib)
+ulfs_get_inode(bid_t bid_ib, uint16_t idx_ib, uint32_t *pino)
 {
 	inode_block_t	*ib;
 
 	ib = (inode_block_t *)ulfs_block_get(bid_ib);
+	if (pino)
+		*pino = ib->ino_start + idx_ib;
 	return ib->inodes + idx_ib;
 }
 

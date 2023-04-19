@@ -5,7 +5,7 @@
 
 #include "libmb.h"
 
-static int	count = 1024;
+static int	count = 10;
 
 static void
 usage(void)
@@ -17,21 +17,22 @@ usage(void)
 }
 
 static void
-read_dirents(DIR *dir)
+read_dirents(const char *path)
 {
-	int	i;
+	DIR	*dir;
+	struct dirent	*dirent;
 
-	for (i = 0; i < count; i++) {
-		struct dirent	*dirent;
-		while ((dirent = readdir(dir)))
-			printf("ent: %ld %s\n", dirent->d_ino, dirent->d_name);
-	}
+	dir = opendir(path);
+	while ((dirent = readdir(dir)))
+		printf("ent: %ld %s\n", dirent->d_ino, dirent->d_name);
+	closedir(dir);
 }
 
 int
 main(int argc, char *argv[])
 {
 	DIR	*dir;
+	int	i;
 
 	if (argc < 2) {
 		usage();
@@ -41,17 +42,18 @@ main(int argc, char *argv[])
 	if (argc > 2)
 		count = atoi(argv[2]);
 
-	init_tickcount();
-
 	dir = opendir(argv[1]);
 	if (dir == NULL) {
 		printf("failed to open: %s\n", argv[1]);
 		return 2;
 	}
-
-	read_dirents(dir);
-
 	closedir(dir);
+
+	init_tickcount();
+
+	for (i = 0; i < count; i++) {
+		read_dirents(argv[1]);
+	}
 
 	printf("elapsed: %d\n", get_tickcount());
 
