@@ -1,6 +1,8 @@
 #ifndef _ULFS_TOOL_H_
 #define _ULFS_TOOL_H_
 
+#define ULFS_NO_WEAK
+
 #include "ulv_libc.h"
 #include "ulfs_p.h"
 #include "ulfs.h"

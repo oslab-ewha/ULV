@@ -1,8 +1,20 @@
 #include "ulfs_tool.h"
 
-static char	typechars[] = { 'f', 'd' };
 static bool_t	ls_size = FALSE;
 static bool_t	ls_inode = FALSE;
+
+static char
+to_typechar(inode_type_t type)
+{
+	switch (type) {
+	case INODE_TYPE_DIR:
+		return 'd';
+	case INODE_TYPE_FILE:
+		return 'f';
+	default:
+		return '?';
+	}
+}
 
 static int
 do_ls(const char *_path)
@@ -22,7 +34,7 @@ do_ls(const char *_path)
 		uint32_t	ino;
 
 		inode = ulfs_get_inode(ent->bid_ib, ent->idx_ib, &ino);
-		printf("%c %s", typechars[inode->type - 1], ent->name);
+		printf("%c %s", to_typechar(inode->type), ent->name);
 		if (ls_size)
 			printf(" %lu", inode->size);
 		if (ls_inode)
