@@ -1,6 +1,10 @@
 #include <stdio.h>
 #include <string.h>
 #include <stdarg.h>
+#include <sys/types.h>
+#include <sys/stat.h>
+#include <fcntl.h>
+#include <unistd.h>
 
 int ulfs_tool_mkfs(int argc, char *argv[]);
 int ulfs_tool_ls(int argc, char *argv[]);
@@ -35,6 +39,22 @@ error(const char *fmt, ...)
 	va_end(ap);
 
 	fprintf(stderr, "Error: %s\n", buf);
+}
+
+long long
+get_fd_size(int fd)
+{
+	struct stat	statb;
+
+	if (fstat(fd, &statb) < 0)
+		return -1;
+	return statb.st_size;
+}
+
+int
+openr(const char *path)
+{
+	return open(path, O_RDONLY);
 }
 
 int

@@ -18,7 +18,7 @@ DEF_ULV_SYSCALL(mkdir, 2);
 DEF_ULV_SYSCALL(rmdir, 1);
 DEF_ULV_SYSCALL(unlink, 1);
 DEF_ULV_SYSCALL(fcntl, 3);
-DEF_ULV_SYSCALL(getdents, 3);
+DEF_ULV_SYSCALL(getdents64, 3);
 DEF_ULV_SYSCALL(mmap, 6);
 DEF_ULV_SYSCALL(mprotect, 3);
 DEF_ULV_SYSCALL(munmap, 2);

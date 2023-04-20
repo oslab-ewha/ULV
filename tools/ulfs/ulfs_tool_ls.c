@@ -1,9 +1,3 @@
-#include <string.h>
-#include <stdio.h>
-
-#define ULFS_USE_GLIBC
-#include "ulfs_p.h"
-
 #include "ulfs_tool.h"
 
 static char	typechars[] = { 'f', 'd' };

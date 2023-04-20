@@ -1,15 +1,4 @@
-#include <sys/types.h>
-#include <sys/stat.h>
-#include <fcntl.h>
-#include <string.h>
-#include <libgen.h>
-#include <unistd.h>
-
 #include "ulfs_tool.h"
-
-#define ULFS_USE_GLIBC
-#include <inttypes.h>
-#include "ulfs_p.h"
 
 static void
 do_copy_data(inode_t *inode, int fd)
@@ -40,9 +29,9 @@ do_copyto(int fd, const char *_path)
 {
 	path_t	path;
 	inode_t	*inode, *inode_dir;
-	struct stat	statb;
+	long long	size;
 
-	if (fstat(fd, &statb) < 0) {
+	if ((size = get_fd_size(fd)) < 0) {
 		error("failed to get file size");
 		return 3;
 	}
@@ -75,7 +64,7 @@ do_copyto(int fd, const char *_path)
 		return 4;
 	}
 
-	inode->size = statb.st_size;
+	inode->size = size;
 
 	do_copy_data(inode, fd);
 
@@ -93,7 +82,7 @@ ulfs_tool_copyto(int argc, char *argv[])
 		return 2;
 	}
 
-	fd = open(argv[0], O_RDONLY);
+	fd = openr(argv[0]);
 	if (fd < 0) {
 		error("cannot open: %s", argv[0]);
 		return 2;
