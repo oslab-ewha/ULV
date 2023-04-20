@@ -4,6 +4,7 @@
 #include <fcntl.h>
 #include <unistd.h>
 #include <stdlib.h>
+#include <string.h>
 
 #include "libmb.h"
 
@@ -12,14 +13,29 @@
 #define BLKSIZE_MAX	16384
 
 static int	count = 1024;
+static int	whence = SEEK_SET;
 
 static void
 usage(void)
 {
 	printf(
-"mb_file_lseek [<loop count>]\n"
-"  default loop count: 1024\n"
+"mb_file_lseek [<type>] [<loop count>]\n"
+"  type: set(default), end, cur\n"
+"  loop count default:1024\n"
 		);
+}
+
+static void
+parse_seek_type(const char *typestr)
+{
+	if (strcmp(typestr, "set") == 0)
+		whence = SEEK_SET;
+	else if (strcmp(typestr, "end") == 0)
+		whence = SEEK_END;
+	else if (strcmp(typestr, "cur") == 0)
+		whence = SEEK_CUR;
+	else
+		printf("warning: no such seek type: %s\n", typestr);
 }
 
 int
@@ -29,7 +45,9 @@ main(int argc, char *argv[])
 	int	i;
 
 	if (argc > 1)
-		count = atoi(argv[1]);
+		parse_seek_type(argv[1]);
+	if (argc > 2)
+		count = atoi(argv[2]);
 
 	fd = open(TEST_FILE, O_RDWR | O_CREAT, 0660);
 	if (fd < 0) {
