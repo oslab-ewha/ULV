@@ -114,22 +114,22 @@ libmb_a_LIBADD =
 am_libmb_a_OBJECTS = libmb_stdio.$(OBJEXT) libmb_time.$(OBJEXT) \
 	libmb_net.$(OBJEXT)
 libmb_a_OBJECTS = $(am_libmb_a_OBJECTS)
-am_mb_file_dir_OBJECTS = file_dir_test.$(OBJEXT)
+am_mb_file_dir_OBJECTS = mb_file_dir.$(OBJEXT)
 mb_file_dir_OBJECTS = $(am_mb_file_dir_OBJECTS)
 mb_file_dir_DEPENDENCIES = libmb.a ../musl/lib/libc.a
-am_mb_file_lseek_OBJECTS = file_lseek_test.$(OBJEXT)
+am_mb_file_lseek_OBJECTS = mb_file_lseek.$(OBJEXT)
 mb_file_lseek_OBJECTS = $(am_mb_file_lseek_OBJECTS)
 mb_file_lseek_DEPENDENCIES = libmb.a ../musl/lib/libc.a
-am_mb_file_rw_OBJECTS = file_rw_test.$(OBJEXT)
+am_mb_file_rw_OBJECTS = mb_file_rw.$(OBJEXT)
 mb_file_rw_OBJECTS = $(am_mb_file_rw_OBJECTS)
 mb_file_rw_DEPENDENCIES = libmb.a ../musl/lib/libc.a
-am_mb_network_OBJECTS = network_test.$(OBJEXT)
+am_mb_network_OBJECTS = mb_network.$(OBJEXT)
 mb_network_OBJECTS = $(am_mb_network_OBJECTS)
 mb_network_DEPENDENCIES = libmb.a ../musl/lib/libc.a
-am_mb_syscall_OBJECTS = syscall_test.$(OBJEXT)
+am_mb_syscall_OBJECTS = mb_syscall.$(OBJEXT)
 mb_syscall_OBJECTS = $(am_mb_syscall_OBJECTS)
 mb_syscall_DEPENDENCIES = libmb.a ../musl/lib/libc.a
-am_mb_thread_OBJECTS = thread_test.$(OBJEXT)
+am_mb_thread_OBJECTS = mb_thread.$(OBJEXT)
 mb_thread_OBJECTS = $(am_mb_thread_OBJECTS)
 mb_thread_DEPENDENCIES = ../musl/lib/libc.a
 AM_V_P = $(am__v_P_@AM_V@)
@@ -147,11 +147,11 @@ am__v_at_1 =
 DEFAULT_INCLUDES = -I.@am__isrc@ -I$(top_builddir)
 depcomp = $(SHELL) $(top_srcdir)/depcomp
 am__maybe_remake_depfiles = depfiles
-am__depfiles_remade = ./$(DEPDIR)/file_dir_test.Po \
-	./$(DEPDIR)/file_lseek_test.Po ./$(DEPDIR)/file_rw_test.Po \
-	./$(DEPDIR)/libmb_net.Po ./$(DEPDIR)/libmb_stdio.Po \
-	./$(DEPDIR)/libmb_time.Po ./$(DEPDIR)/network_test.Po \
-	./$(DEPDIR)/syscall_test.Po ./$(DEPDIR)/thread_test.Po
+am__depfiles_remade = ./$(DEPDIR)/libmb_net.Po \
+	./$(DEPDIR)/libmb_stdio.Po ./$(DEPDIR)/libmb_time.Po \
+	./$(DEPDIR)/mb_file_dir.Po ./$(DEPDIR)/mb_file_lseek.Po \
+	./$(DEPDIR)/mb_file_rw.Po ./$(DEPDIR)/mb_network.Po \
+	./$(DEPDIR)/mb_syscall.Po ./$(DEPDIR)/mb_thread.Po
 am__mv = mv -f
 COMPILE = $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) \
 	$(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS)
@@ -300,22 +300,22 @@ libulv = -Wl,--whole-archive ../libulv/libulv.a -Wl,--no-whole-archive
 libulfs = -Wl,--whole-archive ../libulfs/libulfs.a ../libulv/libulv.a -Wl,--no-whole-archive
 liblwip = -Wl,--whole-archive ../libulv/libulv_lwip.a -Wl,--no-whole-archive ../lwip-build/liblwip.a -Wl,--whole-archive ../libulv/libulv.a -Wl,--no-whole-archive
 common_LINK = musl-gcc -static -nolibc -o $@
-mb_thread_SOURCES = thread_test.c
+mb_thread_SOURCES = mb_thread.c
 mb_thread_LDADD = ../musl/lib/libc.a
 mb_thread_LINK = $(common_LINK) $(libulv)
-mb_file_rw_SOURCES = file_rw_test.c
+mb_file_rw_SOURCES = mb_file_rw.c
 mb_file_rw_LDADD = libmb.a ../musl/lib/libc.a
 mb_file_rw_LINK = $(common_LINK) $(libulfs)
-mb_file_dir_SOURCES = file_dir_test.c
+mb_file_dir_SOURCES = mb_file_dir.c
 mb_file_dir_LDADD = libmb.a ../musl/lib/libc.a
 mb_file_dir_LINK = $(common_LINK) $(libulfs)
-mb_file_lseek_SOURCES = file_lseek_test.c
+mb_file_lseek_SOURCES = mb_file_lseek.c
 mb_file_lseek_LDADD = libmb.a ../musl/lib/libc.a
 mb_file_lseek_LINK = $(common_LINK) $(libulfs)
-mb_syscall_SOURCES = syscall_test.c
+mb_syscall_SOURCES = mb_syscall.c
 mb_syscall_LDADD = libmb.a ../musl/lib/libc.a
 mb_syscall_LINK = $(common_LINK) $(libulv)
-mb_network_SOURCES = network_test.c
+mb_network_SOURCES = mb_network.c
 mb_network_LDADD = libmb.a ../musl/lib/libc.a
 mb_network_LINK = $(common_LINK) $(liblwip)
 libmb_a_SOURCES = libmb_stdio.c libmb_time.c libmb_net.c
@@ -394,15 +394,15 @@ mostlyclean-compile:
 distclean-compile:
 	-rm -f *.tab.c
 
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/file_dir_test.Po@am__quote@ # am--include-marker
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/file_lseek_test.Po@am__quote@ # am--include-marker
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/file_rw_test.Po@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libmb_net.Po@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libmb_stdio.Po@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libmb_time.Po@am__quote@ # am--include-marker
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/network_test.Po@am__quote@ # am--include-marker
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/syscall_test.Po@am__quote@ # am--include-marker
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/thread_test.Po@am__quote@ # am--include-marker
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/mb_file_dir.Po@am__quote@ # am--include-marker
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/mb_file_lseek.Po@am__quote@ # am--include-marker
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/mb_file_rw.Po@am__quote@ # am--include-marker
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/mb_network.Po@am__quote@ # am--include-marker
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/mb_syscall.Po@am__quote@ # am--include-marker
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/mb_thread.Po@am__quote@ # am--include-marker
 
 $(am__depfiles_remade):
 	@$(MKDIR_P) $(@D)
@@ -553,15 +553,15 @@ clean-am: clean-generic clean-noinstLIBRARIES clean-noinstPROGRAMS \
 	mostlyclean-am
 
 distclean: distclean-am
-		-rm -f ./$(DEPDIR)/file_dir_test.Po
-	-rm -f ./$(DEPDIR)/file_lseek_test.Po
-	-rm -f ./$(DEPDIR)/file_rw_test.Po
-	-rm -f ./$(DEPDIR)/libmb_net.Po
+		-rm -f ./$(DEPDIR)/libmb_net.Po
 	-rm -f ./$(DEPDIR)/libmb_stdio.Po
 	-rm -f ./$(DEPDIR)/libmb_time.Po
-	-rm -f ./$(DEPDIR)/network_test.Po
-	-rm -f ./$(DEPDIR)/syscall_test.Po
-	-rm -f ./$(DEPDIR)/thread_test.Po
+	-rm -f ./$(DEPDIR)/mb_file_dir.Po
+	-rm -f ./$(DEPDIR)/mb_file_lseek.Po
+	-rm -f ./$(DEPDIR)/mb_file_rw.Po
+	-rm -f ./$(DEPDIR)/mb_network.Po
+	-rm -f ./$(DEPDIR)/mb_syscall.Po
+	-rm -f ./$(DEPDIR)/mb_thread.Po
 	-rm -f Makefile
 distclean-am: clean-am distclean-compile distclean-generic \
 	distclean-tags
@@ -607,15 +607,15 @@ install-ps-am:
 installcheck-am:
 
 maintainer-clean: maintainer-clean-am
-		-rm -f ./$(DEPDIR)/file_dir_test.Po
-	-rm -f ./$(DEPDIR)/file_lseek_test.Po
-	-rm -f ./$(DEPDIR)/file_rw_test.Po
-	-rm -f ./$(DEPDIR)/libmb_net.Po
+		-rm -f ./$(DEPDIR)/libmb_net.Po
 	-rm -f ./$(DEPDIR)/libmb_stdio.Po
 	-rm -f ./$(DEPDIR)/libmb_time.Po
-	-rm -f ./$(DEPDIR)/network_test.Po
-	-rm -f ./$(DEPDIR)/syscall_test.Po
-	-rm -f ./$(DEPDIR)/thread_test.Po
+	-rm -f ./$(DEPDIR)/mb_file_dir.Po
+	-rm -f ./$(DEPDIR)/mb_file_lseek.Po
+	-rm -f ./$(DEPDIR)/mb_file_rw.Po
+	-rm -f ./$(DEPDIR)/mb_network.Po
+	-rm -f ./$(DEPDIR)/mb_syscall.Po
+	-rm -f ./$(DEPDIR)/mb_thread.Po
 	-rm -f Makefile
 maintainer-clean-am: distclean-am maintainer-clean-generic
 
