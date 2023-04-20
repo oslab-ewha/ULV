@@ -86,7 +86,7 @@ POST_INSTALL = :
 NORMAL_UNINSTALL = :
 PRE_UNINSTALL = :
 POST_UNINSTALL = :
-noinst_PROGRAMS = test_dyntab$(EXEEXT)
+noinst_PROGRAMS = test_dyntab$(EXEEXT) test_ulfs_inode$(EXEEXT)
 subdir = tests
 ACLOCAL_M4 = $(top_srcdir)/aclocal.m4
 am__aclocal_m4_deps = $(top_srcdir)/configure.ac
@@ -104,6 +104,16 @@ test_dyntab_OBJECTS = $(am_test_dyntab_OBJECTS)
 test_dyntab_DEPENDENCIES = ../libulv/libulv.a
 test_dyntab_LINK = $(CCLD) $(test_dyntab_CFLAGS) $(CFLAGS) \
 	$(AM_LDFLAGS) $(LDFLAGS) -o $@
+am__dirstamp = $(am__leading_dot)dirstamp
+am_test_ulfs_inode_OBJECTS =  \
+	test_ulfs_inode-test_ulfs_inode.$(OBJEXT) \
+	../tools/ulfs/test_ulfs_inode-ulfs_tool_mkfs.$(OBJEXT) \
+	../tools/ulfs/test_ulfs_inode-ulfs_tool_info.$(OBJEXT) \
+	test_ulfs_inode-ulv_test.$(OBJEXT)
+test_ulfs_inode_OBJECTS = $(am_test_ulfs_inode_OBJECTS)
+test_ulfs_inode_DEPENDENCIES = ../libulfs/libulfs.a ../libulv/libulv.a
+test_ulfs_inode_LINK = $(CCLD) $(test_ulfs_inode_CFLAGS) $(CFLAGS) \
+	$(AM_LDFLAGS) $(LDFLAGS) -o $@
 AM_V_P = $(am__v_P_@AM_V@)
 am__v_P_ = $(am__v_P_@AM_DEFAULT_V@)
 am__v_P_0 = false
@@ -119,8 +129,13 @@ am__v_at_1 =
 DEFAULT_INCLUDES = -I.@am__isrc@ -I$(top_builddir)
 depcomp = $(SHELL) $(top_srcdir)/depcomp
 am__maybe_remake_depfiles = depfiles
-am__depfiles_remade = ./$(DEPDIR)/test_dyntab-test_dyntab.Po \
-	./$(DEPDIR)/test_dyntab-ulv_test.Po
+am__depfiles_remade =  \
+	../tools/ulfs/$(DEPDIR)/test_ulfs_inode-ulfs_tool_info.Po \
+	../tools/ulfs/$(DEPDIR)/test_ulfs_inode-ulfs_tool_mkfs.Po \
+	./$(DEPDIR)/test_dyntab-test_dyntab.Po \
+	./$(DEPDIR)/test_dyntab-ulv_test.Po \
+	./$(DEPDIR)/test_ulfs_inode-test_ulfs_inode.Po \
+	./$(DEPDIR)/test_ulfs_inode-ulv_test.Po
 am__mv = mv -f
 AM_V_lt = $(am__v_lt_@AM_V@)
 am__v_lt_ = $(am__v_lt_@AM_DEFAULT_V@)
@@ -138,8 +153,8 @@ AM_V_CCLD = $(am__v_CCLD_@AM_V@)
 am__v_CCLD_ = $(am__v_CCLD_@AM_DEFAULT_V@)
 am__v_CCLD_0 = @echo "  CCLD    " $@;
 am__v_CCLD_1 = 
-SOURCES = $(test_dyntab_SOURCES)
-DIST_SOURCES = $(test_dyntab_SOURCES)
+SOURCES = $(test_dyntab_SOURCES) $(test_ulfs_inode_SOURCES)
+DIST_SOURCES = $(test_dyntab_SOURCES) $(test_ulfs_inode_SOURCES)
 am__can_run_installinfo = \
   case $$AM_UPDATE_INFO_DIR in \
     n|no|NO) false;; \
@@ -262,6 +277,11 @@ top_srcdir = @top_srcdir@
 test_dyntab_SOURCES = test_dyntab.c ulv_test.c ulv_test.h
 test_dyntab_CFLAGS = -I../libulv
 test_dyntab_LDADD = ../libulv/libulv.a
+test_ulfs_inode_SOURCES = test_ulfs_inode.c ../tools/ulfs/ulfs_tool_mkfs.c ../tools/ulfs/ulfs_tool_info.c \
+			ulv_test.c ulv_test.h
+
+test_ulfs_inode_CFLAGS = -I../libulv -I../libulfs
+test_ulfs_inode_LDADD = ../libulfs/libulfs.a ../libulv/libulv.a
 all: all-am
 
 .SUFFIXES:
@@ -302,15 +322,36 @@ clean-noinstPROGRAMS:
 test_dyntab$(EXEEXT): $(test_dyntab_OBJECTS) $(test_dyntab_DEPENDENCIES) $(EXTRA_test_dyntab_DEPENDENCIES) 
 	@rm -f test_dyntab$(EXEEXT)
 	$(AM_V_CCLD)$(test_dyntab_LINK) $(test_dyntab_OBJECTS) $(test_dyntab_LDADD) $(LIBS)
+../tools/ulfs/$(am__dirstamp):
+	@$(MKDIR_P) ../tools/ulfs
+	@: > ../tools/ulfs/$(am__dirstamp)
+../tools/ulfs/$(DEPDIR)/$(am__dirstamp):
+	@$(MKDIR_P) ../tools/ulfs/$(DEPDIR)
+	@: > ../tools/ulfs/$(DEPDIR)/$(am__dirstamp)
+../tools/ulfs/test_ulfs_inode-ulfs_tool_mkfs.$(OBJEXT):  \
+	../tools/ulfs/$(am__dirstamp) \
+	../tools/ulfs/$(DEPDIR)/$(am__dirstamp)
+../tools/ulfs/test_ulfs_inode-ulfs_tool_info.$(OBJEXT):  \
+	../tools/ulfs/$(am__dirstamp) \
+	../tools/ulfs/$(DEPDIR)/$(am__dirstamp)
+
+test_ulfs_inode$(EXEEXT): $(test_ulfs_inode_OBJECTS) $(test_ulfs_inode_DEPENDENCIES) $(EXTRA_test_ulfs_inode_DEPENDENCIES) 
+	@rm -f test_ulfs_inode$(EXEEXT)
+	$(AM_V_CCLD)$(test_ulfs_inode_LINK) $(test_ulfs_inode_OBJECTS) $(test_ulfs_inode_LDADD) $(LIBS)
 
 mostlyclean-compile:
 	-rm -f *.$(OBJEXT)
+	-rm -f ../tools/ulfs/*.$(OBJEXT)
 
 distclean-compile:
 	-rm -f *.tab.c
 
+@AMDEP_TRUE@@am__include@ @am__quote@../tools/ulfs/$(DEPDIR)/test_ulfs_inode-ulfs_tool_info.Po@am__quote@ # am--include-marker
+@AMDEP_TRUE@@am__include@ @am__quote@../tools/ulfs/$(DEPDIR)/test_ulfs_inode-ulfs_tool_mkfs.Po@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/test_dyntab-test_dyntab.Po@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/test_dyntab-ulv_test.Po@am__quote@ # am--include-marker
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/test_ulfs_inode-test_ulfs_inode.Po@am__quote@ # am--include-marker
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/test_ulfs_inode-ulv_test.Po@am__quote@ # am--include-marker
 
 $(am__depfiles_remade):
 	@$(MKDIR_P) $(@D)
@@ -361,6 +402,62 @@ test_dyntab-ulv_test.obj: ulv_test.c
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='ulv_test.c' object='test_dyntab-ulv_test.obj' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
 @am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(test_dyntab_CFLAGS) $(CFLAGS) -c -o test_dyntab-ulv_test.obj `if test -f 'ulv_test.c'; then $(CYGPATH_W) 'ulv_test.c'; else $(CYGPATH_W) '$(srcdir)/ulv_test.c'; fi`
+
+test_ulfs_inode-test_ulfs_inode.o: test_ulfs_inode.c
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(test_ulfs_inode_CFLAGS) $(CFLAGS) -MT test_ulfs_inode-test_ulfs_inode.o -MD -MP -MF $(DEPDIR)/test_ulfs_inode-test_ulfs_inode.Tpo -c -o test_ulfs_inode-test_ulfs_inode.o `test -f 'test_ulfs_inode.c' || echo '$(srcdir)/'`test_ulfs_inode.c
+@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/test_ulfs_inode-test_ulfs_inode.Tpo $(DEPDIR)/test_ulfs_inode-test_ulfs_inode.Po
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='test_ulfs_inode.c' object='test_ulfs_inode-test_ulfs_inode.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(test_ulfs_inode_CFLAGS) $(CFLAGS) -c -o test_ulfs_inode-test_ulfs_inode.o `test -f 'test_ulfs_inode.c' || echo '$(srcdir)/'`test_ulfs_inode.c
+
+test_ulfs_inode-test_ulfs_inode.obj: test_ulfs_inode.c
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(test_ulfs_inode_CFLAGS) $(CFLAGS) -MT test_ulfs_inode-test_ulfs_inode.obj -MD -MP -MF $(DEPDIR)/test_ulfs_inode-test_ulfs_inode.Tpo -c -o test_ulfs_inode-test_ulfs_inode.obj `if test -f 'test_ulfs_inode.c'; then $(CYGPATH_W) 'test_ulfs_inode.c'; else $(CYGPATH_W) '$(srcdir)/test_ulfs_inode.c'; fi`
+@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/test_ulfs_inode-test_ulfs_inode.Tpo $(DEPDIR)/test_ulfs_inode-test_ulfs_inode.Po
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='test_ulfs_inode.c' object='test_ulfs_inode-test_ulfs_inode.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(test_ulfs_inode_CFLAGS) $(CFLAGS) -c -o test_ulfs_inode-test_ulfs_inode.obj `if test -f 'test_ulfs_inode.c'; then $(CYGPATH_W) 'test_ulfs_inode.c'; else $(CYGPATH_W) '$(srcdir)/test_ulfs_inode.c'; fi`
+
+../tools/ulfs/test_ulfs_inode-ulfs_tool_mkfs.o: ../tools/ulfs/ulfs_tool_mkfs.c
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(test_ulfs_inode_CFLAGS) $(CFLAGS) -MT ../tools/ulfs/test_ulfs_inode-ulfs_tool_mkfs.o -MD -MP -MF ../tools/ulfs/$(DEPDIR)/test_ulfs_inode-ulfs_tool_mkfs.Tpo -c -o ../tools/ulfs/test_ulfs_inode-ulfs_tool_mkfs.o `test -f '../tools/ulfs/ulfs_tool_mkfs.c' || echo '$(srcdir)/'`../tools/ulfs/ulfs_tool_mkfs.c
+@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) ../tools/ulfs/$(DEPDIR)/test_ulfs_inode-ulfs_tool_mkfs.Tpo ../tools/ulfs/$(DEPDIR)/test_ulfs_inode-ulfs_tool_mkfs.Po
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='../tools/ulfs/ulfs_tool_mkfs.c' object='../tools/ulfs/test_ulfs_inode-ulfs_tool_mkfs.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(test_ulfs_inode_CFLAGS) $(CFLAGS) -c -o ../tools/ulfs/test_ulfs_inode-ulfs_tool_mkfs.o `test -f '../tools/ulfs/ulfs_tool_mkfs.c' || echo '$(srcdir)/'`../tools/ulfs/ulfs_tool_mkfs.c
+
+../tools/ulfs/test_ulfs_inode-ulfs_tool_mkfs.obj: ../tools/ulfs/ulfs_tool_mkfs.c
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(test_ulfs_inode_CFLAGS) $(CFLAGS) -MT ../tools/ulfs/test_ulfs_inode-ulfs_tool_mkfs.obj -MD -MP -MF ../tools/ulfs/$(DEPDIR)/test_ulfs_inode-ulfs_tool_mkfs.Tpo -c -o ../tools/ulfs/test_ulfs_inode-ulfs_tool_mkfs.obj `if test -f '../tools/ulfs/ulfs_tool_mkfs.c'; then $(CYGPATH_W) '../tools/ulfs/ulfs_tool_mkfs.c'; else $(CYGPATH_W) '$(srcdir)/../tools/ulfs/ulfs_tool_mkfs.c'; fi`
+@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) ../tools/ulfs/$(DEPDIR)/test_ulfs_inode-ulfs_tool_mkfs.Tpo ../tools/ulfs/$(DEPDIR)/test_ulfs_inode-ulfs_tool_mkfs.Po
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='../tools/ulfs/ulfs_tool_mkfs.c' object='../tools/ulfs/test_ulfs_inode-ulfs_tool_mkfs.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(test_ulfs_inode_CFLAGS) $(CFLAGS) -c -o ../tools/ulfs/test_ulfs_inode-ulfs_tool_mkfs.obj `if test -f '../tools/ulfs/ulfs_tool_mkfs.c'; then $(CYGPATH_W) '../tools/ulfs/ulfs_tool_mkfs.c'; else $(CYGPATH_W) '$(srcdir)/../tools/ulfs/ulfs_tool_mkfs.c'; fi`
+
+../tools/ulfs/test_ulfs_inode-ulfs_tool_info.o: ../tools/ulfs/ulfs_tool_info.c
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(test_ulfs_inode_CFLAGS) $(CFLAGS) -MT ../tools/ulfs/test_ulfs_inode-ulfs_tool_info.o -MD -MP -MF ../tools/ulfs/$(DEPDIR)/test_ulfs_inode-ulfs_tool_info.Tpo -c -o ../tools/ulfs/test_ulfs_inode-ulfs_tool_info.o `test -f '../tools/ulfs/ulfs_tool_info.c' || echo '$(srcdir)/'`../tools/ulfs/ulfs_tool_info.c
+@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) ../tools/ulfs/$(DEPDIR)/test_ulfs_inode-ulfs_tool_info.Tpo ../tools/ulfs/$(DEPDIR)/test_ulfs_inode-ulfs_tool_info.Po
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='../tools/ulfs/ulfs_tool_info.c' object='../tools/ulfs/test_ulfs_inode-ulfs_tool_info.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(test_ulfs_inode_CFLAGS) $(CFLAGS) -c -o ../tools/ulfs/test_ulfs_inode-ulfs_tool_info.o `test -f '../tools/ulfs/ulfs_tool_info.c' || echo '$(srcdir)/'`../tools/ulfs/ulfs_tool_info.c
+
+../tools/ulfs/test_ulfs_inode-ulfs_tool_info.obj: ../tools/ulfs/ulfs_tool_info.c
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(test_ulfs_inode_CFLAGS) $(CFLAGS) -MT ../tools/ulfs/test_ulfs_inode-ulfs_tool_info.obj -MD -MP -MF ../tools/ulfs/$(DEPDIR)/test_ulfs_inode-ulfs_tool_info.Tpo -c -o ../tools/ulfs/test_ulfs_inode-ulfs_tool_info.obj `if test -f '../tools/ulfs/ulfs_tool_info.c'; then $(CYGPATH_W) '../tools/ulfs/ulfs_tool_info.c'; else $(CYGPATH_W) '$(srcdir)/../tools/ulfs/ulfs_tool_info.c'; fi`
+@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) ../tools/ulfs/$(DEPDIR)/test_ulfs_inode-ulfs_tool_info.Tpo ../tools/ulfs/$(DEPDIR)/test_ulfs_inode-ulfs_tool_info.Po
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='../tools/ulfs/ulfs_tool_info.c' object='../tools/ulfs/test_ulfs_inode-ulfs_tool_info.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(test_ulfs_inode_CFLAGS) $(CFLAGS) -c -o ../tools/ulfs/test_ulfs_inode-ulfs_tool_info.obj `if test -f '../tools/ulfs/ulfs_tool_info.c'; then $(CYGPATH_W) '../tools/ulfs/ulfs_tool_info.c'; else $(CYGPATH_W) '$(srcdir)/../tools/ulfs/ulfs_tool_info.c'; fi`
+
+test_ulfs_inode-ulv_test.o: ulv_test.c
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(test_ulfs_inode_CFLAGS) $(CFLAGS) -MT test_ulfs_inode-ulv_test.o -MD -MP -MF $(DEPDIR)/test_ulfs_inode-ulv_test.Tpo -c -o test_ulfs_inode-ulv_test.o `test -f 'ulv_test.c' || echo '$(srcdir)/'`ulv_test.c
+@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/test_ulfs_inode-ulv_test.Tpo $(DEPDIR)/test_ulfs_inode-ulv_test.Po
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='ulv_test.c' object='test_ulfs_inode-ulv_test.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(test_ulfs_inode_CFLAGS) $(CFLAGS) -c -o test_ulfs_inode-ulv_test.o `test -f 'ulv_test.c' || echo '$(srcdir)/'`ulv_test.c
+
+test_ulfs_inode-ulv_test.obj: ulv_test.c
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(test_ulfs_inode_CFLAGS) $(CFLAGS) -MT test_ulfs_inode-ulv_test.obj -MD -MP -MF $(DEPDIR)/test_ulfs_inode-ulv_test.Tpo -c -o test_ulfs_inode-ulv_test.obj `if test -f 'ulv_test.c'; then $(CYGPATH_W) 'ulv_test.c'; else $(CYGPATH_W) '$(srcdir)/ulv_test.c'; fi`
+@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/test_ulfs_inode-ulv_test.Tpo $(DEPDIR)/test_ulfs_inode-ulv_test.Po
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='ulv_test.c' object='test_ulfs_inode-ulv_test.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(test_ulfs_inode_CFLAGS) $(CFLAGS) -c -o test_ulfs_inode-ulv_test.obj `if test -f 'ulv_test.c'; then $(CYGPATH_W) 'ulv_test.c'; else $(CYGPATH_W) '$(srcdir)/ulv_test.c'; fi`
 
 ID: $(am__tagged_files)
 	$(am__define_uniq_tagged_files); mkid -fID $$unique
@@ -477,6 +574,8 @@ clean-generic:
 distclean-generic:
 	-test -z "$(CONFIG_CLEAN_FILES)" || rm -f $(CONFIG_CLEAN_FILES)
 	-test . = "$(srcdir)" || test -z "$(CONFIG_CLEAN_VPATH_FILES)" || rm -f $(CONFIG_CLEAN_VPATH_FILES)
+	-rm -f ../tools/ulfs/$(DEPDIR)/$(am__dirstamp)
+	-rm -f ../tools/ulfs/$(am__dirstamp)
 
 maintainer-clean-generic:
 	@echo "This command is intended for maintainers to use"
@@ -486,8 +585,12 @@ clean: clean-am
 clean-am: clean-generic clean-noinstPROGRAMS mostlyclean-am
 
 distclean: distclean-am
-		-rm -f ./$(DEPDIR)/test_dyntab-test_dyntab.Po
+		-rm -f ../tools/ulfs/$(DEPDIR)/test_ulfs_inode-ulfs_tool_info.Po
+	-rm -f ../tools/ulfs/$(DEPDIR)/test_ulfs_inode-ulfs_tool_mkfs.Po
+	-rm -f ./$(DEPDIR)/test_dyntab-test_dyntab.Po
 	-rm -f ./$(DEPDIR)/test_dyntab-ulv_test.Po
+	-rm -f ./$(DEPDIR)/test_ulfs_inode-test_ulfs_inode.Po
+	-rm -f ./$(DEPDIR)/test_ulfs_inode-ulv_test.Po
 	-rm -f Makefile
 distclean-am: clean-am distclean-compile distclean-generic \
 	distclean-tags
@@ -533,8 +636,12 @@ install-ps-am:
 installcheck-am:
 
 maintainer-clean: maintainer-clean-am
-		-rm -f ./$(DEPDIR)/test_dyntab-test_dyntab.Po
+		-rm -f ../tools/ulfs/$(DEPDIR)/test_ulfs_inode-ulfs_tool_info.Po
+	-rm -f ../tools/ulfs/$(DEPDIR)/test_ulfs_inode-ulfs_tool_mkfs.Po
+	-rm -f ./$(DEPDIR)/test_dyntab-test_dyntab.Po
 	-rm -f ./$(DEPDIR)/test_dyntab-ulv_test.Po
+	-rm -f ./$(DEPDIR)/test_ulfs_inode-test_ulfs_inode.Po
+	-rm -f ./$(DEPDIR)/test_ulfs_inode-ulv_test.Po
 	-rm -f Makefile
 maintainer-clean-am: distclean-am maintainer-clean-generic
 

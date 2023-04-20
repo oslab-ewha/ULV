@@ -5,6 +5,7 @@
 
 int printf(const char *format, ...);
 
+int snprintf(char *str, size_t size, const char *format, ...);
 int sscanf(const char *str, const char *format, ...);
 
 void *memset(void *s, int c, size_t n);

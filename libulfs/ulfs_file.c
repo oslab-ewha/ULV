@@ -18,6 +18,7 @@ ulfs_open(const char *pathname, int flags, int mode)
 	ulfs_path_dirname(&path);
 	inode_dir = ulfs_lookup_path(&path, NULL);
 
+	ulfs_path_init(&path, pathname);
 	if (ulfs_path_is_root(&path)) {
 		inode = inode_dir;
 	}

@@ -216,7 +216,8 @@ ulfs_dir_del_inode(inode_t *inode_dir, path_t *ppath)
 
 	*ent->name = '\0';
 	ulfs_free_data_blocks(inode);
-	ulfs_free_inode(inode);
+
+	ulfs_free_inode(ent->bid_ib, inode);
 
 	return TRUE;
 }

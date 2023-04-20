@@ -50,6 +50,7 @@ do_init_indb(void)
 	/* This bid of first inode block willl be BID_IND_START */
 	indb = (inode_block_t *)ulfs_block_get(ulfs_block_alloc());
 	indb->next = 0;
+	indb->prev = 0;
 	indb->ino_start = 1;
 	indb->n_used = 0;
 	ulfs_block_sync(BID_INDB_START);

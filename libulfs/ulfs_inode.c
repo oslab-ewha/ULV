@@ -1,5 +1,7 @@
 #include "ulfs_p.h"
 
+#include "ulv_assert.h"
+
 #define INODE_OFFSET(ib, inode)	((char *)(inode) - (char *)(ib)->inodes)
 #define IDX_IN_IB(ib, inode)	(INODE_OFFSET(ib, inode) / sizeof(inode_t))
 
@@ -11,11 +13,18 @@ get_next_inode_block_bid(inode_block_t *ib)
 {
 	if (ib->next == 0) {
 		inode_block_t	*ib_new;
+		inode_block_t	*ib_prev = NULL;
 
+		if (ib->prev != 0)
+			ib_prev = ulfs_block_get(ib->prev);
 		ib->next = ulfs_block_alloc();
 		/* init inode block */
 		ib_new = ulfs_block_get(ib->next);
 		ib_new->next = 0;
+		if (ib_prev)
+			ib_new->prev = ib_prev->next;
+		else
+			ib_new->prev = BID_INDB_START;
 		ib_new->ino_start = ib->ino_start + N_INODES_PER_IB;
 		ib_new->n_used = 0;
 	}
@@ -63,9 +72,41 @@ ulfs_alloc_inode(inode_type_t type, bid_t *pbid_ib, uint16_t *pidx_ib)
 }
 
 void
-ulfs_free_inode(inode_t *inode)
+ulfs_free_inode(bid_t bid_ib, inode_t *inode)
 {
+	inode_block_t	*ib;
+
 	inode->type = INODE_TYPE_NONE;
+
+	ib = ulfs_block_get(bid_ib);
+	ULV_ASSERT(ib->n_used > 0);
+	ib->n_used--;
+	if (ib->n_used == 0) {
+		inode_block_t	*ib_prev = NULL;
+
+		if (ib->next != 0) {
+			inode_block_t	*ib_next;
+
+			ib_next = ulfs_block_get(ib->next);
+			if (ib->prev == 0) {
+				/* ASSUME: root inode block is never freed */
+				ib_next->prev = 0;
+			}
+			else {
+				ib_prev = ulfs_block_get(ib->prev);
+				ib_prev->next = ib->next;
+				ib_next->prev = ib->prev;
+			}
+		}
+		else {
+			/* ASSUME: root inode block is never freed */
+			ULV_ASSERT(ib->prev != 0);
+
+			ib_prev = ulfs_block_get(ib->prev);
+			ib_prev->next = 0;
+		}
+		ulfs_block_free(bid_ib);
+	}
 }
 
 inode_t *

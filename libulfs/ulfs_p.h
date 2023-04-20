@@ -53,10 +53,10 @@ typedef struct {
 	bid_t	bids_data[2];		/* data block */
 } inode_t;
 
-#define N_INODES_PER_IB	(BSIZE - offsetof(inode_block_t, inodes))
+#define N_INODES_PER_IB	((BSIZE - offsetof(inode_block_t, inodes)) / sizeof(inode_t))
 
 typedef struct {
-	bid_t	next;
+	bid_t	next, prev;
 	uint32_t	ino_start;
 	uint16_t	n_used;
 	uint16_t	dummy;
@@ -104,7 +104,7 @@ void ulfs_block_free(bid_t bid);
 void ulfs_block_init(void);
 
 inode_t *ulfs_alloc_inode(inode_type_t type, bid_t *pbid_ib, uint16_t *pidx_ib);
-void ulfs_free_inode(inode_t *inode);
+void ulfs_free_inode(bid_t bid_ib, inode_t *inode);
 
 inode_t *ulfs_get_inode(bid_t bid_ib, uint16_t idx_ib, uint32_t *pino);
 inode_t *ulfs_get_inode_root(void);

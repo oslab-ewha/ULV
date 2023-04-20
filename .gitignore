@@ -34,5 +34,6 @@
 /lwip-build/Makefile
 /tests/Makefile
 /tests/test_dyntab
+/tests/test_ulfs_inode
 /tools/ulfs/Makefile
 /tools/ulfs/ulfs
