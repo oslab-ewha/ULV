@@ -1,4 +1,5 @@
 #include "ulfs_p.h"
+#include "ulfs.h"
 
 #include "ulv_syscall_flags.h"
 #include "ulv_assert.h"
@@ -53,6 +54,33 @@ ulfs_close(int fd)
 	if (ulfd) {
 		ulv_dyntab_release(&ulfds, ulfd);
 	}
+}
+
+off_t
+ulfs_lseek(int fd, off_t off, int whence)
+{
+	ulfd_t	*ulfd;
+
+	ulfd = (ulfd_t *)ulv_dyntab_get(&ulfds, fd);
+	if (ulfd == NULL)
+		return -1;
+	switch (whence) {
+	case ULFS_SEEK_SET:
+		ulfd->off = off;
+		break;
+	case ULFS_SEEK_CUR:
+		ulfd->off += off;
+		break;
+	case ULFS_SEEK_END:
+		if (off > 0)
+			ulfd->off = ulfd->inode->size;
+		else
+			ulfd->off = ulfd->inode->size + off;
+		break;
+	default:
+		return -1;
+	}
+	return ulfd->off;
 }
 
 ulfd_t *

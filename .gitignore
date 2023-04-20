@@ -11,6 +11,7 @@
 /cscope.out
 /micro_benchmarks/mb_syscall
 /micro_benchmarks/mb_file_dir
+/micro_benchmarks/mb_file_lseek
 /micro_benchmarks/mb_file_rw
 /micro_benchmarks/mb_network
 /micro_benchmarks/mb_thread

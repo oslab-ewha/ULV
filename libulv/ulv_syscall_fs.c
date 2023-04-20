@@ -26,3 +26,15 @@ ulv_syscall_getdents64(int fd, ulfs_dirent_t *dirp, unsigned int count)
 		return -1;
 	return ulfs_getdents(fd_real, (ulfs_dirent_t *)dirp, count);
 }
+
+int
+ulv_syscall_lseek(int fd, off_t offset, int whence)
+{
+	int	fd_real;
+	fdtype_t	type;
+
+	fd_real = ulv_lookup_fd_real(fd, &type);
+	if (fd_real < 0 || type != FDTYPE_ULFS)
+		return -1;
+	return ulfs_lseek(fd_real, offset, whence);
+}
