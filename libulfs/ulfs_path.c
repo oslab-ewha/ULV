@@ -8,6 +8,7 @@ ulfs_path_init(path_t *ppath, const char *path)
 	ppath->start = path;
 	for (p = path; *p; p++);
 	ppath->end = p;
+	ppath->start_name = NULL;
 }
 
 inline void
@@ -41,7 +42,8 @@ ulfs_path_first_name(path_t *ppath)
 	const char	*p;
 
 	for (p = ppath->start; *p && *p != '/'; p++);
-	ppath->end = p;
+	ppath->start_name = ppath->start;
+	ppath->end_name = p;
 }
 
 inline bool_t
@@ -49,12 +51,14 @@ ulfs_path_next_name(path_t *ppath)
 {
 	const char	*p;
 
-	if (!*ppath->end)
+	if (ppath->end_name == ppath->end) {
+		ppath->start_name = NULL;
 		return FALSE;
+	}
 
-	for (p = ppath->end + 1; *p && *p != '/'; p++);
-	ppath->start = ppath->end + 1;
-	ppath->end = p;
+	for (p = ppath->end_name + 1; *p && *p != '/'; p++);
+	ppath->start_name = ppath->end_name + 1;
+	ppath->end_name = p;
 
 	return TRUE;
 }
@@ -63,8 +67,14 @@ inline bool_t
 ulfs_path_matched(path_t *ppath, const char *name)
 {
 	const char	*p, *q;
+	const char	*start = ppath->start_name, *end = ppath->end_name;
 
-	for (p = ppath->start, q = name; p < ppath->end; p++, q++) {
+	if (start == NULL) {
+		start = ppath->start;
+		end = ppath->end;
+	}
+
+	for (p = start, q = name; p < end; p++, q++) {
 		if (*p != *q)
 			return FALSE;
 	}

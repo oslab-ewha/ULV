@@ -23,7 +23,6 @@ ulfs_open(const char *pathname, int flags, int mode)
 		inode = inode_dir;
 	}
 	else {
-		ulfs_path_init(&path, pathname);
 		ulfs_path_basename(&path);
 
 		if (flags & O_CREAT) {

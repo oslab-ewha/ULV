@@ -91,8 +91,8 @@ typedef struct {
 } dirlist_t;
 
 typedef struct {
-	const char	*start;
-	const char	*end;
+	const char	*start, *start_name;
+	const char	*end, *end_name;
 } path_t;
 
 void *ulfs_block_get(bid_t bid);
