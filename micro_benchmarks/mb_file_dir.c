@@ -4,6 +4,7 @@
 #include <dirent.h>
 #include <stdlib.h>
 #include <unistd.h>
+#include <string.h>
 
 #include "libmb.h"
 
@@ -68,8 +69,13 @@ main(int argc, char *argv[])
 {
 	int	i;
 
-	if (argc > 1)
+	if (argc > 1) {
+		if (strcmp(argv[1], "-h") == 0) {
+			usage();
+			return 0;
+		}
 		count_entries = atoi(argv[1]);
+	}
 	if (argc > 2)
 		count_loop = atoi(argv[2]);
 

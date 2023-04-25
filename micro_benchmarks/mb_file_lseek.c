@@ -44,8 +44,13 @@ main(int argc, char *argv[])
 	int	fd;
 	int	i;
 
-	if (argc > 1)
+	if (argc > 1) {
+		if (strcmp(argv[1], "-h") == 0) {
+			usage();
+			return 0;
+		}
 		parse_seek_type(argv[1]);
+	}
 	if (argc > 2)
 		count = atoi(argv[2]);
 
