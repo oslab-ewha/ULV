@@ -1,7 +1,7 @@
 #include "ulfs_p.h"
 
 bid_t
-ulfs_alloc_data_block(inode_t *inode, lbid_t lbid, bidblock_t **pbb, uint16_t *pidx_bb)
+ulfs_alloc_dblock_bid(inode_t *inode, lbid_t lbid, bidblock_t **pbb, uint16_t *pidx_bb)
 {
 	bid_t	bid_bb;
 
@@ -38,7 +38,7 @@ ulfs_alloc_data_block(inode_t *inode, lbid_t lbid, bidblock_t **pbb, uint16_t *p
 }
 
 bid_t
-ulfs_alloc_data_block_next(inode_t *inode, bidblock_t **pbb, uint16_t *pidx_bb)
+ulfs_alloc_dblock_bid_next(inode_t *inode, bidblock_t **pbb, uint16_t *pidx_bb)
 {
 	bidblock_t	*bb = *pbb;
 	uint16_t	idx_bb = *pidx_bb;
@@ -65,13 +65,13 @@ ulfs_alloc_data_block_next(inode_t *inode, bidblock_t **pbb, uint16_t *pidx_bb)
 }
 
 void *
-ulfs_get_data_block(inode_t *inode, lbid_t lbid)
+ulfs_alloc_dblock(inode_t *inode, lbid_t lbid)
 {
 	bidblock_t	*bb;
 	uint16_t	idx_bb;
 	bid_t	bid;
 
-	bid = ulfs_alloc_data_block(inode, lbid, &bb, &idx_bb);
+	bid = ulfs_alloc_dblock_bid(inode, lbid, &bb, &idx_bb);
 	return ulfs_block_get(bid);
 }
 

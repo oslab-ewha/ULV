@@ -109,9 +109,9 @@ void ulfs_free_inode(bid_t bid_ib, inode_t *inode);
 inode_t *ulfs_get_inode(bid_t bid_ib, uint16_t idx_ib, uint32_t *pino);
 inode_t *ulfs_get_inode_root(void);
 inode_t *ulfs_get_inode_cwd(void);
-bid_t ulfs_alloc_data_block(inode_t *inode, lbid_t lbid, bidblock_t **pbb, uint16_t *pidx_bb);
-bid_t ulfs_alloc_data_block_next(inode_t *inode, bidblock_t **pbb, uint16_t *pidx_bb);
-void *ulfs_get_data_block(inode_t *inode, lbid_t lbid);
+bid_t ulfs_alloc_dblock_bid(inode_t *inode, lbid_t lbid, bidblock_t **pbb, uint16_t *pidx_bb);
+bid_t ulfs_alloc_dblock_bid_next(inode_t *inode, bidblock_t **pbb, uint16_t *pidx_bb);
+void *ulfs_alloc_dblock(inode_t *inode, lbid_t lbid);
 void ulfs_free_data_blocks(inode_t *inode);
 
 inode_t *ulfs_lookup_name(inode_t *inode_dir, path_t *ppath, dirent_t **pent);

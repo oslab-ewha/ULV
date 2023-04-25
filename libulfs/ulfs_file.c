@@ -98,7 +98,7 @@ ulfs_get_ulfd_data(int fd)
 	if (ulfd == NULL)
 		return NULL;
 	if (ulfd->data == NULL) {
-		ulfd->data = ulfs_block_get(ulfs_alloc_data_block(ulfd->inode, ulfd->off / BSIZE, &ulfd->bb, &ulfd->idx_bb));
+		ulfd->data = ulfs_block_get(ulfs_alloc_dblock_bid(ulfd->inode, ulfd->off / BSIZE, &ulfd->bb, &ulfd->idx_bb));
 	}
 	return ulfd;
 }

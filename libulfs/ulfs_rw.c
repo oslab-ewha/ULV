@@ -32,7 +32,7 @@ ulfs_read(int fd, void *buf, size_t count)
 		buf += cpysize;
 		remain -= cpysize;
 		if (count > 0) {
-			ulfd->data = ulfs_block_get(ulfs_alloc_data_block_next(ulfd->inode, &ulfd->bb, &ulfd->idx_bb));
+			ulfd->data = ulfs_block_get(ulfs_alloc_dblock_bid_next(ulfd->inode, &ulfd->bb, &ulfd->idx_bb));
 		}
 	}
 
@@ -63,7 +63,7 @@ ulfs_write(int fd, const void *buf, size_t count)
 		nwrite += cpysize;
 		buf += cpysize;
 		if (count > 0) {
-			ulfd->data = ulfs_block_get(ulfs_alloc_data_block_next(ulfd->inode, &ulfd->bb, &ulfd->idx_bb));
+			ulfd->data = ulfs_block_get(ulfs_alloc_dblock_bid_next(ulfd->inode, &ulfd->bb, &ulfd->idx_bb));
 		}
 	}
 

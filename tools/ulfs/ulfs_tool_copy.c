@@ -10,7 +10,7 @@ do_copy_data(inode_t *inode, int fd)
 		char	*data;
 		ssize_t	nread;
 
-		data = ulfs_get_data_block(inode, (lbid_t)i);
+		data = ulfs_alloc_dblock(inode, (lbid_t)i);
 		if (size_copy >= BSIZE) {
 			nread = read(fd, data, BSIZE);
 			size_copy -= BSIZE;

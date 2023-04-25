@@ -65,7 +65,7 @@ do_mk_root(void)
 	dirent_t	*ent;
 
 	inode = ulfs_alloc_inode(INODE_TYPE_DIR, &bid_ib, &idx_ib);
-	ent = (dirent_t *)ulfs_get_data_block(inode, 0);
+	ent = (dirent_t *)ulfs_alloc_dblock(inode, 0);
 
 	strcpy(ent->name, ".");
 	ent->bid_ib = bid_ib;

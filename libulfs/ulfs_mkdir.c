@@ -21,7 +21,7 @@ ulfs_mkdir(const char *pathname)
 	inode = ulfs_dir_add_inode(inode_dir, &path, INODE_TYPE_DIR, &ent_new, FALSE);
 	if (inode == NULL)
 		return -EEXIST;
-	ent_dir = (dirent_t *)ulfs_get_data_block(inode, 0);
+	ent_dir = (dirent_t *)ulfs_alloc_dblock(inode, 0);
 	strcpy(ent_dir->name, ".");
 	ent_dir->bid_ib = ent_new->bid_ib;
 	ent_dir->idx_ib = ent_new->idx_ib;
