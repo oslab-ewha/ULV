@@ -51,7 +51,8 @@ typedef enum {
 typedef struct {
 	inode_type_t	type;
 	uint64_t	size;
-	bid_t	bids_data[2];		/* data block */
+	/* the first is just a data block and the second is bid block */
+	bid_t	bids_data[2];
 } inode_t;
 
 #define N_INODES_PER_IB	((BSIZE - offsetof(inode_block_t, inodes)) / sizeof(inode_t))

@@ -1,5 +1,22 @@
 #include "ulfs_p.h"
 
+#include "ulv_libc.h"
+
+static bid_t
+alloc_new_bblock(void)
+{
+	bidblock_t	*bb;
+	bid_t	bid;
+
+	bid = ulfs_block_alloc();
+	if (bid == 0)
+		return 0;
+	bb = ulfs_block_get(bid);
+	bb->next = 0;
+	memset(bb->bids, 0, sizeof(bb->bids));
+	return bid;
+}
+
 static bid_t
 get_dblock_bid(inode_t *inode, lbid_t lbid, bool_t alloc_ok, bidblock_t **pbb, uint16_t *pidx_bb)
 {
@@ -29,7 +46,7 @@ get_dblock_bid(inode_t *inode, lbid_t lbid, bool_t alloc_ok, bidblock_t **pbb, u
 			if (bb->bids[lbid - 1] == 0) {
 				if (!alloc_ok)
 					return 0;
-				bb->bids[lbid - 1] = ulfs_block_alloc();
+				bb->bids[lbid - 1] = alloc_new_bblock();
 			}
 			*pbb = bb;
 			*pidx_bb = lbid - 1;
@@ -39,7 +56,7 @@ get_dblock_bid(inode_t *inode, lbid_t lbid, bool_t alloc_ok, bidblock_t **pbb, u
 		if (bb->next == 0) {
 			if (!alloc_ok)
 				return 0;
-			bb->next = ulfs_block_alloc();
+			bb->next = alloc_new_bblock();
 		}
 		bid_bb = bb->next;
 	}

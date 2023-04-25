@@ -59,6 +59,8 @@ ulfs_alloc_inode(inode_type_t type, bid_t *pbid_ib, uint16_t *pidx_ib)
 			inode = get_empty_inode(ib);
 			ib->n_used++;
 			inode->type = type;
+			inode->bids_data[0] = 0;
+			inode->bids_data[1] = 0;
 
 			*pbid_ib = bid_ib;
 			*pidx_ib = IDX_IN_IB(ib, inode);

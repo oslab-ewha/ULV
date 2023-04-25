@@ -84,15 +84,22 @@ ulfs_block_alloc(void)
 
 	while (1) {
 		mapb = (mapblock_t *)ulfs_block_get(bid_mapb);
+		if (mapb == NULL)
+			return 0;
+
 		if (mapb->n_frees == ULFS_ENDOFMAPB)
 			setup_new_mapb(mapb, bid_mapb);
 		if (mapb->n_frees > 0) {
+			bid_t	bid_new;
 			unsigned	bit_idx;
 
 			bit_idx = alloc_bit_index(mapb->bitmap);
 			ULV_ASSERT(bit_idx != N_BIDS_PER_MAPB);
 			mapb->n_frees--;
-			return bid_mapb + 1 + bit_idx;
+			bid_new = bid_mapb + 1 + bit_idx;
+			if (bid_max != 0 && bid_new > bid_max)
+				return 0;
+			return bid_new;
 		}
 		bid_mapb = BID_MAPB_NEXT(bid_mapb);
 	}
