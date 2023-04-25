@@ -6,11 +6,14 @@
 static void
 init_dirlist_with_ulfd(dirlist_t *dlist, ulfd_t *ulfd)
 {
+	void	*data;
+
 	dlist->inode = ulfd->inode;
 	dlist->size_remain = ulfd->inode->size - ulfd->off;
 	dlist->bb = ulfd->bb;
 	dlist->idx_bb = ulfd->idx_bb;
-	dlist->head = dlist->ent = (dirent_t *)(ulfd->data + ulfd->off % BSIZE);
+	data = ulfs_get_dblock(ulfd->inode, ulfd->off / BSIZE, FALSE, &ulfd->bb, &ulfd->idx_bb);
+	dlist->head = dlist->ent = (dirent_t *)(data + ulfd->off % BSIZE);
 }
 
 static int
@@ -33,7 +36,7 @@ ulfs_getdents(int fd, ulfs_dirent_t *dirp, unsigned int count)
 	int	nfilled = 0;
 	off_t	off;
 
-	ulfd = ulfs_get_ulfd_data(fd);
+	ulfd = ulfs_get_ulfd(fd);
 	if (ulfd == NULL)
 		return -EBADF;
 

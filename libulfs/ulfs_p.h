@@ -66,7 +66,6 @@ typedef struct {
 typedef struct {
         off_t	off;
 	inode_t	*inode;
-	void	*data;
 	bidblock_t	*bb;
 	uint16_t	idx_bb;
 } ulfd_t;
@@ -109,9 +108,8 @@ void ulfs_free_inode(bid_t bid_ib, inode_t *inode);
 inode_t *ulfs_get_inode(bid_t bid_ib, uint16_t idx_ib, uint32_t *pino);
 inode_t *ulfs_get_inode_root(void);
 inode_t *ulfs_get_inode_cwd(void);
-bid_t ulfs_alloc_dblock_bid(inode_t *inode, lbid_t lbid, bidblock_t **pbb, uint16_t *pidx_bb);
-bid_t ulfs_alloc_dblock_bid_next(inode_t *inode, bidblock_t **pbb, uint16_t *pidx_bb);
 void *ulfs_alloc_dblock(inode_t *inode, lbid_t lbid);
+void *ulfs_get_dblock(inode_t *inode, lbid_t lbid, bool_t alloc_ok, bidblock_t **pbb, uint16_t *pidx_bb);
 void ulfs_free_data_blocks(inode_t *inode);
 
 inode_t *ulfs_lookup_name(inode_t *inode_dir, path_t *ppath, dirent_t **pent);
@@ -127,7 +125,6 @@ dirent_t *ulfs_dir_get_ent_root(void);
 dirent_t *ulfs_dir_get_ent_cwd(void);
 
 ulfd_t *ulfs_get_ulfd(int fd);
-ulfd_t *ulfs_get_ulfd_data(int fd);
 
 void ulfs_path_init(path_t *ppath, const char *path);
 void ulfs_path_dirname(path_t *ppath);
