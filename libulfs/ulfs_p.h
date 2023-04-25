@@ -26,6 +26,7 @@ typedef unsigned	lbid_t;
 
 typedef struct {
 	unsigned	magic;
+	unsigned	max_blocks;
 } sb_t;
 
 typedef struct {

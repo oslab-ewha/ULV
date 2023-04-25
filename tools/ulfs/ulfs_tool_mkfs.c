@@ -22,12 +22,13 @@ parse_sizestr(const char *arg)
 }
 
 static void
-do_mk_sb(void)
+do_mk_sb(long size)
 {
 	sb_t	*sb;
 
 	sb = (sb_t *)ulfs_block_get(0);
 	sb->magic = ULFS_SB_MAGIC;
+	sb->max_blocks = size / BSIZE;
 	ulfs_block_sync(0);
 }
 
@@ -80,9 +81,9 @@ do_mk_root(void)
 }
 
 static void
-do_mkfs(void)
+do_mkfs(long size)
 {
-	do_mk_sb();
+	do_mk_sb(size);
 	do_init_mapb();
 	do_init_indb();
 	do_mk_root();
@@ -122,7 +123,7 @@ ulfs_tool_mkfs(int argc, char *argv[])
 	setenv("ULV_BLOCK", argv[0], 1);
 	ulfs_block_init();
 
-	do_mkfs();
+	do_mkfs(size);
 
 	return 0;
 }

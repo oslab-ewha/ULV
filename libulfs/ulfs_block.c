@@ -13,6 +13,7 @@
 #define BID_MAPB_FROM_BID(bid)	 ((((bid) - BID_MAPB_START) / (N_BIDS_PER_MAPB + 1)) * (N_BIDS_PER_MAPB + 1) + 1)
 
 static void	*mapped;
+static long	bid_max;
 
 struct stat {
 	char	dummy1[44];
@@ -25,6 +26,8 @@ const char *getenv(const char *);
 void *
 ulfs_block_get(bid_t bid)
 {
+	if (bid_max != 0 && bid > bid_max)
+		return NULL;
 	return BID_TO_BLOCK(bid);
 }
 
@@ -108,6 +111,12 @@ ulfs_block_free(bid_t bid)
 	ULV_ASSERT(mapb->n_frees != ULFS_ENDOFMAPB);
 	mapb->n_frees++;
 	free_bit_index(mapb->bitmap, bid - bid_mapb - 1);
+}
+
+void
+ulfs_block_set_max(long max_blocks)
+{
+	bid_max = max_blocks - 1;
 }
 
 void
