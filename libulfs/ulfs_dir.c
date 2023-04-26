@@ -25,23 +25,11 @@ again:
 	}
 	else {
 		dlist->ent++;
-		if (dlist->ent - dlist->head > N_DIRENT_PER_DB) {
-			if (dlist->bb == NULL) {
-				ULV_ASSERT(dlist->inode->bids_data[1] != 0);
-				dlist->bb = (bidblock_t *)ulfs_block_get(dlist->inode->bids_data[1]);
-				dlist->idx_bb = 0;
-			}
-			else {
-				dlist->idx_bb++;
-				if (dlist->idx_bb == N_BIDS_PER_BB) {
-					dlist->bb = (bidblock_t *)ulfs_block_get(dlist->bb->next);
-					dlist->idx_bb = 0;
-				}
-			}
-			dlist->ent = dlist->head = (dirent_t *)ulfs_block_get(dlist->bb->bids[dlist->idx_bb]);
-		}
+		if (dlist->ent - dlist->head == N_DIRENT_PER_DB)
+			dlist->ent = dlist->head = (dirent_t *)ulfs_next_dblock(&dlist->walk);
 	}
 
+	/* It's empty dirent */
 	if (*ent->name == '\0')
 		goto again;
 	return ent;
@@ -52,9 +40,7 @@ init_dirlist(dirlist_t *dlist, inode_t *inode_dir)
 {
 	dlist->inode = inode_dir;
 	dlist->size_remain = inode_dir->size;
-	dlist->bb = NULL;
-	dlist->idx_bb = 0;
-	dlist->head = dlist->ent = ulfs_block_get(dlist->inode->bids_data[0]);
+	dlist->head = dlist->ent = (dirent_t *)ulfs_first_dblock(inode_dir, 0, FALSE, &dlist->walk);
 }
 
 inode_t *
@@ -147,20 +133,8 @@ find_empty_entry(inode_t *inode_dir)
 			ent = dirlist.ent_last + 1;
 		}
 		else {
-			if (dirlist.bb == NULL) {
-				dirlist.inode->bids_data[1] = ulfs_block_alloc();
-				dirlist.bb = (bidblock_t *)ulfs_block_get(dirlist.inode->bids_data[1]);
-			}
-			else
-				dirlist.idx_bb++;
-
-			if (dirlist.idx_bb == N_BIDS_PER_BB - 1) {
-				if (dirlist.bb->next == 0)
-					dirlist.bb->next = ulfs_block_alloc();
-				dirlist.bb = (bidblock_t *)ulfs_block_get(dirlist.bb->next);
-				dirlist.idx_bb = 0;
-			}
-			ent = (dirent_t *)ulfs_block_get(dirlist.bb->bids[dirlist.idx_bb]);
+			dirlist.walk.alloc_ok = TRUE;
+			ent = (dirent_t *)ulfs_next_dblock(&dirlist.walk);
 		}
 
 		inode_dir->size += sizeof(dirent_t);

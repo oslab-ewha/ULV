@@ -10,10 +10,11 @@ init_dirlist_with_ulfd(dirlist_t *dlist, ulfd_t *ulfd)
 
 	dlist->inode = ulfd->inode;
 	dlist->size_remain = ulfd->inode->size - ulfd->off;
-	dlist->bb = ulfd->bb;
-	dlist->idx_bb = ulfd->idx_bb;
-	data = ulfs_get_dblock(ulfd->inode, ulfd->off / BSIZE, FALSE, &ulfd->bb, &ulfd->idx_bb);
-	dlist->head = dlist->ent = (dirent_t *)(data + ulfd->off % BSIZE);
+	data = ulfs_first_dblock(ulfd->inode, ulfd->off / BSIZE, FALSE, &dlist->walk);
+	if (data == NULL)
+		dlist->ent = NULL;
+	else
+		dlist->head = dlist->ent = (dirent_t *)(data + ulfd->off % BSIZE);
 }
 
 static int

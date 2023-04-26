@@ -38,8 +38,7 @@ ulfs_open(const char *pathname, int flags, int mode)
 	ulfd = (ulfd_t *)ulv_dyntab_assign(&ulfds);
 	ulfd->off = 0;
 	ulfd->inode = inode;
-	ulfd->bb = NULL;
-	ulfd->idx_bb = 0;
+	ulfd->walked = FALSE;
 
 	return ULV_DYNTAB_ENTRY_IDX(ulfd);
 }
@@ -79,6 +78,7 @@ ulfs_lseek(int fd, off_t off, int whence)
 	default:
 		return -1;
 	}
+	ulfd->walked = FALSE;
 	return ulfd->off;
 }
 

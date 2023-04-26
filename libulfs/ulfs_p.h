@@ -66,10 +66,18 @@ typedef struct {
 } inode_block_t;
 
 typedef struct {
+	inode_t		*inode;
+	bool_t	alloc_ok;
+	lbid_t		lbid;
+	bid_t		bid_bb;
+	uint16_t	idx_bb;
+} dblock_walk_t;
+
+typedef struct {
         off_t	off;
 	inode_t	*inode;
-	bidblock_t	*bb;
-	uint16_t	idx_bb;
+	bool_t		walked;
+	dblock_walk_t	walk;
 } ulfd_t;
 
 #define ULFS_NAME_MAX	26
@@ -83,11 +91,10 @@ typedef struct {
 } dirent_t;
 
 typedef struct {
-	inode_t	*inode;
+	inode_t		*inode;
 	dirent_t	*head;
 	dirent_t	*ent, *ent_last;
-	bidblock_t	*bb;
-	uint16_t	idx_bb;
+	dblock_walk_t	walk;
 	uint64_t	size_remain;
 } dirlist_t;
 
@@ -111,7 +118,9 @@ inode_t *ulfs_get_inode(bid_t bid_ib, uint16_t idx_ib, uint32_t *pino);
 inode_t *ulfs_get_inode_root(void);
 inode_t *ulfs_get_inode_cwd(void);
 void *ulfs_alloc_dblock(inode_t *inode, lbid_t lbid);
-void *ulfs_get_dblock(inode_t *inode, lbid_t lbid, bool_t alloc_ok, bidblock_t **pbb, uint16_t *pidx_bb);
+void *ulfs_first_dblock(inode_t *inode, lbid_t lbid, bool_t alloc_ok, dblock_walk_t *pwalk);
+void *ulfs_get_dblock(dblock_walk_t *pwalk);
+void *ulfs_next_dblock(dblock_walk_t *pwalk);
 void ulfs_free_data_blocks(inode_t *inode);
 
 inode_t *ulfs_lookup_name(inode_t *inode_dir, path_t *ppath, dirent_t **pent);

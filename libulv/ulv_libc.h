@@ -8,6 +8,7 @@ int printf(const char *format, ...);
 int snprintf(char *str, size_t size, const char *format, ...);
 int sscanf(const char *str, const char *format, ...);
 
+void *memcpy(void *, const void *, size_t);
 void *memset(void *s, int c, size_t n);
 char *strcpy(char *dest, const char *src);
 
