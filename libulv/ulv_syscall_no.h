@@ -19,6 +19,7 @@
 #define __NR_pipe	22
 #define __NR_select	23
 #define __NR_msync	26
+#define __NR_madvise	28
 #define __NR_socket	41
 #define __NR_connect	42
 #define __NR_sendto	44

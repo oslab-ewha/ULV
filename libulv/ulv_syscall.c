@@ -31,6 +31,7 @@ ulv_syscall(long n, long *args)
 		CASE_ULV_SYSCALL(munmap, 2);
 		CASE_ULV_SYSCALL(brk, 1);
 	case __NR_rt_sigprocmask:
+	case __NR_madvise:
 		return 0;
 		CASE_ULV_SYSCALL(ioctl, 3);
 		CASE_ULV_SYSCALL(writev, 3);
