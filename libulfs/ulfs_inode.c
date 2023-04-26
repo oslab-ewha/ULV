@@ -8,6 +8,26 @@
 static inode_t	*inode_root;
 static inode_t	*inode_cwd;
 
+static bid_t
+alloc_new_iblock(void)
+{
+	inode_block_t	*ib;
+	bid_t	bid;
+	int	i;
+
+	bid = ulfs_block_alloc();
+	if (bid == 0)
+		return 0;
+	ib = ulfs_block_get(bid);
+	ib->next = 0;
+	ib->prev = 0;
+
+	for (i = 0; i < N_INODES_PER_IB; i++)
+		ib->inodes[i].type = INODE_TYPE_NONE;
+
+	return bid;
+}
+
 static inline bid_t
 get_next_inode_block_bid(inode_block_t *ib)
 {
@@ -17,8 +37,7 @@ get_next_inode_block_bid(inode_block_t *ib)
 
 		if (ib->prev != 0)
 			ib_prev = ulfs_block_get(ib->prev);
-		ib->next = ulfs_block_alloc();
-		/* init inode block */
+		ib->next = alloc_new_iblock();
 		ib_new = ulfs_block_get(ib->next);
 		ib_new->next = 0;
 		if (ib_prev)
