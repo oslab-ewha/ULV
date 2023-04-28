@@ -54,10 +54,11 @@ ulfs_getdents(int fd, ulfs_dirent_t *dirp, unsigned int count)
 		dirent = ulfs_dir_get(&dirlist);
 		if (dirent == NULL)
 			break;
-		namelen = copy_name_len(dirp->d_name, dirent->name);
+		namelen = strlen(dirent->name) + 1;
 		reclen = namelen + sizeof(ulfs_dirent_t);
 		if (count < nfilled + reclen)
 			break;
+		strcpy(dirp->d_name, dirent->name);
 		dirp->d_off = dirlist.off;
 		dirp->d_reclen = reclen;
 		inode = ulfs_get_inode(dirent->bid_ib, dirent->idx_ib, &ino);
