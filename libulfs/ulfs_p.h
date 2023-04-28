@@ -92,10 +92,12 @@ typedef struct {
 
 typedef struct {
 	inode_t		*inode;
-	dirent_t	*head;
-	dirent_t	*ent, *ent_last;
+	/* entry index in dir data block */
+	unsigned	idx_in_block;
+	dirent_t	*ent;
+	/* current listing entry offset in dir data */
+	off_t		off;
 	dblock_walk_t	walk;
-	uint64_t	size_remain;
 } dirlist_t;
 
 typedef struct {

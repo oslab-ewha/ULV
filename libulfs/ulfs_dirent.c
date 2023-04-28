@@ -9,12 +9,15 @@ init_dirlist_with_ulfd(dirlist_t *dlist, ulfd_t *ulfd)
 	void	*data;
 
 	dlist->inode = ulfd->inode;
-	dlist->size_remain = ulfd->inode->size - ulfd->off;
+	dlist->off = ulfd->off;
+
 	data = ulfs_first_dblock(ulfd->inode, ulfd->off / BSIZE, FALSE, &dlist->walk);
 	if (data == NULL)
 		dlist->ent = NULL;
-	else
-		dlist->head = dlist->ent = (dirent_t *)(data + ulfd->off % BSIZE);
+	else {
+		dlist->ent = (dirent_t *)(data + ulfd->off % BSIZE);
+		dlist->idx_in_block = (ulfd->off % BSIZE) / sizeof(dirent_t);
+	}
 }
 
 static int
@@ -35,14 +38,12 @@ ulfs_getdents(int fd, ulfs_dirent_t *dirp, unsigned int count)
 	dirlist_t	dirlist;
 	ulfd_t	*ulfd;
 	int	nfilled = 0;
-	off_t	off;
 
 	ulfd = ulfs_get_ulfd(fd);
 	if (ulfd == NULL)
 		return -EBADF;
 
 	init_dirlist_with_ulfd(&dirlist, ulfd);
-	off = ulfd->off;
 
 	while (1) {
 		dirent_t	*dirent;
@@ -57,17 +58,16 @@ ulfs_getdents(int fd, ulfs_dirent_t *dirp, unsigned int count)
 		reclen = namelen + sizeof(ulfs_dirent_t);
 		if (count < nfilled + reclen)
 			break;
-		dirp->d_off = off;
+		dirp->d_off = dirlist.off;
 		dirp->d_reclen = reclen;
 		inode = ulfs_get_inode(dirent->bid_ib, dirent->idx_ib, &ino);
 		dirp->d_ino = (uint64_t)ino;
 		dirp->d_type = inode->type;
 
 		dirp = (ulfs_dirent_t *)(((uint8_t *)dirp) + reclen);
-		off += sizeof(dirent_t);
 		nfilled += reclen;
 	}
 
-	ulfd->off = off;
+	ulfd->off = dirlist.off;
 	return nfilled;
 }

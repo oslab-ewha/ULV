@@ -26,7 +26,8 @@ next_walk_dblock(dblock_walk_t *pwalk)
 	bidblock_t	*bb;
 
 	if (pwalk->bid_bb == 0) {
-		ULV_ASSERT(pwalk->lbid == 0);
+		if (pwalk->lbid != 0)
+			return 0;
 		pwalk->bid_bb = pwalk->inode->bids_data[1];
 		if (pwalk->bid_bb == 0) {
 			if (!pwalk->alloc_ok)

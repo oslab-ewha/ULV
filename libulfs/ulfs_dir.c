@@ -9,24 +9,23 @@ ulfs_dir_get(dirlist_t *dlist)
 {
 	dirent_t	*ent;
 
-	if (dlist->size_remain == 0)
-		return NULL;
-
 again:
 	ent = dlist->ent;
 	if (ent == NULL)
 		return NULL;
 
-	dlist->size_remain -= sizeof(dirent_t);
+	dlist->idx_in_block++;
+	dlist->off += sizeof(dirent_t);
 
-	if (dlist->size_remain == 0) {
-		dlist->ent_last = dlist->ent;
+	if (dlist->off == dlist->inode->size)
 		dlist->ent = NULL;
-	}
 	else {
 		dlist->ent++;
-		if (dlist->ent - dlist->head == N_DIRENT_PER_DB)
-			dlist->ent = dlist->head = (dirent_t *)ulfs_next_dblock(&dlist->walk);
+		if (dlist->idx_in_block == N_DIRENT_PER_DB) {
+			dlist->ent = (dirent_t *)ulfs_next_dblock(&dlist->walk);
+			dlist->idx_in_block = 0;
+			dlist->off += BSIZE - N_DIRENT_PER_DB * sizeof(dirent_t);
+		}
 	}
 
 	/* It's empty dirent */
@@ -39,8 +38,9 @@ static void
 init_dirlist(dirlist_t *dlist, inode_t *inode_dir)
 {
 	dlist->inode = inode_dir;
-	dlist->size_remain = inode_dir->size;
-	dlist->head = dlist->ent = (dirent_t *)ulfs_first_dblock(inode_dir, 0, FALSE, &dlist->walk);
+	dlist->idx_in_block = 0;
+	dlist->off = 0;
+	dlist->ent = (dirent_t *)ulfs_first_dblock(inode_dir, 0, FALSE, &dlist->walk);
 }
 
 inode_t *
@@ -129,12 +129,13 @@ find_empty_entry(inode_t *inode_dir)
 			break;
 	}
 	if (ent == NULL) {
-		if (dirlist.ent_last - dirlist.head < N_DIRENT_PER_DB) {
-			ent = dirlist.ent_last + 1;
+		if (dirlist.idx_in_block < N_DIRENT_PER_DB) {
+			ent = (dirent_t *)ulfs_get_dblock(&dirlist.walk) + dirlist.idx_in_block;
 		}
 		else {
 			dirlist.walk.alloc_ok = TRUE;
 			ent = (dirent_t *)ulfs_next_dblock(&dirlist.walk);
+			inode_dir->size += (BSIZE - N_DIRENT_PER_DB * sizeof(dirent_t));
 		}
 
 		inode_dir->size += sizeof(dirent_t);
