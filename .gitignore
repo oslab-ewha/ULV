@@ -15,6 +15,7 @@
 /micro_benchmarks/mb_file_rw
 /micro_benchmarks/mb_network
 /micro_benchmarks/mb_thread
+/micro_benchmarks/mb_loop
 /micro_benchmarks/libmb.a
 /micro_benchmarks/Makefile
 /macro_benchmarks/*.spt
