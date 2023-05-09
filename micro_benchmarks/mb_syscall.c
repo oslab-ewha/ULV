@@ -1,26 +1,41 @@
 #include <stdio.h>
-#include <unistd.h>
-#include <sys/stat.h>
-#include <sys/types.h>
-#include <fcntl.h>
+#include <stdlib.h>
+#include <string.h>
 #include <sys/time.h>
 #include <sys/utsname.h>
-#include <errno.h>
 
 #include "libmb.h"
 
+static int	count = 1;
+
+static void
+usage(void)
+{
+	printf(
+"mb_syscall [<loop count>]\n"
+"  loop count default:1\n"
+		);
+}
+
 int
-main(int argc, char *argv[], char *envp[])
+main(int argc, char *argv[])
 {
 	struct utsname	utsname;
 	struct timeval	tv;
-	int	ret;
 	unsigned	elapsed;
 	int	i;
 
+	if (argc > 1) {
+		if (strcmp(argv[1], "-h") == 0) {
+			usage();
+			return 0;
+		}
+		count = atoi(argv[1]);
+	}
+
 	init_tickcount();
 
-	for (i = 0; i < 10000; i++) {
+	for (i = 0; i < count; i++) {
 		uname(&utsname);
 	}
 
@@ -29,7 +44,7 @@ main(int argc, char *argv[], char *envp[])
 
 	init_tickcount();
 
-	for (i = 0; i < 10000; i++) {
+	for (i = 0; i < count; i++) {
 		gettimeofday(&tv, NULL);
 	}
 	
