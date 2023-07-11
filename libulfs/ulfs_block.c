@@ -71,7 +71,8 @@ setup_new_mapb(mapblock_t *mapb_new, bid_t bid_mapb)
 	mapblock_t	*mapb_next;
 
 	mapb_next = (mapblock_t *)ulfs_block_get(BID_MAPB_NEXT(bid_mapb));
-	mapb_next->n_frees = ULFS_ENDOFMAPB;
+	if (mapb_next)
+		mapb_next->n_frees = ULFS_ENDOFMAPB;
 	mapb_new->n_frees = N_BIDS_PER_MAPB;
 	memset(mapb_new->bitmap, 0, sizeof(mapb_new->bitmap));
 }

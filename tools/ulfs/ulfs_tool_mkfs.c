@@ -29,6 +29,7 @@ do_mk_sb(long size)
 	sb = (sb_t *)ulfs_block_get(0);
 	sb->magic = ULFS_SB_MAGIC;
 	sb->max_blocks = size / BSIZE;
+	ulfs_block_set_max(sb->max_blocks);
 	ulfs_block_sync(0);
 }
 

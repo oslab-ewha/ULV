@@ -112,6 +112,7 @@ bid_t ulfs_block_alloc(void);
 void ulfs_block_free(bid_t bid);
 
 void ulfs_block_init(void);
+void ulfs_block_set_max(long max_blocks);
 
 inode_t *ulfs_alloc_inode(inode_type_t type, bid_t *pbid_ib, uint16_t *pidx_ib);
 void ulfs_free_inode(bid_t bid_ib, inode_t *inode);

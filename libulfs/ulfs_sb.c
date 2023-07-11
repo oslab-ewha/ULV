@@ -1,8 +1,6 @@
 #include "ulfs_p.h"
 #include "ulv_assert.h"
 
-void ulfs_block_set_max(long max_blocks);
-
 void
 ulfs_sb_init(void)
 {
