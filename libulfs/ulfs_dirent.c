@@ -15,8 +15,12 @@ init_dirlist_with_ulfd(dirlist_t *dlist, ulfd_t *ulfd)
 	if (data == NULL)
 		dlist->ent = NULL;
 	else {
-		dlist->ent = (dirent_t *)(data + ulfd->off % BSIZE);
-		dlist->idx_in_block = (ulfd->off % BSIZE) / sizeof(dirent_t);
+		if (ulfd->inode->size == ulfd->off)
+			dlist->ent = NULL;
+		else {
+			dlist->ent = (dirent_t *)(data + ulfd->off % BSIZE);
+			dlist->idx_in_block = (ulfd->off % BSIZE) / sizeof(dirent_t);
+		}
 	}
 }
 
