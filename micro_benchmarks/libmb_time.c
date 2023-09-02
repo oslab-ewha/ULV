@@ -25,5 +25,7 @@ get_tickcount(void)
                 ticks += (ts.tv_nsec - started_ts.tv_nsec) / 1000;
         }
 
+	started_ts = ts;
+
         return ticks;
 }

@@ -84,6 +84,7 @@ main(int argc, char *argv[])
 {
 	int	fd;
 	int	i;
+	unsigned	write_ts, read_ts;
 
 	if (argc > 1) {
 		if (strcmp(argv[1], "-h") == 0) {
@@ -120,6 +121,8 @@ main(int argc, char *argv[])
 		close(fd);
 	}
 
+	write_ts = get_tickcount();
+
 	for (i = 0; i < count_file; i++) {
 		char	fpath[128];
 
@@ -133,7 +136,8 @@ main(int argc, char *argv[])
 		close(fd);
 	}
 
-	printf("elapsed: %d\n", get_tickcount());
+	read_ts = get_tickcount();
+	printf("elapsed: %d(read:%d)\n", write_ts + read_ts, read_ts);
 
 	for (i = 0; i < count_file; i++) {
 		char	fpath[128];
