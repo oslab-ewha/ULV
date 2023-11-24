@@ -28,6 +28,12 @@ typedef struct ulfs_dirent {
 	char		d_name[];
 } ulfs_dirent_t;
 
+typedef struct ulfs_stat {
+	uint8_t		st_is_dir;
+	uint32_t	st_ino;
+	uint64_t	st_size;
+} ulfs_stat_t;
+
 int _ULFS_WEAKABLE ulfs_open(const char *path, int flags, int mode);
 void _ULFS_WEAKABLE ulfs_close(int fd);
 ssize_t _ULFS_WEAKABLE ulfs_read(int fd, void *buf, size_t count);
@@ -39,6 +45,8 @@ int _ULFS_WEAKABLE ulfs_rmdir(const char *path);
 int _ULFS_WEAKABLE ulfs_unlink(const char *path);
 
 int _ULFS_WEAKABLE ulfs_getdents(int fd, ulfs_dirent_t *dirp, unsigned int count);
+
+int _ULFS_WEAKABLE ulfs_fstat(int fd, ulfs_stat_t *statbuf);
 
 void _ULFS_WEAKABLE ulfs_init(void);
 

@@ -141,6 +141,15 @@ ulfs_get_inode(bid_t bid_ib, uint16_t idx_ib, uint32_t *pino)
 	return ib->inodes + idx_ib;
 }
 
+uint32_t
+ulfs_get_ino_from_dirent(dirent_t *ent)
+{
+	inode_block_t	*ib;
+
+	ib = (inode_block_t *)ulfs_block_get(ent->bid_ib);
+	return ib->ino_start + ent->idx_ib;
+}
+
 inline inode_t *
 ulfs_get_inode_root(void)
 {

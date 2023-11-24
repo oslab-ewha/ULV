@@ -20,6 +20,7 @@ ulv_syscall(long n, long *args)
 		CASE_ULV_SYSCALL(write, 3);
 		CASE_ULV_SYSCALL(open, 3);
 		CASE_ULV_SYSCALL(close, 1);
+		CASE_ULV_SYSCALL(fstat, 2);
 		CASE_ULV_SYSCALL(mkdir, 2);
 		CASE_ULV_SYSCALL(rmdir, 1);
 		CASE_ULV_SYSCALL(unlink, 1);
@@ -30,6 +31,8 @@ ulv_syscall(long n, long *args)
 		CASE_ULV_SYSCALL(mprotect, 3);
 		CASE_ULV_SYSCALL(munmap, 2);
 		CASE_ULV_SYSCALL(brk, 1);
+	case __NR_flock:
+	case __NR_fsync:
 	case __NR_rt_sigprocmask:
 	case __NR_madvise:
 		return 0;

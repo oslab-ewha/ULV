@@ -30,6 +30,8 @@
 #define __NR_exit	60
 #define __NR_uname	63
 #define __NR_fcntl	72
+#define __NR_flock	73
+#define __NR_fsync	74
 #define __NR_mkdir	83
 #define __NR_rmdir	84
 #define __NR_unlink	87

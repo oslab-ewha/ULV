@@ -76,6 +76,7 @@ typedef struct {
 typedef struct {
         off_t	off;
 	inode_t	*inode;
+	uint32_t	ino;
 	bool_t		walked;
 	dblock_walk_t	walk;
 } ulfd_t;
@@ -118,6 +119,7 @@ inode_t *ulfs_alloc_inode(inode_type_t type, bid_t *pbid_ib, uint16_t *pidx_ib);
 void ulfs_free_inode(bid_t bid_ib, inode_t *inode);
 
 inode_t *ulfs_get_inode(bid_t bid_ib, uint16_t idx_ib, uint32_t *pino);
+uint32_t ulfs_get_ino_from_dirent(dirent_t *ent);
 inode_t *ulfs_get_inode_root(void);
 inode_t *ulfs_get_inode_cwd(void);
 void *ulfs_alloc_dblock(inode_t *inode, lbid_t lbid);

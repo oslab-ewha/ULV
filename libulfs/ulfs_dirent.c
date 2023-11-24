@@ -1,5 +1,6 @@
 #include "ulfs_p.h"
 #include "ulv_assert.h"
+#include "ulv_libc.h"
 
 #include "ulfs.h"
 
@@ -22,18 +23,6 @@ init_dirlist_with_ulfd(dirlist_t *dlist, ulfd_t *ulfd)
 			dlist->idx_in_block = (ulfd->off % BSIZE) / sizeof(dirent_t);
 		}
 	}
-}
-
-static int
-copy_name_len(char *dst, const char *src)
-{
-	char	*d = dst;
-
-	for (; *src != '\0'; d++, src++)
-		*d = *src;
-
-	*d = '\0';
-	return (int)(d - dst) + 1;
 }
 
 int

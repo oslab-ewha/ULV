@@ -14,6 +14,7 @@ DEF_ULV_SYSCALL(read, 3);
 DEF_ULV_SYSCALL(write, 3);
 DEF_ULV_SYSCALL(open, 3);
 DEF_ULV_SYSCALL(close, 1);
+DEF_ULV_SYSCALL(fstat, 2);
 DEF_ULV_SYSCALL(mkdir, 2);
 DEF_ULV_SYSCALL(rmdir, 1);
 DEF_ULV_SYSCALL(unlink, 1);

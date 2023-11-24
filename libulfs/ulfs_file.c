@@ -12,12 +12,13 @@ ulfs_open(const char *pathname, int flags, int mode)
 {
 	path_t	path;
 	inode_t	*inode_dir, *inode;
+	dirent_t	*ent;
 	ulfd_t	*ulfd;
 
 	ulfs_path_init(&path, pathname);
 
 	ulfs_path_dirname(&path);
-	inode_dir = ulfs_lookup_path(&path, NULL);
+	inode_dir = ulfs_lookup_path(&path, &ent);
 
 	ulfs_path_init(&path, pathname);
 	if (ulfs_path_is_root(&path)) {
@@ -27,9 +28,9 @@ ulfs_open(const char *pathname, int flags, int mode)
 		ulfs_path_basename(&path);
 
 		if (flags & O_CREAT) {
-			inode = ulfs_dir_add_inode(inode_dir, &path, INODE_TYPE_FILE, NULL, TRUE);
+			inode = ulfs_dir_add_inode(inode_dir, &path, INODE_TYPE_FILE, &ent, TRUE);
 		} else {
-			inode = ulfs_lookup_name(inode_dir, &path, NULL);
+			inode = ulfs_lookup_name(inode_dir, &path, &ent);
 			if (inode == NULL)
 				return -1;
 		}
@@ -38,6 +39,7 @@ ulfs_open(const char *pathname, int flags, int mode)
 	ulfd = (ulfd_t *)ulv_dyntab_assign(&ulfds);
 	ulfd->off = 0;
 	ulfd->inode = inode;
+	ulfd->ino = ulfs_get_ino_from_dirent(ent);
 	ulfd->walked = FALSE;
 
 	return ULV_DYNTAB_ENTRY_IDX(ulfd);
@@ -86,6 +88,22 @@ ulfd_t *
 ulfs_get_ulfd(int fd)
 {
 	return (ulfd_t *)ulv_dyntab_get(&ulfds, fd);
+}
+
+int
+ulfs_fstat(int fd, ulfs_stat_t *statbuf)
+{
+	ulfd_t	*ulfd;
+
+	ulfd = (ulfd_t *)ulv_dyntab_get(&ulfds, fd);
+	if (ulfd == NULL)
+		return -1;
+
+	statbuf->st_is_dir = (ulfd->inode->type == INODE_TYPE_DIR) ? 1: 0;
+	statbuf->st_ino = ulfd->ino;
+	statbuf->st_size = ulfd->inode->size;
+
+	return 0;
 }
 
 void
