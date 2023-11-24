@@ -18,9 +18,11 @@
 /micro_benchmarks/mb_loop
 /micro_benchmarks/libmb.a
 /micro_benchmarks/Makefile
+/macro_benchmarks/Makefile
 /macro_benchmarks/*.spt
 /macro_benchmarks/manifest.c
 /macro_benchmarks/manifest-wget.c
+/macro_benchmarks/Mb_gdbm
 /Makefile
 /libulfs/Makefile
 /libulfs/libulfs.a

@@ -32,6 +32,7 @@ AC_CONFIG_FILES([Makefile
                  libulv/Makefile
                  libulfs/Makefile
 		 micro_benchmarks/Makefile
+		 macro_benchmarks/Makefile
 		 tools/ulfs/Makefile
 		 tests/Makefile
 		 ])

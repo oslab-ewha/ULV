@@ -4553,7 +4553,7 @@ $as_echo "#define _GNU_SOURCE /**/" >>confdefs.h
 
 # Checks for library functions.
 
-ac_config_files="$ac_config_files Makefile libulv/Makefile libulfs/Makefile micro_benchmarks/Makefile tools/ulfs/Makefile tests/Makefile"
+ac_config_files="$ac_config_files Makefile libulv/Makefile libulfs/Makefile micro_benchmarks/Makefile macro_benchmarks/Makefile tools/ulfs/Makefile tests/Makefile"
 
 
 cat >confcache <<\_ACEOF
@@ -5295,6 +5295,7 @@ do
     "libulv/Makefile") CONFIG_FILES="$CONFIG_FILES libulv/Makefile" ;;
     "libulfs/Makefile") CONFIG_FILES="$CONFIG_FILES libulfs/Makefile" ;;
     "micro_benchmarks/Makefile") CONFIG_FILES="$CONFIG_FILES micro_benchmarks/Makefile" ;;
+    "macro_benchmarks/Makefile") CONFIG_FILES="$CONFIG_FILES macro_benchmarks/Makefile" ;;
     "tools/ulfs/Makefile") CONFIG_FILES="$CONFIG_FILES tools/ulfs/Makefile" ;;
     "tests/Makefile") CONFIG_FILES="$CONFIG_FILES tests/Makefile" ;;
 
