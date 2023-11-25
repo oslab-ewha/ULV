@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <unistd.h>
+#include <stdlib.h>
 
 #include "libMb.h"
 
@@ -31,25 +32,23 @@ const char *gdbm_strerror(gdbm_error);
 static void
 fatal(const char *msg)
 {
-	puts(msg);
+	printf("%s", msg);
 }
 
-static char	*envp[1024] = { 0, 0 };
-
 static void
-gdbm_test(void)
+gdbm_test(int count)
 {
 	void	*dbf;
 	int	i;
 
 	dbf = gdbm_open(PATH_DB, 0, GDBM_WRCREAT, 0600, fatal);
 	if (dbf == NULL) {
-		puts(gdbm_strerror(gdbm_errno));
-		puts("\nfailed to open for create\n");
+		printf("%s", gdbm_strerror(gdbm_errno));
+		printf("\nfailed to open for create\n");
 		return;
 	}
 
-	for (i = 0; i < 1000; i++) {
+	for (i = 0; i < count; i++) {
 		datum	key, content;
 		key.dptr = (char *)&i;
 		key.dsize = sizeof(int);
@@ -61,11 +60,11 @@ gdbm_test(void)
 
 	dbf = gdbm_open(PATH_DB, 0, GDBM_READER, 0400, NULL);
 	if (dbf == NULL) {
-		puts("failed to open to fetch\n");
+		printf("failed to open to fetch\n");
 		return;
 	}
 
-	for (i = 0; i < 1000; i++) {
+	for (i = 0; i < count; i++) {
 		datum	key;
 		key.dptr = (char *)&i;
 		key.dsize = sizeof(int);
@@ -80,16 +79,19 @@ gdbm_test(void)
 int
 main(int argc, char *argv[])
 {
-	unsigned	gdbm_ts;
+	int	count = 1000;
 	unsigned	elapsed;
+
+	if (argc > 1)
+		count = atoi(argv[1]);
 
 	init_tickcount();
 
-	gdbm_test();
+	gdbm_test(count);
 
 	elapsed = get_tickcount();
 
-	printf("elapsed: %d\n", gdbm_ts);
+	printf("elapsed: %d\n", elapsed);
 
 	return 0;
 }
