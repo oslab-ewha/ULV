@@ -1,4 +1,4 @@
-SUBDIRS = libulv libulfs micro_benchmarks macro_benchmarks tools/ulfs tests
+SUBDIRS = gdbm_lite libulv libulfs micro_benchmarks macro_benchmarks tools/ulfs tests
 
 prep: musl/lib/libc.a lwip-build/liblwip.a
 

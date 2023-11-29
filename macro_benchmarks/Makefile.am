@@ -5,9 +5,9 @@ MACRO_BENCHMARKS = Mb_gdbm
 noinst_LIBRARIES = libMb.a
 noinst_PROGRAMS = $(MACRO_BENCHMARKS)
 
-GDBM := ../gdbm
+GDBM := ../gdbm_lite
 
-LIBGDBM := $(GDBM)/src/.libs/libgdbm.a
+LIBGDBM := $(GDBM)/libgdbm.a
 
 CFLAGS = -g
 libulv = -Wl,--whole-archive ../libulv/libulv.a -Wl,--no-whole-archive

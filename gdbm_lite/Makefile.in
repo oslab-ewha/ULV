@@ -14,7 +14,6 @@
 
 @SET_MAKE@
 
-
 VPATH = @srcdir@
 am__is_gnu_make = { \
   if test -z '$(MAKELEVEL)'; then \
@@ -87,8 +86,7 @@ POST_INSTALL = :
 NORMAL_UNINSTALL = :
 PRE_UNINSTALL = :
 POST_UNINSTALL = :
-noinst_PROGRAMS = $(am__EXEEXT_1)
-subdir = macro_benchmarks
+subdir = gdbm_lite
 ACLOCAL_M4 = $(top_srcdir)/aclocal.m4
 am__aclocal_m4_deps = $(top_srcdir)/configure.ac
 am__configure_deps = $(am__aclocal_m4_deps) $(CONFIGURE_DEPENDENCIES) \
@@ -98,8 +96,6 @@ mkinstalldirs = $(install_sh) -d
 CONFIG_HEADER = $(top_builddir)/config.h
 CONFIG_CLEAN_FILES =
 CONFIG_CLEAN_VPATH_FILES =
-am__EXEEXT_1 = Mb_gdbm$(EXEEXT)
-PROGRAMS = $(noinst_PROGRAMS)
 LIBRARIES = $(noinst_LIBRARIES)
 AR = ar
 ARFLAGS = cru
@@ -107,13 +103,14 @@ AM_V_AR = $(am__v_AR_@AM_V@)
 am__v_AR_ = $(am__v_AR_@AM_DEFAULT_V@)
 am__v_AR_0 = @echo "  AR      " $@;
 am__v_AR_1 = 
-libMb_a_AR = $(AR) $(ARFLAGS)
-libMb_a_LIBADD =
-am_libMb_a_OBJECTS = libMb_time.$(OBJEXT)
-libMb_a_OBJECTS = $(am_libMb_a_OBJECTS)
-am_Mb_gdbm_OBJECTS = Mb_gdbm.$(OBJEXT)
-Mb_gdbm_OBJECTS = $(am_Mb_gdbm_OBJECTS)
-Mb_gdbm_DEPENDENCIES = libMb.a $(LIBGDBM) ../musl/lib/libc.a
+libgdbm_a_AR = $(AR) $(ARFLAGS)
+libgdbm_a_LIBADD =
+am_libgdbm_a_OBJECTS = gdbmopen.$(OBJEXT) gdbmclose.$(OBJEXT) \
+	gdbmstore.$(OBJEXT) gdbmfetch.$(OBJEXT) update.$(OBJEXT) \
+	findkey.$(OBJEXT) falloc.$(OBJEXT) hash.$(OBJEXT) \
+	gdbmerrno.$(OBJEXT) lock.$(OBJEXT) bucket.$(OBJEXT) \
+	fullio.$(OBJEXT)
+libgdbm_a_OBJECTS = $(am_libgdbm_a_OBJECTS)
 AM_V_P = $(am__v_P_@AM_V@)
 am__v_P_ = $(am__v_P_@AM_DEFAULT_V@)
 am__v_P_0 = false
@@ -129,7 +126,12 @@ am__v_at_1 =
 DEFAULT_INCLUDES = -I.@am__isrc@ -I$(top_builddir)
 depcomp = $(SHELL) $(top_srcdir)/depcomp
 am__maybe_remake_depfiles = depfiles
-am__depfiles_remade = ./$(DEPDIR)/Mb_gdbm.Po ./$(DEPDIR)/libMb_time.Po
+am__depfiles_remade = ./$(DEPDIR)/bucket.Po ./$(DEPDIR)/falloc.Po \
+	./$(DEPDIR)/findkey.Po ./$(DEPDIR)/fullio.Po \
+	./$(DEPDIR)/gdbmclose.Po ./$(DEPDIR)/gdbmerrno.Po \
+	./$(DEPDIR)/gdbmfetch.Po ./$(DEPDIR)/gdbmopen.Po \
+	./$(DEPDIR)/gdbmstore.Po ./$(DEPDIR)/hash.Po \
+	./$(DEPDIR)/lock.Po ./$(DEPDIR)/update.Po
 am__mv = mv -f
 COMPILE = $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) \
 	$(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS)
@@ -143,8 +145,8 @@ AM_V_CCLD = $(am__v_CCLD_@AM_V@)
 am__v_CCLD_ = $(am__v_CCLD_@AM_DEFAULT_V@)
 am__v_CCLD_0 = @echo "  CCLD    " $@;
 am__v_CCLD_1 = 
-SOURCES = $(libMb_a_SOURCES) $(Mb_gdbm_SOURCES)
-DIST_SOURCES = $(libMb_a_SOURCES) $(Mb_gdbm_SOURCES)
+SOURCES = $(libgdbm_a_SOURCES)
+DIST_SOURCES = $(libgdbm_a_SOURCES)
 am__can_run_installinfo = \
   case $$AM_UPDATE_INFO_DIR in \
     n|no|NO) false;; \
@@ -183,7 +185,7 @@ CCAS = @CCAS@
 CCASDEPMODE = @CCASDEPMODE@
 CCASFLAGS = @CCASFLAGS@
 CCDEPMODE = @CCDEPMODE@
-CFLAGS = -g
+CFLAGS = @CFLAGS@
 CPP = @CPP@
 CPPFLAGS = @CPPFLAGS@
 CYGPATH_W = @CYGPATH_W@
@@ -266,18 +268,11 @@ top_builddir = @top_builddir@
 top_srcdir = @top_srcdir@
 CLEANFILES = *~
 DISTCLEANFILES = *~
-MACRO_BENCHMARKS = Mb_gdbm
-noinst_LIBRARIES = libMb.a
-GDBM := ../gdbm_lite
-LIBGDBM := $(GDBM)/libgdbm.a
-libulv = -Wl,--whole-archive ../libulv/libulv.a -Wl,--no-whole-archive
-libulfs = -Wl,--whole-archive ../libulfs/libulfs.a ../libulv/libulv.a -Wl,--no-whole-archive
-liblwip = -Wl,--whole-archive ../libulv/libulv_lwip.a -Wl,--no-whole-archive ../lwip-build/liblwip.a -Wl,--whole-archive ../libulv/libulv.a -Wl,--no-whole-archive
-common_LINK = musl-gcc -static -nolibc -o $@
-Mb_gdbm_SOURCES = Mb_gdbm.c
-Mb_gdbm_LDADD = libMb.a $(LIBGDBM) ../musl/lib/libc.a
-Mb_gdbm_LINK = $(common_LINK) $(libulfs)
-libMb_a_SOURCES = libMb_time.c
+noinst_LIBRARIES = libgdbm.a
+libgdbm_a_SOURCES = gdbmopen.c gdbmclose.c gdbmstore.c gdbmfetch.c update.c findkey.c \
+                falloc.c hash.c gdbmerrno.c lock.c bucket.c fullio.c \
+		autoconf.h gdbm.h gdbmconst.h gdbmdefs.h proto.h systems.h
+
 all: all-am
 
 .SUFFIXES:
@@ -291,9 +286,9 @@ $(srcdir)/Makefile.in: @MAINTAINER_MODE_TRUE@ $(srcdir)/Makefile.am  $(am__confi
 	      exit 1;; \
 	  esac; \
 	done; \
-	echo ' cd $(top_srcdir) && $(AUTOMAKE) --foreign macro_benchmarks/Makefile'; \
+	echo ' cd $(top_srcdir) && $(AUTOMAKE) --foreign gdbm_lite/Makefile'; \
 	$(am__cd) $(top_srcdir) && \
-	  $(AUTOMAKE) --foreign macro_benchmarks/Makefile
+	  $(AUTOMAKE) --foreign gdbm_lite/Makefile
 Makefile: $(srcdir)/Makefile.in $(top_builddir)/config.status
 	@case '$?' in \
 	  *config.status*) \
@@ -312,20 +307,13 @@ $(ACLOCAL_M4): @MAINTAINER_MODE_TRUE@ $(am__aclocal_m4_deps)
 	cd $(top_builddir) && $(MAKE) $(AM_MAKEFLAGS) am--refresh
 $(am__aclocal_m4_deps):
 
-clean-noinstPROGRAMS:
-	-test -z "$(noinst_PROGRAMS)" || rm -f $(noinst_PROGRAMS)
-
 clean-noinstLIBRARIES:
 	-test -z "$(noinst_LIBRARIES)" || rm -f $(noinst_LIBRARIES)
 
-libMb.a: $(libMb_a_OBJECTS) $(libMb_a_DEPENDENCIES) $(EXTRA_libMb_a_DEPENDENCIES) 
-	$(AM_V_at)-rm -f libMb.a
-	$(AM_V_AR)$(libMb_a_AR) libMb.a $(libMb_a_OBJECTS) $(libMb_a_LIBADD)
-	$(AM_V_at)$(RANLIB) libMb.a
-
-Mb_gdbm$(EXEEXT): $(Mb_gdbm_OBJECTS) $(Mb_gdbm_DEPENDENCIES) $(EXTRA_Mb_gdbm_DEPENDENCIES) 
-	@rm -f Mb_gdbm$(EXEEXT)
-	$(AM_V_GEN)$(Mb_gdbm_LINK) $(Mb_gdbm_OBJECTS) $(Mb_gdbm_LDADD) $(LIBS)
+libgdbm.a: $(libgdbm_a_OBJECTS) $(libgdbm_a_DEPENDENCIES) $(EXTRA_libgdbm_a_DEPENDENCIES) 
+	$(AM_V_at)-rm -f libgdbm.a
+	$(AM_V_AR)$(libgdbm_a_AR) libgdbm.a $(libgdbm_a_OBJECTS) $(libgdbm_a_LIBADD)
+	$(AM_V_at)$(RANLIB) libgdbm.a
 
 mostlyclean-compile:
 	-rm -f *.$(OBJEXT)
@@ -333,8 +321,18 @@ mostlyclean-compile:
 distclean-compile:
 	-rm -f *.tab.c
 
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/Mb_gdbm.Po@am__quote@ # am--include-marker
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libMb_time.Po@am__quote@ # am--include-marker
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/bucket.Po@am__quote@ # am--include-marker
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/falloc.Po@am__quote@ # am--include-marker
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/findkey.Po@am__quote@ # am--include-marker
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/fullio.Po@am__quote@ # am--include-marker
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/gdbmclose.Po@am__quote@ # am--include-marker
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/gdbmerrno.Po@am__quote@ # am--include-marker
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/gdbmfetch.Po@am__quote@ # am--include-marker
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/gdbmopen.Po@am__quote@ # am--include-marker
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/gdbmstore.Po@am__quote@ # am--include-marker
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/hash.Po@am__quote@ # am--include-marker
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/lock.Po@am__quote@ # am--include-marker
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/update.Po@am__quote@ # am--include-marker
 
 $(am__depfiles_remade):
 	@$(MKDIR_P) $(@D)
@@ -445,7 +443,7 @@ distdir-am: $(DISTFILES)
 	done
 check-am: all-am
 check: check-am
-all-am: Makefile $(PROGRAMS) $(LIBRARIES)
+all-am: Makefile $(LIBRARIES)
 installdirs:
 install: install-am
 install-exec: install-exec-am
@@ -481,12 +479,21 @@ maintainer-clean-generic:
 	@echo "it deletes files that may require special tools to rebuild."
 clean: clean-am
 
-clean-am: clean-generic clean-noinstLIBRARIES clean-noinstPROGRAMS \
-	mostlyclean-am
+clean-am: clean-generic clean-noinstLIBRARIES mostlyclean-am
 
 distclean: distclean-am
-		-rm -f ./$(DEPDIR)/Mb_gdbm.Po
-	-rm -f ./$(DEPDIR)/libMb_time.Po
+		-rm -f ./$(DEPDIR)/bucket.Po
+	-rm -f ./$(DEPDIR)/falloc.Po
+	-rm -f ./$(DEPDIR)/findkey.Po
+	-rm -f ./$(DEPDIR)/fullio.Po
+	-rm -f ./$(DEPDIR)/gdbmclose.Po
+	-rm -f ./$(DEPDIR)/gdbmerrno.Po
+	-rm -f ./$(DEPDIR)/gdbmfetch.Po
+	-rm -f ./$(DEPDIR)/gdbmopen.Po
+	-rm -f ./$(DEPDIR)/gdbmstore.Po
+	-rm -f ./$(DEPDIR)/hash.Po
+	-rm -f ./$(DEPDIR)/lock.Po
+	-rm -f ./$(DEPDIR)/update.Po
 	-rm -f Makefile
 distclean-am: clean-am distclean-compile distclean-generic \
 	distclean-tags
@@ -532,8 +539,18 @@ install-ps-am:
 installcheck-am:
 
 maintainer-clean: maintainer-clean-am
-		-rm -f ./$(DEPDIR)/Mb_gdbm.Po
-	-rm -f ./$(DEPDIR)/libMb_time.Po
+		-rm -f ./$(DEPDIR)/bucket.Po
+	-rm -f ./$(DEPDIR)/falloc.Po
+	-rm -f ./$(DEPDIR)/findkey.Po
+	-rm -f ./$(DEPDIR)/fullio.Po
+	-rm -f ./$(DEPDIR)/gdbmclose.Po
+	-rm -f ./$(DEPDIR)/gdbmerrno.Po
+	-rm -f ./$(DEPDIR)/gdbmfetch.Po
+	-rm -f ./$(DEPDIR)/gdbmopen.Po
+	-rm -f ./$(DEPDIR)/gdbmstore.Po
+	-rm -f ./$(DEPDIR)/hash.Po
+	-rm -f ./$(DEPDIR)/lock.Po
+	-rm -f ./$(DEPDIR)/update.Po
 	-rm -f Makefile
 maintainer-clean-am: distclean-am maintainer-clean-generic
 
@@ -554,18 +571,17 @@ uninstall-am:
 .MAKE: install-am install-strip
 
 .PHONY: CTAGS GTAGS TAGS all all-am am--depfiles check check-am clean \
-	clean-generic clean-noinstLIBRARIES clean-noinstPROGRAMS \
-	cscopelist-am ctags ctags-am distclean distclean-compile \
-	distclean-generic distclean-tags distdir dvi dvi-am html \
-	html-am info info-am install install-am install-data \
-	install-data-am install-dvi install-dvi-am install-exec \
-	install-exec-am install-html install-html-am install-info \
-	install-info-am install-man install-pdf install-pdf-am \
-	install-ps install-ps-am install-strip installcheck \
-	installcheck-am installdirs maintainer-clean \
-	maintainer-clean-generic mostlyclean mostlyclean-compile \
-	mostlyclean-generic pdf pdf-am ps ps-am tags tags-am uninstall \
-	uninstall-am
+	clean-generic clean-noinstLIBRARIES cscopelist-am ctags \
+	ctags-am distclean distclean-compile distclean-generic \
+	distclean-tags distdir dvi dvi-am html html-am info info-am \
+	install install-am install-data install-data-am install-dvi \
+	install-dvi-am install-exec install-exec-am install-html \
+	install-html-am install-info install-info-am install-man \
+	install-pdf install-pdf-am install-ps install-ps-am \
+	install-strip installcheck installcheck-am installdirs \
+	maintainer-clean maintainer-clean-generic mostlyclean \
+	mostlyclean-compile mostlyclean-generic pdf pdf-am ps ps-am \
+	tags tags-am uninstall uninstall-am
 
 .PRECIOUS: Makefile
 

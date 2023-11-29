@@ -9,6 +9,8 @@
 /autom4te.cache/
 /cscope.files
 /cscope.out
+/gdbm_lite/Makefile
+/gdbm_lite/libgdbm.a
 /micro_benchmarks/mb_syscall
 /micro_benchmarks/mb_file_dir
 /micro_benchmarks/mb_file_lseek

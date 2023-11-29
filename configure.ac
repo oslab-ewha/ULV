@@ -29,6 +29,7 @@ AC_DEFINE(_GNU_SOURCE, [], [GNU Supported Code])
 # Checks for library functions.
 
 AC_CONFIG_FILES([Makefile
+                 gdbm_lite/Makefile
                  libulv/Makefile
                  libulfs/Makefile
 		 micro_benchmarks/Makefile
