@@ -65,10 +65,14 @@ gdbm_test(int count)
 	}
 
 	for (i = 0; i < count; i++) {
-		datum	key;
+		datum	key, value;
 		key.dptr = (char *)&i;
 		key.dsize = sizeof(int);
-		gdbm_fetch(dbf, key);
+		value = gdbm_fetch(dbf, key);
+		if (value.dptr == NULL || *(int *)value.dptr != i) {
+			printf("failed to fetch\n");
+			break;
+		}
 	}
 
 	gdbm_close(dbf);
