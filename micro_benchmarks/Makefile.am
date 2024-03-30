@@ -1,7 +1,7 @@
 CLEANFILES = *~
 DISTCLEANFILES = *~
 
-MICRO_BENCHMARKS = mb_thread mb_file_rw mb_file_dir mb_file_lseek mb_syscall mb_network mb_loop
+MICRO_BENCHMARKS = mb_thread mb_file_rw mb_file_dir mb_file_lseek mb_file_fstat mb_syscall mb_network mb_loop
 noinst_LIBRARIES = libmb.a
 noinst_PROGRAMS = $(MICRO_BENCHMARKS)
 
@@ -26,6 +26,10 @@ mb_file_dir_LINK = $(common_LINK) $(libulfs)
 mb_file_lseek_SOURCES = mb_file_lseek.c
 mb_file_lseek_LDADD = libmb.a ../musl/lib/libc.a
 mb_file_lseek_LINK = $(common_LINK) $(libulfs)
+
+mb_file_fstat_SOURCES = mb_file_fstat.c
+mb_file_fstat_LDADD = libmb.a ../musl/lib/libc.a
+mb_file_fstat_LINK = $(common_LINK) $(libulfs)
 
 mb_syscall_SOURCES = mb_syscall.c
 mb_syscall_LDADD = libmb.a ../musl/lib/libc.a

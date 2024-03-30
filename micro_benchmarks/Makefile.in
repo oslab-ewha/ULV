@@ -100,7 +100,8 @@ CONFIG_CLEAN_FILES =
 CONFIG_CLEAN_VPATH_FILES =
 am__EXEEXT_1 = mb_thread$(EXEEXT) mb_file_rw$(EXEEXT) \
 	mb_file_dir$(EXEEXT) mb_file_lseek$(EXEEXT) \
-	mb_syscall$(EXEEXT) mb_network$(EXEEXT) mb_loop$(EXEEXT)
+	mb_file_fstat$(EXEEXT) mb_syscall$(EXEEXT) mb_network$(EXEEXT) \
+	mb_loop$(EXEEXT)
 PROGRAMS = $(noinst_PROGRAMS)
 LIBRARIES = $(noinst_LIBRARIES)
 AR = ar
@@ -117,6 +118,9 @@ libmb_a_OBJECTS = $(am_libmb_a_OBJECTS)
 am_mb_file_dir_OBJECTS = mb_file_dir.$(OBJEXT)
 mb_file_dir_OBJECTS = $(am_mb_file_dir_OBJECTS)
 mb_file_dir_DEPENDENCIES = libmb.a ../musl/lib/libc.a
+am_mb_file_fstat_OBJECTS = mb_file_fstat.$(OBJEXT)
+mb_file_fstat_OBJECTS = $(am_mb_file_fstat_OBJECTS)
+mb_file_fstat_DEPENDENCIES = libmb.a ../musl/lib/libc.a
 am_mb_file_lseek_OBJECTS = mb_file_lseek.$(OBJEXT)
 mb_file_lseek_OBJECTS = $(am_mb_file_lseek_OBJECTS)
 mb_file_lseek_DEPENDENCIES = libmb.a ../musl/lib/libc.a
@@ -152,10 +156,10 @@ depcomp = $(SHELL) $(top_srcdir)/depcomp
 am__maybe_remake_depfiles = depfiles
 am__depfiles_remade = ./$(DEPDIR)/libmb_net.Po \
 	./$(DEPDIR)/libmb_stdio.Po ./$(DEPDIR)/libmb_time.Po \
-	./$(DEPDIR)/mb_file_dir.Po ./$(DEPDIR)/mb_file_lseek.Po \
-	./$(DEPDIR)/mb_file_rw.Po ./$(DEPDIR)/mb_loop.Po \
-	./$(DEPDIR)/mb_network.Po ./$(DEPDIR)/mb_syscall.Po \
-	./$(DEPDIR)/mb_thread.Po
+	./$(DEPDIR)/mb_file_dir.Po ./$(DEPDIR)/mb_file_fstat.Po \
+	./$(DEPDIR)/mb_file_lseek.Po ./$(DEPDIR)/mb_file_rw.Po \
+	./$(DEPDIR)/mb_loop.Po ./$(DEPDIR)/mb_network.Po \
+	./$(DEPDIR)/mb_syscall.Po ./$(DEPDIR)/mb_thread.Po
 am__mv = mv -f
 COMPILE = $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) \
 	$(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS)
@@ -170,13 +174,13 @@ am__v_CCLD_ = $(am__v_CCLD_@AM_DEFAULT_V@)
 am__v_CCLD_0 = @echo "  CCLD    " $@;
 am__v_CCLD_1 = 
 SOURCES = $(libmb_a_SOURCES) $(mb_file_dir_SOURCES) \
-	$(mb_file_lseek_SOURCES) $(mb_file_rw_SOURCES) \
-	$(mb_loop_SOURCES) $(mb_network_SOURCES) $(mb_syscall_SOURCES) \
-	$(mb_thread_SOURCES)
+	$(mb_file_fstat_SOURCES) $(mb_file_lseek_SOURCES) \
+	$(mb_file_rw_SOURCES) $(mb_loop_SOURCES) $(mb_network_SOURCES) \
+	$(mb_syscall_SOURCES) $(mb_thread_SOURCES)
 DIST_SOURCES = $(libmb_a_SOURCES) $(mb_file_dir_SOURCES) \
-	$(mb_file_lseek_SOURCES) $(mb_file_rw_SOURCES) \
-	$(mb_loop_SOURCES) $(mb_network_SOURCES) $(mb_syscall_SOURCES) \
-	$(mb_thread_SOURCES)
+	$(mb_file_fstat_SOURCES) $(mb_file_lseek_SOURCES) \
+	$(mb_file_rw_SOURCES) $(mb_loop_SOURCES) $(mb_network_SOURCES) \
+	$(mb_syscall_SOURCES) $(mb_thread_SOURCES)
 am__can_run_installinfo = \
   case $$AM_UPDATE_INFO_DIR in \
     n|no|NO) false;; \
@@ -298,7 +302,7 @@ top_builddir = @top_builddir@
 top_srcdir = @top_srcdir@
 CLEANFILES = *~
 DISTCLEANFILES = *~
-MICRO_BENCHMARKS = mb_thread mb_file_rw mb_file_dir mb_file_lseek mb_syscall mb_network mb_loop
+MICRO_BENCHMARKS = mb_thread mb_file_rw mb_file_dir mb_file_lseek mb_file_fstat mb_syscall mb_network mb_loop
 noinst_LIBRARIES = libmb.a
 libulv = -Wl,--whole-archive ../libulv/libulv.a -Wl,--no-whole-archive
 libulfs = -Wl,--whole-archive ../libulfs/libulfs.a ../libulv/libulv.a -Wl,--no-whole-archive
@@ -316,6 +320,9 @@ mb_file_dir_LINK = $(common_LINK) $(libulfs)
 mb_file_lseek_SOURCES = mb_file_lseek.c
 mb_file_lseek_LDADD = libmb.a ../musl/lib/libc.a
 mb_file_lseek_LINK = $(common_LINK) $(libulfs)
+mb_file_fstat_SOURCES = mb_file_fstat.c
+mb_file_fstat_LDADD = libmb.a ../musl/lib/libc.a
+mb_file_fstat_LINK = $(common_LINK) $(libulfs)
 mb_syscall_SOURCES = mb_syscall.c
 mb_syscall_LDADD = libmb.a ../musl/lib/libc.a
 mb_syscall_LINK = $(common_LINK) $(libulv)
@@ -375,6 +382,10 @@ mb_file_dir$(EXEEXT): $(mb_file_dir_OBJECTS) $(mb_file_dir_DEPENDENCIES) $(EXTRA
 	@rm -f mb_file_dir$(EXEEXT)
 	$(AM_V_GEN)$(mb_file_dir_LINK) $(mb_file_dir_OBJECTS) $(mb_file_dir_LDADD) $(LIBS)
 
+mb_file_fstat$(EXEEXT): $(mb_file_fstat_OBJECTS) $(mb_file_fstat_DEPENDENCIES) $(EXTRA_mb_file_fstat_DEPENDENCIES) 
+	@rm -f mb_file_fstat$(EXEEXT)
+	$(AM_V_GEN)$(mb_file_fstat_LINK) $(mb_file_fstat_OBJECTS) $(mb_file_fstat_LDADD) $(LIBS)
+
 mb_file_lseek$(EXEEXT): $(mb_file_lseek_OBJECTS) $(mb_file_lseek_DEPENDENCIES) $(EXTRA_mb_file_lseek_DEPENDENCIES) 
 	@rm -f mb_file_lseek$(EXEEXT)
 	$(AM_V_GEN)$(mb_file_lseek_LINK) $(mb_file_lseek_OBJECTS) $(mb_file_lseek_LDADD) $(LIBS)
@@ -409,6 +420,7 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libmb_stdio.Po@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libmb_time.Po@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/mb_file_dir.Po@am__quote@ # am--include-marker
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/mb_file_fstat.Po@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/mb_file_lseek.Po@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/mb_file_rw.Po@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/mb_loop.Po@am__quote@ # am--include-marker
@@ -569,6 +581,7 @@ distclean: distclean-am
 	-rm -f ./$(DEPDIR)/libmb_stdio.Po
 	-rm -f ./$(DEPDIR)/libmb_time.Po
 	-rm -f ./$(DEPDIR)/mb_file_dir.Po
+	-rm -f ./$(DEPDIR)/mb_file_fstat.Po
 	-rm -f ./$(DEPDIR)/mb_file_lseek.Po
 	-rm -f ./$(DEPDIR)/mb_file_rw.Po
 	-rm -f ./$(DEPDIR)/mb_loop.Po
@@ -624,6 +637,7 @@ maintainer-clean: maintainer-clean-am
 	-rm -f ./$(DEPDIR)/libmb_stdio.Po
 	-rm -f ./$(DEPDIR)/libmb_time.Po
 	-rm -f ./$(DEPDIR)/mb_file_dir.Po
+	-rm -f ./$(DEPDIR)/mb_file_fstat.Po
 	-rm -f ./$(DEPDIR)/mb_file_lseek.Po
 	-rm -f ./$(DEPDIR)/mb_file_rw.Po
 	-rm -f ./$(DEPDIR)/mb_loop.Po
